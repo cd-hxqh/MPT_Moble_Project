@@ -2,8 +2,8 @@ package com.mpt.hxqh.mpt_project.api;
 
 import android.content.Context;
 
-import com.hsk.hxqh.agp_eam.R;
-import com.hsk.hxqh.agp_eam.unit.NetWorkHelper;
+import com.mpt.hxqh.mpt_project.R;
+import com.mpt.hxqh.mpt_project.unit.NetWorkHelper;
 
 
 /**

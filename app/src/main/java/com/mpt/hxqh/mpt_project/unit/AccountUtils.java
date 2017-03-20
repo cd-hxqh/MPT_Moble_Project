@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-import com.hsk.hxqh.agp_eam.R;
+import com.mpt.hxqh.mpt_project.R;
 
 
 /**
