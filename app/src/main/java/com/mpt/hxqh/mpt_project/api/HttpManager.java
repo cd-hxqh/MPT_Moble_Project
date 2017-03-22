@@ -209,6 +209,19 @@ public class HttpManager {
     }
 
     /**
+     * 设置采购接收查询*
+     */
+    public static String getPoUrl(String search, int curpage, int showcount) {
+        if (search.equals("")) {
+            return "{'appid':'" + Constants.ASSET_APPID + "','objectname':'" + Constants.ASSET_NAME + "'," +
+                    "'curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','orderby':'ASSETNUM ASC'}";
+        } else {
+            return "{'appid':'" + Constants.ASSET_APPID + "','objectname':'" + Constants.ASSET_NAME + "'," +
+                    "'curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','orderby':'ASSETNUM ASC','sinorsearch':{'ASSETNUM':' "+ search + "','DESCRIPTION':'" + search + "'}}";
+        }
+    }
+
+    /**
      * 设置部件查询*
      */
     public static String getBujianUrl(String assetnum,int curpage, int showcount) {

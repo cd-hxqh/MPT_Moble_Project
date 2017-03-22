@@ -15,4 +15,6 @@
     <color name="text_color">#ffffff00</color>
     <!--黑色-->
     <color name="black">#000000</color>
+
+    <color name="gray">#aaa</color>
 </resources>
