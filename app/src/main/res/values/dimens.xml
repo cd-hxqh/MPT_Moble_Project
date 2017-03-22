@@ -4,6 +4,14 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="size_20dp">20dp</dimen>
     <dimen name="size_5dp">5dp</dimen>
+    <dimen name="dimens_30dp">30dp</dimen>
+    <dimen name="dimens_20sp">20sp</dimen>
+    <dimen name="dimen_10">10dp</dimen>
+    <dimen name="dimens_16sp">16sp</dimen>
+
+    <dimen name="title_heiht_size">50dp</dimen>
+    <dimen name="dimens_100dp">100dp</dimen>
+    <dimen name="dimens_10dp">10dp</dimen>
     <dimen name="dp_22">22dp</dimen>
     <dimen name="dp_36">36dp</dimen>
     <dimen name="dp_4">4dp</dimen>

@@ -17,4 +17,7 @@
     <color name="black">#000000</color>
 
     <color name="gray">#aaa</color>
+
+    <color name="viewfinder_mask">#60000000</color>
+    <color name="light_gray">#60bfbdbd</color>
 </resources>
