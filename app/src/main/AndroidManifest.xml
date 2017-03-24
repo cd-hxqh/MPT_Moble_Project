@@ -18,6 +18,7 @@
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <!-- Permission for Unit Test -->
     <uses-permission android:name="android.permission.GET_TASKS" />
@@ -47,7 +48,21 @@
             android:screenOrientation="portrait"
             android:theme="@style/MPT.ActivityTheme" />
 
-        <activity android:name=".ui.actvity.Asset_Search_Activity"></activity>
+        <activity
+            android:name=".ui.actvity.Asset_Search_Activity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".ui.actvity.MipcaActivityCapture"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".ui.actvity.PermissionsActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".ui.actvity.LocationChooseActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".ui.actvity.Asset_Details_Activity"
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>

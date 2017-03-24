@@ -24,66 +24,72 @@
             android:orientation="vertical">
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="center_vertical"
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="@dimen/dimens_100dp"
+                    android:layout_width="@dimen/dimens_80dp"
                     android:layout_height="wrap_content"
                     android:gravity="right"
                     android:text="@string/location_text"
                     android:textSize="@dimen/dimens_16sp" />
 
-                <EditText
+                <TextView
+                    android:id="@+id/location_text_id"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/size_5dp"
-                    android:background="@drawable/bg_edit_text"
-                    android:drawableRight="@mipmap/ic_more" />
+                    android:background="@drawable/editsharp"
+                    android:gravity="center_vertical" />
 
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/size_5dp"
+                android:gravity="center_vertical"
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="@dimen/dimens_100dp"
+                    android:layout_width="@dimen/dimens_80dp"
                     android:layout_height="wrap_content"
                     android:gravity="right"
                     android:text="@string/sn_text" />
 
-                <EditText
+                <TextView
+                    android:id="@+id/sn_text_id"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/size_5dp"
-                    android:background="@drawable/bg_edit_text"
+                    android:background="@drawable/editsharp"
                     android:drawableRight="@mipmap/ic_sn"
+                    android:gravity="center_vertical"
                     android:textSize="@dimen/dimens_16sp" />
 
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/size_5dp"
+                android:gravity="center_vertical"
                 android:orientation="horizontal">
 
                 <TextView
 
-                    android:layout_width="@dimen/dimens_100dp"
+                    android:layout_width="@dimen/dimens_80dp"
                     android:layout_height="wrap_content"
                     android:gravity="right"
                     android:text="@string/item_text" />
 
-                <EditText
+                <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/size_5dp"
-                    android:background="@drawable/bg_edit_text"
+                    android:background="@drawable/editsharp"
                     android:textSize="@dimen/dimens_16sp" />
 
             </LinearLayout>
@@ -91,14 +97,18 @@
 
         </LinearLayout>
 
-        <ImageView
+        <Button
+            android:id="@+id/search_btn_id"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_margin="@dimen/dimen_10"
             android:layout_marginTop="@dimen/dimens_10dp"
             android:layout_weight="1"
-            android:src="@drawable/ic_searh" />
+            android:background="@drawable/ic_searh" />
 
 
     </LinearLayout>
+
+    <include layout="@layout/list"></include>
 
 </LinearLayout>

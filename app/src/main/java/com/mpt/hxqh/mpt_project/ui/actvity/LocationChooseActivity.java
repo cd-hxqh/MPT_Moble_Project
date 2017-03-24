@@ -1,6 +1,7 @@
-package com.mpt.hxqh.mpt_project.ui.fragment;
+package com.mpt.hxqh.mpt_project.ui.actvity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -11,35 +12,50 @@ import android.text.Spanned;
 import android.text.style.ImageSpan;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.mpt.hxqh.mpt_project.R;
 import com.mpt.hxqh.mpt_project.adpter.BaseQuickAdapter;
-import com.mpt.hxqh.mpt_project.adpter.PoAdapter;
+import com.mpt.hxqh.mpt_project.adpter.LocationAdapter;
 import com.mpt.hxqh.mpt_project.api.HttpManager;
 import com.mpt.hxqh.mpt_project.api.HttpRequestHandler;
 import com.mpt.hxqh.mpt_project.api.JsonUtils;
 import com.mpt.hxqh.mpt_project.bean.Results;
-import com.mpt.hxqh.mpt_project.model.PO;
+import com.mpt.hxqh.mpt_project.model.LOCATIONS;
 import com.mpt.hxqh.mpt_project.ui.widget.SwipeRefreshLayout;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Administrator on 2017/2/27.
- */
+ * 选择项
+ **/
 
-public class PoFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener, SwipeRefreshLayout.OnLoadListener{
-    private static final String TAG = "AssetFragment";
+public class LocationChooseActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener, SwipeRefreshLayout.OnLoadListener {
+
+    private static final String TAG = "ChooseActivity";
+
+
+    public static final int LOCATION_CODE=1000;
+
+    /**
+     * 标题*
+     */
+    private TextView titleTextView;
+    /**
+     * 返回按钮
+     */
+    private ImageView backImageView;
+
     LinearLayoutManager layoutManager;
+
+
     /**
      * RecyclerView*
      */
@@ -55,7 +71,7 @@ public class PoFragment extends BaseFragment implements SwipeRefreshLayout.OnRef
     /**
      * 适配器*
      */
-    private PoAdapter poAdapter;
+    private LocationAdapter locationAdapter;
     /**
      * 编辑框*
      */
@@ -66,43 +82,38 @@ public class PoFragment extends BaseFragment implements SwipeRefreshLayout.OnRef
     private String searchText = "";
     private int page = 1;
 
+    ArrayList<LOCATIONS> items = new ArrayList<LOCATIONS>();
 
-    ArrayList<PO> items = new ArrayList<PO>();
+
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_choose_list);
+        findViewById();
+        initView();
+
+    }
+
+
+    @Override
+    protected void findViewById() {
+        backImageView = (ImageView) findViewById(R.id.title_back_id);
+        titleTextView = (TextView) findViewById(R.id.title_name);
+        recyclerView = (RecyclerView) findViewById(R.id.recyclerView_id);
+        refresh_layout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
+        nodatalayout = (LinearLayout) findViewById(R.id.have_not_data_id);
+        search = (EditText) findViewById(R.id.search_edit);
+
+
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_list, container,
-                false);
-
-        findByIdView(view);
-        initView();
-        return view;
-    }
-
-    /**
-     * 初始化界面组件*
-     */
-    private void findByIdView(View view) {
-
-        recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView_id);
-        refresh_layout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
-        nodatalayout = (LinearLayout) view.findViewById(R.id.have_not_data_id);
-        search = (EditText) view.findViewById(R.id.search_edit);
-    }
-
-
-    /**
-     * 设置事件监听*
-     */
-    private void initView() {
+    protected void initView() {
+        backImageView.setOnClickListener(backImageViewOnClickListener);
+        titleTextView.setText("Location");
         setSearchEdit();
 
-        layoutManager = new LinearLayoutManager(getActivity());
+        layoutManager = new LinearLayoutManager(LocationChooseActivity.this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         layoutManager.scrollToPosition(0);
         recyclerView.setLayoutManager(layoutManager);
@@ -116,21 +127,30 @@ public class PoFragment extends BaseFragment implements SwipeRefreshLayout.OnRef
         refresh_layout.setOnRefreshListener(this);
         refresh_layout.setOnLoadListener(this);
 
-
+        initAdapter(new ArrayList<LOCATIONS>());
+        items = new ArrayList<>();
+        getData(searchText);
     }
+
+
+    private View.OnClickListener backImageViewOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            finish();
+        }
+    };
+
 
     @Override
     public void onStart() {
         super.onStart();
-        refresh_layout.setRefreshing(true);
-        initAdapter(new ArrayList<PO>());
-        items = new ArrayList<>();
-        getData(searchText);
+
     }
 
     @Override
     public void onLoad() {
         page++;
+
         getData(searchText);
     }
 
@@ -138,11 +158,12 @@ public class PoFragment extends BaseFragment implements SwipeRefreshLayout.OnRef
     public void onRefresh() {
         page = 1;
         getData(searchText);
+
     }
 
 
     private void setSearchEdit() {
-        SpannableString msp = new SpannableString(getString(R.string.search_text));
+        SpannableString msp = new SpannableString("XXSearch");
         Drawable drawable = getResources().getDrawable(R.drawable.ic_search);
         msp.setSpan(new ImageSpan(drawable), 0, 2, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
@@ -155,12 +176,12 @@ public class PoFragment extends BaseFragment implements SwipeRefreshLayout.OnRef
                     // 先隐藏键盘
                     ((InputMethodManager) search.getContext().getSystemService(Context.INPUT_METHOD_SERVICE))
                             .hideSoftInputFromWindow(
-                                    getActivity().getCurrentFocus()
+                                    getCurrentFocus()
                                             .getWindowToken(),
                                     InputMethodManager.HIDE_NOT_ALWAYS);
                     searchText = search.getText().toString();
-                    poAdapter.removeAll(items);
-                    items = new ArrayList<PO>();
+                    locationAdapter.removeAll(items);
+                    items = new ArrayList<LOCATIONS>();
                     nodatalayout.setVisibility(View.GONE);
                     refresh_layout.setRefreshing(true);
                     page = 1;
@@ -177,7 +198,7 @@ public class PoFragment extends BaseFragment implements SwipeRefreshLayout.OnRef
      * 获取数据*
      */
     private void getData(String search) {
-        HttpManager.getDataPagingInfo(getActivity(), "", new HttpRequestHandler<Results>() {
+        HttpManager.getDataPagingInfo(LocationChooseActivity.this, HttpManager.getLocationUrl(search, page, 20), new HttpRequestHandler<Results>() {
             @Override
             public void onSuccess(Results results) {
                 Log.i(TAG, "data=" + results);
@@ -185,7 +206,7 @@ public class PoFragment extends BaseFragment implements SwipeRefreshLayout.OnRef
 
             @Override
             public void onSuccess(Results results, int totalPages, int currentPage) {
-                ArrayList<PO> item = JsonUtils.parsingPO(getActivity(), results.getResultlist());
+                ArrayList<LOCATIONS> item = JsonUtils.parsingLOCATIONS(LocationChooseActivity.this, results.getResultlist());
                 refresh_layout.setRefreshing(false);
                 refresh_layout.setLoading(false);
                 if (item == null || item.isEmpty()) {
@@ -194,8 +215,8 @@ public class PoFragment extends BaseFragment implements SwipeRefreshLayout.OnRef
 
                     if (item != null || item.size() != 0) {
                         if (page == 1) {
-                            items = new ArrayList<PO>();
-                            initAdapter(items);
+                            items = new ArrayList<LOCATIONS>();
+                            initAdapter(new ArrayList<LOCATIONS>());
                         }
                         for (int i = 0; i < item.size(); i++) {
                             items.add(item.get(i));
@@ -218,20 +239,22 @@ public class PoFragment extends BaseFragment implements SwipeRefreshLayout.OnRef
     }
 
 
+
     /**
      * 获取数据*
      */
-    private void initAdapter(final List<PO> list) {
-        poAdapter = new PoAdapter(getActivity(), R.layout.list_item_po, list);
-        recyclerView.setAdapter(poAdapter);
-        poAdapter.setOnRecyclerViewItemClickListener(new BaseQuickAdapter.OnRecyclerViewItemClickListener() {
+    private void initAdapter(final List<LOCATIONS> list) {
+        locationAdapter = new LocationAdapter(LocationChooseActivity.this, R.layout.list_item, list);
+        recyclerView.setAdapter(locationAdapter);
+        locationAdapter.setOnRecyclerViewItemClickListener(new BaseQuickAdapter.OnRecyclerViewItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-//                Intent intent = new Intent(getActivity(), AssetDetailsActivity.class);
-//                Bundle bundle = new Bundle();
-//                bundle.putSerializable("asset", items.get(position));
-//                intent.putExtras(bundle);
-//                startActivityForResult(intent, 0);
+
+                Intent intent = getIntent();
+                intent.putExtra("Location", list.get(position).getLOCATION());
+                setResult(LOCATION_CODE, intent);
+                finish();
+
             }
         });
     }
@@ -239,8 +262,7 @@ public class PoFragment extends BaseFragment implements SwipeRefreshLayout.OnRef
     /**
      * 添加数据*
      */
-    private void addData(final List<PO> list) {
-        poAdapter.addData(list);
+    private void addData(final List<LOCATIONS> list) {
+        locationAdapter.addData(list);
     }
-
 }
