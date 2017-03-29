@@ -7,7 +7,7 @@
     <string name="quit">退出</string>
     <string name="user_name_text">User Name</string>
     <string name="pass_word_text">Pass Word</string>
-    <string name="remenber_pass_text">记住密码</string>
+    <string name="remenber_pass_text">Remember the password</string>
     <string name="login_text">Login</string>
 
 
@@ -42,16 +42,16 @@
     <string name="error_unknown">未知错误</string>
     <string name="load">正在加载</string>
     <string name="load1">暂无数据</string>
-    <string name="have_not_data_txt">暂无相关数据</string>
+    <string name="have_not_data_txt">No related data</string>
     <string name="loading">Loading...</string>
 
     <string name="search_text">XXsearch</string>
 
-    <string name="get_data_info_fail">获取信息失败</string>
-    <string name="login_success">登录成功</string>
-    <string name="login_successful_hint">登陆成功</string>
+    <string name="get_data_info_fail">Failed to get information</string>
+    <string name="login_success">Log in successfully</string>
+    <string name="login_successful_hint">Log in successfully</string>
     <!--退出程序-->
-    <string name="exit_text">再按一次退出程序</string>
+    <string name="exit_text">Again according to exit the program</string>
 
     <!--主菜单-->
     <string name="asset_mangment_text">Asset Mangment</string>
@@ -83,5 +83,32 @@
     <string name="pat_date_text">Pat Date:</string>
     <string name="configure_text">Configure:</string>
     <string name="phase_text">Phase:</string>
+    <string name="asset_transfer">Asset Transfer</string>
+    <string name="order_text">Order:</string>
+    <string name="from_storeroom_text">From Storeroom:</string>
+    <string name="inventory_owner_text">Inventory Owner:</string>
+    <string name="type_text">Type</string>
+    <string name="item1_text">Item</string>
+    <string name="to_storeroom_text">To Storeroom</string>
+    <string name="descrition_text">Descrition</string>
+    <string name="asset_repair_text">Asset Repair</string>
+    <string name="install_date1_text">Install Date:</string>
+    <string name="sn_text1">SN</string>
+    <string name="location_text_id">Location</string>
+    <string name="repair_date_text">Repair Date</string>
+    <string name="asset_retirement_text">Asset Retirement</string>
+    <string name="retire_no_text">Retire No:</string>
+    <string name="retire_date_text">Retire Date:</string>
+    <string name="asset_management_text">Asset Management</string>
+    <string name="from_department_text">From Dep:</string>
+    <string name="assetnum_text">Assetnum</string>
+    <string name="desc_text">Desc</string>
+    <string name="Material_outbound_text">Material Outbound</string>
+    <string name="material_refund_text">Material Refund</string>
+    <string name="inv_owner_text">Inv Owner:</string>
+    <string name="line_type_text">Line Type</string>
+    <string name="quantity_text">Qty</string>
+    <string name="to_loc_text">To Loc</string>
+    <string name="to_storeroom1_text">To Storeroom</string>
 
 </resources>

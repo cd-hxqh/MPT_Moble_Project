@@ -21,6 +21,19 @@ public class MainActivity extends BaseActivity {
 
     private ImageView assetImagView;//资产查询
 
+    private ImageView udasstImagView;//资产维修
+
+    private ImageView transferImagView;//资产转移
+
+    private ImageView udretireImagView;//资产报废
+
+    private ImageView udassettransfImagView;//资产移动
+
+    private ImageView workorderImagView;//物料出库
+
+    private ImageView mainvuseImagView;//物料退库
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +47,12 @@ public class MainActivity extends BaseActivity {
         backImageView = (ImageView) findViewById(R.id.title_back_id);
         titleTextView = (TextView) findViewById(R.id.title_name);
         assetImagView = (ImageView) findViewById(R.id.asset_image_id);
+        udasstImagView = (ImageView) findViewById(R.id.udasst_image_id);
+        transferImagView = (ImageView) findViewById(R.id.transfer_image_id);
+        udretireImagView = (ImageView) findViewById(R.id.udretire_image_id);
+        udassettransfImagView = (ImageView) findViewById(R.id.udassettransf_image_id);
+        workorderImagView = (ImageView) findViewById(R.id.workorder_image_id);
+        mainvuseImagView = (ImageView) findViewById(R.id.mainvuse_image_id);
     }
 
     @Override
@@ -41,6 +60,12 @@ public class MainActivity extends BaseActivity {
         backImageView.setVisibility(View.GONE);
         titleTextView.setText(R.string.main_text);
         assetImagView.setOnClickListener(assetImagViewOnClickListener);
+        udasstImagView.setOnClickListener(udasstImagViewOnClickListener);
+        transferImagView.setOnClickListener(transferImagViewOnClickListener);
+        udretireImagView.setOnClickListener(udretireImagViewOnClickListener);
+        udassettransfImagView.setOnClickListener(udassettransfImagViewOnClickListener);
+        workorderImagView.setOnClickListener(workorderImagViewOnClickListener);
+        mainvuseImagView.setOnClickListener(mainvuseImagViewOnClickListener);
     }
 
     /**
@@ -50,6 +75,72 @@ public class MainActivity extends BaseActivity {
         @Override
         public void onClick(View view) {
             Intent intent = new Intent(MainActivity.this, Asset_Search_Activity.class);
+            startActivityForResult(intent, 0);
+
+        }
+    };
+    /**
+     * 资产维修
+     **/
+    private View.OnClickListener udasstImagViewOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Intent intent = new Intent(MainActivity.this, Asset_Udasst_Activity.class);
+            startActivityForResult(intent, 0);
+
+        }
+    };
+    /**
+     * 资产转移
+     **/
+    private View.OnClickListener transferImagViewOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Intent intent = new Intent(MainActivity.this, Asset_Transfer_Activity.class);
+            startActivityForResult(intent, 0);
+
+        }
+    };
+    /**
+     * 资产转移
+     **/
+    private View.OnClickListener udretireImagViewOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Intent intent = new Intent(MainActivity.this, Asset_Udretire_Activity.class);
+            startActivityForResult(intent, 0);
+
+        }
+    };
+    /**
+     * 资产移动
+     **/
+    private View.OnClickListener udassettransfImagViewOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Intent intent = new Intent(MainActivity.this, Asset_Udassettransf_Activity.class);
+            startActivityForResult(intent, 0);
+
+        }
+    };
+    /**
+     * 物料出库
+     **/
+    private View.OnClickListener workorderImagViewOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Intent intent = new Intent(MainActivity.this, Material_Workorder_Activity.class);
+            startActivityForResult(intent, 0);
+
+        }
+    };
+    /**
+     * 物料出库
+     **/
+    private View.OnClickListener mainvuseImagViewOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Intent intent = new Intent(MainActivity.this, Material_Mainvuse_Activity.class);
             startActivityForResult(intent, 0);
 
         }

@@ -52,6 +52,130 @@ public class HttpManager {
 
 
     /**
+     * 设置资产转移*
+     */
+    public static String getINVUSEURL(String vlaue, int curpage, int showcount) {
+        if (vlaue.equals("")) {
+            return "{'appid':'" + Constants.ASOUTB_NAME + "','objectname':'" + Constants.INVUSE_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read'}";
+        } else {
+            return "{'appid':'" + Constants.ASOUTB_NAME + "','objectname':'" + Constants.INVUSE_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','sinorsearch':{'INVUSENUM':'" + vlaue + "','DESCRIPTION':'" + vlaue + "'}}";
+        }
+    }
+
+    /**
+     * 设置资产转移行表*
+     */
+    public static String getINVUSELINEURL(String invusenum, int curpage, int showcount) {
+            return "{'appid':'" + Constants.ASOUTB_NAME + "','objectname':'" + Constants.INVUSELINE_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','condition':{'INVUSENUM':'=" + invusenum + "'}}";
+
+    }
+
+    /**
+     * 设置资产维修*
+     */
+    public static String getUDASSTURL(String vlaue, int curpage, int showcount) {
+        if (vlaue.equals("")) {
+            return "{'appid':'" + Constants.UDASREP_NAME + "','objectname':'" + Constants.UDASST_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read'}";
+        } else {
+            return "{'appid':'" + Constants.UDASREP_NAME + "','objectname':'" + Constants.UDASST_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','sinorsearch':{'UDASSTNUM':'" + vlaue + "','DESCRIPTION':'" + vlaue + "'}}";
+        }
+    }
+
+    /**
+     * 设置资产维修行表*
+     */
+    public static String getUDASSTREPURL(String udasstnum, int curpage, int showcount) {
+        return "{'appid':'" + Constants.UDASREP_NAME + "','objectname':'" + Constants.UDASSTREP_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','condition':{'UDASSTNUM':'=" + udasstnum + "'}}";
+
+    }
+
+    /**
+     * 设置资产报废*
+     */
+    public static String getUDRETIREURL(String vlaue, int curpage, int showcount) {
+        if (vlaue.equals("")) {
+            return "{'appid':'" + Constants.UDRETIRE_APPID + "','objectname':'" + Constants.UDRETIRE_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read'}";
+        } else {
+            return "{'appid':'" + Constants.UDRETIRE_APPID + "','objectname':'" + Constants.UDRETIRE_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','sinorsearch':{'RETIRENUM':'" + vlaue + "','DESCRIPTION':'" + vlaue + "'}}";
+        }
+    }
+
+    /**
+     * 设置资产维修行表*
+     */
+    public static String getUDRETIRELINEURL(String retirenum, int curpage, int showcount) {
+        return "{'appid':'" + Constants.UDRETIRE_APPID + "','objectname':'" + Constants.UDRETIRELINE_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','condition':{'RETIRENUM':'=" + retirenum + "'}}";
+
+    }
+    /**
+     * 设置资产移动*
+     */
+    public static String getUDASSETTRANSFURL(String vlaue, int curpage, int showcount) {
+        if (vlaue.equals("")) {
+            return "{'appid':'" + Constants.ASTRANSF_APPID + "','objectname':'" + Constants.UDASSETTRANSF_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read'}";
+        } else {
+            return "{'appid':'" + Constants.ASTRANSF_APPID + "','objectname':'" + Constants.UDASSETTRANSF_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','sinorsearch':{'ASSETTRANNUM':'" + vlaue + "','DESCRIPTION':'" + vlaue + "'}}";
+        }
+    }
+
+    /**
+     * 设置资产移动行表*
+     */
+    public static String getUDTRANSFLINEURL(String assettrannum, int curpage, int showcount) {
+        return "{'appid':'" + Constants.ASTRANSF_APPID + "','objectname':'" + Constants.UDTRANSFLINE_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','condition':{'ASSETTRANNUM':'=" + assettrannum + "'}}";
+
+    }
+
+
+    /**
+     * 设置物料出库*
+     */
+    public static String getWORKORDERURL(String vlaue, int curpage, int showcount) {
+        if (vlaue.equals("")) {
+            return "{'appid':'" + Constants.WOFMOUT_APPID + "','objectname':'" + Constants.WORKORDER_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read'}";
+        } else {
+            return "{'appid':'" + Constants.WOFMOUT_APPID + "','objectname':'" + Constants.WORKORDER_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','sinorsearch':{'WONUM':'" + vlaue + "','DESCRIPTION':'" + vlaue + "'}}";
+        }
+    }
+
+    /**
+     * 设置物料出库计划行表*
+     */
+    public static String getWPMATERIALURL(String wonum, int curpage, int showcount) {
+        return "{'appid':'" + Constants.WOFMOUT_APPID + "','objectname':'" + Constants.WPMATERIAL_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','condition':{'WONUM':'=" + wonum + "'}}";
+
+    }
+
+    /**
+     * 设置物料出库计划行表*
+     */
+    public static String getMATUSETRANSURL(String wonum, int curpage, int showcount) {
+        return "{'appid':'" + Constants.WOFMOUT_APPID + "','objectname':'" + Constants.WPMATERIAL_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','condition':{'WONUM':'=" + wonum + "'}}";
+
+    }
+
+
+    /**
+     * 设置物料退库*
+     */
+    public static String getMAINVUSE(String vlaue, int curpage, int showcount) {
+        if (vlaue.equals("")) {
+            return "{'appid':'" + Constants.MATREF_APPID + "','objectname':'" + Constants.MAINVUSE_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read'}";
+        } else {
+            return "{'appid':'" + Constants.MATREF_APPID + "','objectname':'" + Constants.MAINVUSE_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','sinorsearch':{'INVUSENUM':'" + vlaue + "','DESCRIPTION':'" + vlaue + "'}}";
+        }
+    }
+
+    /**
+     * 设置物料出库计划行表*
+     */
+    public static String getMAINVUSELINEURL(String invusenum, int curpage, int showcount) {
+        return "{'appid':'" + Constants.MATREF_APPID + "','objectname':'" + Constants.MAINVUSELINE_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','condition':{'INVUSENUM':'=" + invusenum + "'}}";
+
+    }
+
+
+    /**
      * 使用用户名密码登录
      *
      * @param cxt

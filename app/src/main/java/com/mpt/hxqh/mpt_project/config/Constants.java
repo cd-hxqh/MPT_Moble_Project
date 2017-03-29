@@ -55,8 +55,53 @@ public class Constants {
     //资产appid
     public static final String UDMPTASSET_APPID = "UDMPTASSET" ;
 
-    //位置的表名
+    //资产的表名
     public static final String ASSET_NAME = "ASSET";
+
+    //资产转移appid
+    public static final String ASOUTB_NAME = "ASOUTB";
+    //资产转移的表名
+    public static final String INVUSE_NAME = "INVUSE";
+    //资产转移行的表名
+    public static final String INVUSELINE_NAME = "INVUSELINE";
+
+    //资产维修appid
+    public static final String UDASREP_NAME = "UDASREP";
+    //资产维修的表名
+    public static final String UDASST_NAME = "UDASST";
+    //资产维修行的表名
+    public static final String UDASSTREP_NAME = "UDASSTREP";
+
+    //资产报废appid
+    public static final String UDRETIRE_APPID = "UDRETIRE";
+    //资产报废的表名
+    public static final String UDRETIRE_NAME = "UDRETIRE";
+    //资产报废行的表名
+    public static final String UDRETIRELINE_NAME = "UDRETIRELINE";
+
+    //资产移动appid
+    public static final String ASTRANSF_APPID = "ASTRANSF";
+    //资产移动的表名
+    public static final String UDASSETTRANSF_NAME = "UDASSETTRANSF";
+    //资产移动行的表名
+    public static final String UDTRANSFLINE_NAME = "UDTRANSFLINE";
+
+    //物料出库appid
+    public static final String WOFMOUT_APPID = "WOFMOUT";
+    //物料出库的表名
+    public static final String WORKORDER_NAME = "WORKORDER";
+    //物料出库计划行的表名
+    public static final String WPMATERIAL_NAME = "WPMATERIAL";
+    //物料出库实际行的表名
+    public static final String MATUSETRANS_NAME = "MATUSETRANS";
+
+    //物料退库appid
+    public static final String MATREF_APPID = "MATREF";
+    //物料退库的表名
+    public static final String MAINVUSE_NAME = "INVUSE";
+    //物料退库行的表名
+    public static final String MAINVUSELINE_NAME = "INVUSELINE";
+
 
      /***数据库表名配置--结束***/
 

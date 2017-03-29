@@ -63,6 +63,39 @@
         <activity
             android:name=".ui.actvity.Asset_Details_Activity"
             android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".ui.actvity.Asset_Transfer_Activity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".ui.actvity.Transfer_Details_Activity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".ui.actvity.Asset_Udasst_Activity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".ui.actvity.Udasst_Details_Activity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".ui.actvity.Asset_Udretire_Activity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".ui.actvity.Udretire_Details_Activity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".ui.actvity.Asset_Udassettransf_Activity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".ui.actvity.Udassettransf_Details_Activity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".ui.actvity.Material_Workorder_Activity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".ui.actvity.Material_Mainvuse_Activity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".ui.actvity.Mainvuse_Details_Activity"
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>
