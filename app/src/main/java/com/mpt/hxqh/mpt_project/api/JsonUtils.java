@@ -13,11 +13,13 @@ import com.mpt.hxqh.mpt_project.model.LOCATIONS;
 import com.mpt.hxqh.mpt_project.model.MAINVUSE;
 import com.mpt.hxqh.mpt_project.model.MAINVUSELINE;
 import com.mpt.hxqh.mpt_project.model.PO;
+import com.mpt.hxqh.mpt_project.model.POLINE;
 import com.mpt.hxqh.mpt_project.model.UDASSETTRANSF;
 import com.mpt.hxqh.mpt_project.model.UDASST;
 import com.mpt.hxqh.mpt_project.model.UDASSTREP;
 import com.mpt.hxqh.mpt_project.model.UDRETIRE;
 import com.mpt.hxqh.mpt_project.model.UDRETIRELINE;
+import com.mpt.hxqh.mpt_project.model.UDSTOCKT;
 import com.mpt.hxqh.mpt_project.model.UDTRANSFLINE;
 import com.mpt.hxqh.mpt_project.model.WORKORDER;
 
@@ -169,6 +171,7 @@ public class JsonUtils<E> {
             return null;
         }
     }
+
     /**
      * 资产选择
      */
@@ -214,6 +217,7 @@ public class JsonUtils<E> {
             return null;
         }
     }
+
     /**
      * 资产转移
      */
@@ -261,7 +265,6 @@ public class JsonUtils<E> {
     }
 
 
-
     /**
      * 资产转移行
      */
@@ -306,7 +309,6 @@ public class JsonUtils<E> {
             return null;
         }
     }
-
 
 
     /**
@@ -443,6 +445,7 @@ public class JsonUtils<E> {
             return null;
         }
     }
+
     /**
      * 资产报废行
      */
@@ -672,7 +675,7 @@ public class JsonUtils<E> {
     }
 
     /**
-     * 物料退库
+     * 物料退库行
      */
     public static ArrayList<MAINVUSELINE> parsingMAINVUSELINE(String data) {
         ArrayList<MAINVUSELINE> list = null;
@@ -716,16 +719,56 @@ public class JsonUtils<E> {
         }
     }
 
+    /**
+     * 物料盘点
+     */
+    public static ArrayList<UDSTOCKT> parsingUDSTOCKT(String data) {
+        ArrayList<UDSTOCKT> list = null;
+        UDSTOCKT udstockt = null;
+        try {
+            JSONArray jsonArray = new JSONArray(data);
+            JSONObject jsonObject;
+            list = new ArrayList<UDSTOCKT>();
+            for (int i = 0; i < jsonArray.length(); i++) {
+                udstockt = new UDSTOCKT();
+                jsonObject = jsonArray.getJSONObject(i);
+                Field[] field = udstockt.getClass().getDeclaredFields();        //获取实体类的所有属性，返回Field数组
+                for (int j = 0; j < field.length; j++) {     //遍历所有属性
+                    field[j].setAccessible(true);
+                    String name = field[j].getName();    //获取属性的名字
+                    if (jsonObject.has(name) && jsonObject.getString(name) != null && !jsonObject.getString(name).equals("")) {
+                        try {
+                            // 调用getter方法获取属性值
+                            Method getOrSet = udstockt.getClass().getMethod("get" + name);
+                            Object value = getOrSet.invoke(udstockt);
+                            if (value == null) {
+                                //调用setter方法设属性值
+                                Class[] parameterTypes = new Class[1];
+                                parameterTypes[0] = field[j].getType();
+                                getOrSet = udstockt.getClass().getDeclaredMethod("set" + name, parameterTypes);
+                                getOrSet.invoke(udstockt, jsonObject.getString(name));
+                            }
 
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
 
-
-
+                }
+                list.add(udstockt);
+            }
+            return list;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
 
     /**
      * 采购接收*
      */
-    public static ArrayList<PO> parsingPO(Context ctx, String data) {
+    public static ArrayList<PO> parsingPO(String data) {
         Log.i(TAG, "udpro data=" + data);
         ArrayList<PO> list = null;
         PO po = null;
@@ -770,6 +813,50 @@ public class JsonUtils<E> {
         }
     }
 
+    /**
+     * 采购接收*
+     */
+    public static ArrayList<POLINE> parsingPOLINE(String data) {
+        ArrayList<POLINE> list = null;
+        POLINE poline = null;
+        try {
+            JSONArray jsonArray = new JSONArray(data);
+            JSONObject jsonObject;
+            list = new ArrayList<POLINE>();
+            for (int i = 0; i < jsonArray.length(); i++) {
+                poline = new POLINE();
+                jsonObject = jsonArray.getJSONObject(i);
+                Field[] field = poline.getClass().getDeclaredFields();        //获取实体类的所有属性，返回Field数组
+                for (int j = 0; j < field.length; j++) {     //遍历所有属性
+                    field[j].setAccessible(true);
+                    String name = field[j].getName();    //获取属性的名字
+                    if (jsonObject.has(name) && jsonObject.getString(name) != null && !jsonObject.getString(name).equals("")) {
+                        try {
+                            // 调用getter方法获取属性值
+                            Method getOrSet = poline.getClass().getMethod("get" + name);
+                            Object value = getOrSet.invoke(poline);
+                            if (value == null) {
+                                //调用setter方法设属性值
+                                Class[] parameterTypes = new Class[1];
+                                parameterTypes[0] = field[j].getType();
+                                getOrSet = poline.getClass().getDeclaredMethod("set" + name, parameterTypes);
+                                getOrSet.invoke(poline, jsonObject.getString(name));
+                            }
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                }
+                list.add(poline);
+            }
+            return list;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
 
 }

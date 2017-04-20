@@ -96,6 +96,24 @@
         <activity
             android:name=".ui.actvity.Mainvuse_Details_Activity"
             android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".ui.actvity.Material_Udstockt_Activity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".ui.actvity.Udstockt_Details_Activity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".ui.actvity.Material_PO_Activity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".ui.actvity.Po_Details_Activity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".ui.actvity.Material_Maainvuse_Activity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".ui.actvity.Maainvuse_Details_Activity"
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>

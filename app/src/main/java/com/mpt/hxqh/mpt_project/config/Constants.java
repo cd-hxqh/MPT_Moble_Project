@@ -97,10 +97,27 @@ public class Constants {
 
     //物料退库appid
     public static final String MATREF_APPID = "MATREF";
+    //物料转移appid
+    public static final String MATOUTB_APPID = "MATOUTB";
     //物料退库的表名
     public static final String MAINVUSE_NAME = "INVUSE";
     //物料退库行的表名
     public static final String MAINVUSELINE_NAME = "INVUSELINE";
+
+    //物料盘点appid
+    public static final String UDSTOCKT_APPID = "UDSTOCKT";
+    //物料盘点的表名
+    public static final String UDSTOCKT_NAME = "UDSTOCKT";
+    //物料盘点行的表名
+    public static final String UDSTOCKTLINE_NAME = "UDSTOCKTLINE";
+
+
+    //采购接收appid
+    public static final String WHIN_APPID = "WHIN";
+    //采购接收的表名
+    public static final String PO_NAME = "PO";
+    //采购接收行的表名
+    public static final String POLINE_NAME = "POLINE";
 
 
      /***数据库表名配置--结束***/

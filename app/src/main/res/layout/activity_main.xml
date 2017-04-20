@@ -142,6 +142,7 @@
                         android:src="@mipmap/ic_refund" />
 
                     <ImageView
+                        android:id="@+id/udstockt_image_id"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/size_5dp"
@@ -155,6 +156,7 @@
                     android:layout_height="wrap_content">
 
                     <ImageView
+                        android:id="@+id/po_image_id"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/size_5dp"
@@ -162,6 +164,7 @@
                         android:src="@mipmap/ic_receive" />
 
                     <ImageView
+                        android:id="@+id/maainvuse_image_id"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/size_5dp"

@@ -4,7 +4,7 @@ import android.animation.Animator;
 import android.content.Context;
 
 import com.mpt.hxqh.mpt_project.R;
-import com.mpt.hxqh.mpt_project.model.PO;
+import com.mpt.hxqh.mpt_project.model.UDSTOCKT;
 import com.mpt.hxqh.mpt_project.ui.widget.BaseViewHolder;
 
 import java.util.List;
@@ -12,12 +12,12 @@ import java.util.List;
 
 /**
  * Created by apple on 15/10/26
- * 采购接收
+ * 物料盘点
  */
-public class PoAdapter extends BaseQuickAdapter<PO> {
+public class UdstocktAdapter extends BaseQuickAdapter<UDSTOCKT> {
     private int position;
 
-    public PoAdapter(Context context, int layoutResId, List data) {
+    public UdstocktAdapter(Context context, int layoutResId, List data) {
         super(context, layoutResId, data);
     }
 
@@ -30,8 +30,8 @@ public class PoAdapter extends BaseQuickAdapter<PO> {
     }
 
     @Override
-    protected void convert(BaseViewHolder helper, PO item) {
-        helper.setText(R.id.num_text_id, item.getPONUM());
+    protected void convert(BaseViewHolder helper, UDSTOCKT item) {
+        helper.setText(R.id.num_text_id, item.getSTOCKTNUM());
         helper.setText(R.id.description_text, item.getDESCRIPTION());
         helper.setText(R.id.status_text_id, item.getSTATUS());
     }

@@ -176,6 +176,65 @@ public class HttpManager {
 
 
     /**
+     * 设置物料盘点*
+     */
+    public static String getUDSTOCKT(String vlaue, int curpage, int showcount) {
+        if (vlaue.equals("")) {
+            return "{'appid':'" + Constants.UDSTOCKT_APPID + "','objectname':'" + Constants.UDSTOCKT_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read'}";
+        } else {
+            return "{'appid':'" + Constants.UDSTOCKT_APPID + "','objectname':'" + Constants.UDSTOCKT_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','sinorsearch':{'STOCKTNUM':'" + vlaue + "','DESCRIPTION':'" + vlaue + "'}}";
+        }
+    }
+
+    /**
+     * 设置物料盘点行*
+     */
+    public static String getUDSTOCKTLINEURL(String stocktnum, int curpage, int showcount) {
+        return "{'appid':'" + Constants.UDSTOCKT_APPID + "','objectname':'" + Constants.UDSTOCKTLINE_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','condition':{'STOCKTNUM':'=" + stocktnum + "'}}";
+
+    }
+
+    /**
+     * 设置采购接收*
+     */
+    public static String getPOURL(String vlaue, int curpage, int showcount) {
+        if (vlaue.equals("")) {
+            return "{'appid':'" + Constants.WHIN_APPID + "','objectname':'" + Constants.PO_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read'}";
+        } else {
+            return "{'appid':'" + Constants.WHIN_APPID + "','objectname':'" + Constants.PO_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','sinorsearch':{'PONUM':'" + vlaue + "','DESCRIPTION':'" + vlaue + "'}}";
+        }
+    }
+
+    /**
+     * 设置采购接收行*
+     */
+    public static String getPOLINEURL(String ponum, int curpage, int showcount) {
+        return "{'appid':'" + Constants.WHIN_APPID + "','objectname':'" + Constants.POLINE_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','condition':{'PONUM':'=" + ponum + "'}}";
+
+    }
+
+
+    /**
+     * 设置物料转移*
+     */
+    public static String getMAAINVUSE(String vlaue, int curpage, int showcount) {
+        if (vlaue.equals("")) {
+            return "{'appid':'" + Constants.MATOUTB_APPID + "','objectname':'" + Constants.MAINVUSE_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read'}";
+        } else {
+            return "{'appid':'" + Constants.MATOUTB_APPID + "','objectname':'" + Constants.MAINVUSE_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','sinorsearch':{'INVUSENUM':'" + vlaue + "','DESCRIPTION':'" + vlaue + "'}}";
+        }
+    }
+
+    /**
+     * 设置物料转移行表*
+     */
+    public static String getMAAINVUSELINEURL(String invusenum, int curpage, int showcount) {
+        return "{'appid':'" + Constants.MATOUTB_APPID + "','objectname':'" + Constants.MAINVUSELINE_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','condition':{'INVUSENUM':'=" + invusenum + "'}}";
+
+    }
+
+
+    /**
      * 使用用户名密码登录
      *
      * @param cxt

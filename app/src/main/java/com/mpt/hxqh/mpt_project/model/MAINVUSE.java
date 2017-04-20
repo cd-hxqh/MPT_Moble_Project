@@ -14,6 +14,7 @@ public class MAINVUSE implements Serializable {
     public String INVUSENUM;//INVUSENUM
     public String SITEID;//SITEID
     public String STATUS;//STATUS
+    public String USETYPE;//USETYPE
 
     public String getDESCRIPTION() {
         return DESCRIPTION;
@@ -61,5 +62,13 @@ public class MAINVUSE implements Serializable {
 
     public void setSTATUS(String STATUS) {
         this.STATUS = STATUS;
+    }
+
+    public String getUSETYPE() {
+        return USETYPE;
+    }
+
+    public void setUSETYPE(String USETYPE) {
+        this.USETYPE = USETYPE;
     }
 }

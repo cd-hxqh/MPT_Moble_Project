@@ -33,6 +33,12 @@ public class MainActivity extends BaseActivity {
 
     private ImageView mainvuseImagView;//物料退库
 
+    private ImageView udstocktImagView;//物料盘点
+
+    private ImageView poImagView;//采购接收
+
+    private ImageView maainvuseImagView;//物料转移
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +59,9 @@ public class MainActivity extends BaseActivity {
         udassettransfImagView = (ImageView) findViewById(R.id.udassettransf_image_id);
         workorderImagView = (ImageView) findViewById(R.id.workorder_image_id);
         mainvuseImagView = (ImageView) findViewById(R.id.mainvuse_image_id);
+        udstocktImagView = (ImageView) findViewById(R.id.udstockt_image_id);
+        poImagView = (ImageView) findViewById(R.id.po_image_id);
+        maainvuseImagView = (ImageView) findViewById(R.id.maainvuse_image_id);
     }
 
     @Override
@@ -66,6 +75,9 @@ public class MainActivity extends BaseActivity {
         udassettransfImagView.setOnClickListener(udassettransfImagViewOnClickListener);
         workorderImagView.setOnClickListener(workorderImagViewOnClickListener);
         mainvuseImagView.setOnClickListener(mainvuseImagViewOnClickListener);
+        udstocktImagView.setOnClickListener(udstocktImagViewOnClickListener);
+        poImagView.setOnClickListener(poImagViewOnClickListener);
+        maainvuseImagView.setOnClickListener(maainvuseImagViewOnClickListener);
     }
 
     /**
@@ -141,6 +153,40 @@ public class MainActivity extends BaseActivity {
         @Override
         public void onClick(View view) {
             Intent intent = new Intent(MainActivity.this, Material_Mainvuse_Activity.class);
+            startActivityForResult(intent, 0);
+
+        }
+    };
+
+    /**
+     * 物料出库
+     **/
+    private View.OnClickListener udstocktImagViewOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Intent intent = new Intent(MainActivity.this, Material_Udstockt_Activity.class);
+            startActivityForResult(intent, 0);
+
+        }
+    };
+    /**
+     * 采购接收
+     **/
+    private View.OnClickListener poImagViewOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Intent intent = new Intent(MainActivity.this, Material_PO_Activity.class);
+            startActivityForResult(intent, 0);
+
+        }
+    };
+    /**
+     * 采购接收
+     **/
+    private View.OnClickListener maainvuseImagViewOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Intent intent = new Intent(MainActivity.this, Material_Maainvuse_Activity.class);
             startActivityForResult(intent, 0);
 
         }

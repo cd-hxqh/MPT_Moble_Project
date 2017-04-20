@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MPT</string>
+    <string name="app_name">MPT-IM</string>
     <!--权限设置-->
     <string name="settings">设置</string>
     <string name="help">帮助</string>
@@ -110,5 +110,10 @@
     <string name="quantity_text">Qty</string>
     <string name="to_loc_text">To Loc</string>
     <string name="to_storeroom1_text">To Storeroom</string>
+    <string name="material_stocktaking_text">Material Stocktaking</string>
+    <string name="vendor1_text">Vendor:</string>
+    <string name="material_receive_text">Material Receive</string>
+    <string name="revision_text">Revision:</string>
+    <string name="material_transfer_text">Material Transfer</string>
 
 </resources>

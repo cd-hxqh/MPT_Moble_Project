@@ -7,13 +7,22 @@ import java.io.Serializable;
  */
 
 public class POLINE implements Serializable {
-    public String LINETYPE;//LineType
-    public String SERIALNUM;//SN
+    public String EXIST;//LineType
+    public String LINETYPE;//LINETYPE
     public String LOCATION;//Location
-    public String STORELOC;//Storeroom
-    public String SCANNER;//Scanner
-    public String POLINENUM;//Line
-    public String EXIST;//Exist？
+    public String POLINENUM;//POLINENUM
+    public String PONUM;//PONUM
+    public String SCANNER;//SCANNER
+    public String SERIALNUM;//SERIALNUM
+    public String STORELOC;//STORELOC
+
+    public String getEXIST() {
+        return EXIST;
+    }
+
+    public void setEXIST(String EXIST) {
+        this.EXIST = EXIST;
+    }
 
     public String getLINETYPE() {
         return LINETYPE;
@@ -21,14 +30,6 @@ public class POLINE implements Serializable {
 
     public void setLINETYPE(String LINETYPE) {
         this.LINETYPE = LINETYPE;
-    }
-
-    public String getSERIALNUM() {
-        return SERIALNUM;
-    }
-
-    public void setSERIALNUM(String SERIALNUM) {
-        this.SERIALNUM = SERIALNUM;
     }
 
     public String getLOCATION() {
@@ -39,12 +40,20 @@ public class POLINE implements Serializable {
         this.LOCATION = LOCATION;
     }
 
-    public String getSTORELOC() {
-        return STORELOC;
+    public String getPOLINENUM() {
+        return POLINENUM;
     }
 
-    public void setSTORELOC(String STORELOC) {
-        this.STORELOC = STORELOC;
+    public void setPOLINENUM(String POLINENUM) {
+        this.POLINENUM = POLINENUM;
+    }
+
+    public String getPONUM() {
+        return PONUM;
+    }
+
+    public void setPONUM(String PONUM) {
+        this.PONUM = PONUM;
     }
 
     public String getSCANNER() {
@@ -55,19 +64,19 @@ public class POLINE implements Serializable {
         this.SCANNER = SCANNER;
     }
 
-    public String getPOLINENUM() {
-        return POLINENUM;
+    public String getSERIALNUM() {
+        return SERIALNUM;
     }
 
-    public void setPOLINENUM(String POLINENUM) {
-        this.POLINENUM = POLINENUM;
+    public void setSERIALNUM(String SERIALNUM) {
+        this.SERIALNUM = SERIALNUM;
     }
 
-    public String getEXIST() {
-        return EXIST;
+    public String getSTORELOC() {
+        return STORELOC;
     }
 
-    public void setEXIST(String EXIST) {
-        this.EXIST = EXIST;
+    public void setSTORELOC(String STORELOC) {
+        this.STORELOC = STORELOC;
     }
 }

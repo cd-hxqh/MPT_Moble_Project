@@ -21,23 +21,23 @@ import android.widget.TextView;
 
 import com.mpt.hxqh.mpt_project.R;
 import com.mpt.hxqh.mpt_project.adpter.BaseQuickAdapter;
-import com.mpt.hxqh.mpt_project.adpter.WorkOrderAdapter;
+import com.mpt.hxqh.mpt_project.adpter.MainvuseAdapter;
 import com.mpt.hxqh.mpt_project.api.HttpManager;
 import com.mpt.hxqh.mpt_project.api.HttpRequestHandler;
 import com.mpt.hxqh.mpt_project.api.JsonUtils;
 import com.mpt.hxqh.mpt_project.bean.Results;
-import com.mpt.hxqh.mpt_project.model.WORKORDER;
+import com.mpt.hxqh.mpt_project.model.MAINVUSE;
 import com.mpt.hxqh.mpt_project.ui.widget.SwipeRefreshLayout;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 物料出库
+ * 物料退库
  **/
-public class Material_Workorder_Activity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener, SwipeRefreshLayout.OnLoadListener {
+public class Material_Maainvuse_Activity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener, SwipeRefreshLayout.OnLoadListener {
 
-    private static String TAG = "Material_Workorder_Activity";
+    private static String TAG = "Material_Maainvuse_Activity";
 
     /**
      * 返回按钮
@@ -67,7 +67,7 @@ public class Material_Workorder_Activity extends BaseActivity implements SwipeRe
     /**
      * 适配器*
      */
-    private WorkOrderAdapter workOrderAdapter;
+    private MainvuseAdapter mainvuseAdapter;
     /**
      * 编辑框*
      */
@@ -79,7 +79,7 @@ public class Material_Workorder_Activity extends BaseActivity implements SwipeRe
     private int page = 1;
 
 
-    ArrayList<WORKORDER> items = new ArrayList<WORKORDER>();
+    ArrayList<MAINVUSE> items = new ArrayList<MAINVUSE>();
 
 
 
@@ -112,8 +112,8 @@ public class Material_Workorder_Activity extends BaseActivity implements SwipeRe
                 finish();
             }
         });
-        titleTextView.setText(R.string.Material_outbound_text);
-        layoutManager = new LinearLayoutManager(Material_Workorder_Activity.this);
+        titleTextView.setText(R.string.material_transfer_text);
+        layoutManager = new LinearLayoutManager(Material_Maainvuse_Activity.this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         layoutManager.scrollToPosition(0);
         recyclerView.setLayoutManager(layoutManager);
@@ -128,7 +128,7 @@ public class Material_Workorder_Activity extends BaseActivity implements SwipeRe
         refresh_layout.setOnLoadListener(this);
 
         refresh_layout.setRefreshing(true);
-        initAdapter(new ArrayList<WORKORDER>());
+        initAdapter(new ArrayList<MAINVUSE>());
         getData(searchText);
     }
 
@@ -147,12 +147,12 @@ public class Material_Workorder_Activity extends BaseActivity implements SwipeRe
                     // 先隐藏键盘
                     ((InputMethodManager) search.getContext().getSystemService(Context.INPUT_METHOD_SERVICE))
                             .hideSoftInputFromWindow(
-                                    Material_Workorder_Activity.this.getCurrentFocus()
+                                    Material_Maainvuse_Activity.this.getCurrentFocus()
                                             .getWindowToken(),
                                     InputMethodManager.HIDE_NOT_ALWAYS);
                     searchText = search.getText().toString();
-                    workOrderAdapter.removeAll(items);
-                    items = new ArrayList<WORKORDER>();
+                    mainvuseAdapter.removeAll(items);
+                    items = new ArrayList<MAINVUSE>();
                     nodatalayout.setVisibility(View.GONE);
                     refresh_layout.setRefreshing(true);
                     page = 1;
@@ -168,14 +168,14 @@ public class Material_Workorder_Activity extends BaseActivity implements SwipeRe
      * 获取数据*
      */
     private void getData(String search) {
-        HttpManager.getDataPagingInfo(Material_Workorder_Activity.this, HttpManager.getWORKORDERURL(search, page, 20), new HttpRequestHandler<Results>() {
+        HttpManager.getDataPagingInfo(Material_Maainvuse_Activity.this, HttpManager.getMAAINVUSE(search, page, 20), new HttpRequestHandler<Results>() {
             @Override
             public void onSuccess(Results results) {
             }
 
             @Override
             public void onSuccess(Results results, int totalPages, int currentPage) {
-                ArrayList<WORKORDER> item = JsonUtils.parsingWORKORDER(results.getResultlist());
+                ArrayList<MAINVUSE> item = JsonUtils.parsingMAINVUSE(results.getResultlist());
                 refresh_layout.setRefreshing(false);
                 refresh_layout.setLoading(false);
                 if (item == null || item.isEmpty()) {
@@ -184,7 +184,7 @@ public class Material_Workorder_Activity extends BaseActivity implements SwipeRe
 
                     if (item != null || item.size() != 0) {
                         if (page == 1) {
-                            items = new ArrayList<WORKORDER>();
+                            items = new ArrayList<MAINVUSE>();
                             initAdapter(items);
                         }
                         for (int i = 0; i < item.size(); i++) {
@@ -210,18 +210,18 @@ public class Material_Workorder_Activity extends BaseActivity implements SwipeRe
     /**
      * 获取数据*
      */
-    private void initAdapter(final List<WORKORDER> list) {
+    private void initAdapter(final List<MAINVUSE> list) {
         nodatalayout.setVisibility(View.GONE);
-        workOrderAdapter = new WorkOrderAdapter(Material_Workorder_Activity.this, R.layout.list_asset_transfer, list);
-        recyclerView.setAdapter(workOrderAdapter);
-        workOrderAdapter.setOnRecyclerViewItemClickListener(new BaseQuickAdapter.OnRecyclerViewItemClickListener() {
+        mainvuseAdapter = new MainvuseAdapter(Material_Maainvuse_Activity.this, R.layout.list_asset_transfer, list);
+        recyclerView.setAdapter(mainvuseAdapter);
+        mainvuseAdapter.setOnRecyclerViewItemClickListener(new BaseQuickAdapter.OnRecyclerViewItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-//                Intent intent = new Intent(Material_Workorder_Activity.this, Udretire_Details_Activity.class);
-//                Bundle bundle = new Bundle();
-//                bundle.putSerializable("workorder", items.get(position));
-//                intent.putExtras(bundle);
-//                startActivityForResult(intent, 0);
+                Intent intent = new Intent(Material_Maainvuse_Activity.this, Maainvuse_Details_Activity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("mainvuse", items.get(position));
+                intent.putExtras(bundle);
+                startActivityForResult(intent, 0);
             }
         });
     }
@@ -229,8 +229,8 @@ public class Material_Workorder_Activity extends BaseActivity implements SwipeRe
     /**
      * 添加数据*
      */
-    private void addData(final List<WORKORDER> list) {
-        workOrderAdapter.addData(list);
+    private void addData(final List<MAINVUSE> list) {
+        mainvuseAdapter.addData(list);
     }
 
 

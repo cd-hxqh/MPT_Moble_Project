@@ -4,7 +4,7 @@ import android.animation.Animator;
 import android.content.Context;
 
 import com.mpt.hxqh.mpt_project.R;
-import com.mpt.hxqh.mpt_project.model.PO;
+import com.mpt.hxqh.mpt_project.model.POLINE;
 import com.mpt.hxqh.mpt_project.ui.widget.BaseViewHolder;
 
 import java.util.List;
@@ -12,12 +12,12 @@ import java.util.List;
 
 /**
  * Created by apple on 15/10/26
- * 采购接收
+ * 采购单行适配器
  */
-public class PoAdapter extends BaseQuickAdapter<PO> {
+public class PoLineAdapter extends BaseQuickAdapter<POLINE> {
     private int position;
 
-    public PoAdapter(Context context, int layoutResId, List data) {
+    public PoLineAdapter(Context context, int layoutResId, List data) {
         super(context, layoutResId, data);
     }
 
@@ -30,10 +30,11 @@ public class PoAdapter extends BaseQuickAdapter<PO> {
     }
 
     @Override
-    protected void convert(BaseViewHolder helper, PO item) {
-        helper.setText(R.id.num_text_id, item.getPONUM());
-        helper.setText(R.id.description_text, item.getDESCRIPTION());
-        helper.setText(R.id.status_text_id, item.getSTATUS());
+    protected void convert(BaseViewHolder helper, POLINE item) {
+        helper.setText(R.id.type_text_id, item.getLINETYPE());
+        helper.setText(R.id.item_text_id, item.getSERIALNUM());
+        helper.setText(R.id.desc_text_id, item.getLOCATION());
+        helper.setText(R.id.storeroom_text_id, item.getSTORELOC());
     }
 
 
