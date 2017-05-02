@@ -70,6 +70,12 @@
             android:name=".ui.actvity.Transfer_Details_Activity"
             android:screenOrientation="portrait"></activity>
         <activity
+            android:name=".ui.actvity.Transfer_AddNew_Activity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".ui.actvity.TransferLine_AddNew_Activity"
+            android:screenOrientation="portrait"></activity>
+        <activity
             android:name=".ui.actvity.Asset_Udasst_Activity"
             android:screenOrientation="portrait"></activity>
         <activity
@@ -97,10 +103,22 @@
             android:name=".ui.actvity.Mainvuse_Details_Activity"
             android:screenOrientation="portrait"></activity>
         <activity
+            android:name=".ui.actvity.Mainvuse_AddNew_Activity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".ui.actvity.MainvuseLine_AddNew_Activity"
+            android:screenOrientation="portrait"></activity>
+        <activity
             android:name=".ui.actvity.Material_Udstockt_Activity"
             android:screenOrientation="portrait"></activity>
         <activity
             android:name=".ui.actvity.Udstockt_Details_Activity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".ui.actvity.Udstockt_AddNew_Activity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".ui.actvity.UdstocktLine_AddNew_Activity"
             android:screenOrientation="portrait"></activity>
         <activity
             android:name=".ui.actvity.Material_PO_Activity"
@@ -109,10 +127,22 @@
             android:name=".ui.actvity.Po_Details_Activity"
             android:screenOrientation="portrait"></activity>
         <activity
+            android:name=".ui.actvity.PO_AddNew_Activity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".ui.actvity.PoLine_AddNew_Activity"
+            android:screenOrientation="portrait"></activity>
+        <activity
             android:name=".ui.actvity.Material_Maainvuse_Activity"
             android:screenOrientation="portrait"></activity>
         <activity
             android:name=".ui.actvity.Maainvuse_Details_Activity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".ui.actvity.Maainvuse_AddNew_Activity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".ui.actvity.MaainvuseLine_AddNew_Activity"
             android:screenOrientation="portrait"></activity>
     </application>
 

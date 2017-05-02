@@ -34,9 +34,9 @@ public class Constants {
     public static final String WORK_URL = "/meaweb/services/MOBILESERVICE";
 
     /**
-     * 领料单接口*
+     * 资产转移新增接口*
      */
-    public static final String INVUSE_URL = "/meaweb/services/INVUSESERVICE";
+    public static final String TRANSFER_URL = "/meaweb/services/MPTMOBILESERVICE";
     /**
      * 工作流*
      */

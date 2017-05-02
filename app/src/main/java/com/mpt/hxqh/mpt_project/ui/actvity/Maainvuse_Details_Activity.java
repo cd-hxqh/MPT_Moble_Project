@@ -1,6 +1,8 @@
 package com.mpt.hxqh.mpt_project.ui.actvity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -24,7 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 物料退库详情
+ * 物料转移详情
  **/
 public class Maainvuse_Details_Activity extends BaseActivity {
 
@@ -67,6 +69,8 @@ public class Maainvuse_Details_Activity extends BaseActivity {
 
     ArrayList<MAINVUSELINE> items = new ArrayList<MAINVUSELINE>();
 
+    private FloatingActionButton addButton;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,6 +100,8 @@ public class Maainvuse_Details_Activity extends BaseActivity {
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView_id);
         refresh_layout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
         nodatalayout = (LinearLayout) findViewById(R.id.have_not_data_id);
+
+        addButton = (FloatingActionButton) findViewById(R.id.add_flaButton);
 
     }
 
@@ -130,6 +136,8 @@ public class Maainvuse_Details_Activity extends BaseActivity {
         refresh_layout.setRefreshing(true);
         initAdapter(new ArrayList<MAINVUSELINE>());
         getData();
+
+        addButton.setOnClickListener(addOnClickListener);
 
     }
 
@@ -228,4 +236,11 @@ public class Maainvuse_Details_Activity extends BaseActivity {
         maInvuseLineAdapter.addData(list);
     }
 
+    private View.OnClickListener addOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent(Maainvuse_Details_Activity.this,MaainvuseLine_AddNew_Activity.class);
+            startActivity(intent);
+        }
+    };
 }

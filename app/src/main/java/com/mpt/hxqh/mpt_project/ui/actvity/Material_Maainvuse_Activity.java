@@ -33,7 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 物料退库
+ * 物料转移
  **/
 public class Material_Maainvuse_Activity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener, SwipeRefreshLayout.OnLoadListener {
 
@@ -47,6 +47,10 @@ public class Material_Maainvuse_Activity extends BaseActivity implements SwipeRe
      * 标题
      */
     private TextView titleTextView;
+    /**
+     * 新增按钮
+     **/
+    private ImageView addBtn;
 
 
     LinearLayoutManager layoutManager;
@@ -97,6 +101,7 @@ public class Material_Maainvuse_Activity extends BaseActivity implements SwipeRe
     protected void findViewById() {
         backImageView = (ImageView) findViewById(R.id.title_back_id);
         titleTextView = (TextView) findViewById(R.id.title_name);
+        addBtn = (ImageView) findViewById(R.id.title_add);
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView_id);
         refresh_layout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
         nodatalayout = (LinearLayout) findViewById(R.id.have_not_data_id);
@@ -113,6 +118,7 @@ public class Material_Maainvuse_Activity extends BaseActivity implements SwipeRe
             }
         });
         titleTextView.setText(R.string.material_transfer_text);
+        addBtn.setVisibility(View.VISIBLE);
         layoutManager = new LinearLayoutManager(Material_Maainvuse_Activity.this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         layoutManager.scrollToPosition(0);
@@ -130,7 +136,17 @@ public class Material_Maainvuse_Activity extends BaseActivity implements SwipeRe
         refresh_layout.setRefreshing(true);
         initAdapter(new ArrayList<MAINVUSE>());
         getData(searchText);
+
+        addBtn.setOnClickListener(addOnClickListener);
     }
+
+    private View.OnClickListener addOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent(Material_Maainvuse_Activity.this,Maainvuse_AddNew_Activity.class);
+            startActivity(intent);
+        }
+    };
 
 
     private void setSearchEdit() {

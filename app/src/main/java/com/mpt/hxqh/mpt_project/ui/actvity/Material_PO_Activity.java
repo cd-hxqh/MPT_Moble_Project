@@ -47,7 +47,10 @@ public class Material_PO_Activity extends BaseActivity implements SwipeRefreshLa
      * 标题
      */
     private TextView titleTextView;
-
+    /**
+     * 新增按钮
+     **/
+    private ImageView addBtn;
 
     LinearLayoutManager layoutManager;
 
@@ -97,6 +100,7 @@ public class Material_PO_Activity extends BaseActivity implements SwipeRefreshLa
     protected void findViewById() {
         backImageView = (ImageView) findViewById(R.id.title_back_id);
         titleTextView = (TextView) findViewById(R.id.title_name);
+        addBtn = (ImageView) findViewById(R.id.title_add);
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView_id);
         refresh_layout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
         nodatalayout = (LinearLayout) findViewById(R.id.have_not_data_id);
@@ -113,6 +117,7 @@ public class Material_PO_Activity extends BaseActivity implements SwipeRefreshLa
             }
         });
         titleTextView.setText(R.string.material_receive_text);
+        addBtn.setVisibility(View.VISIBLE);
         layoutManager = new LinearLayoutManager(Material_PO_Activity.this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         layoutManager.scrollToPosition(0);
@@ -130,8 +135,17 @@ public class Material_PO_Activity extends BaseActivity implements SwipeRefreshLa
         refresh_layout.setRefreshing(true);
         initAdapter(new ArrayList<PO>());
         getData(searchText);
+
+        addBtn.setOnClickListener(addOnClickListener);
     }
 
+    private View.OnClickListener addOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent(Material_PO_Activity.this,PO_AddNew_Activity.class);
+            startActivity(intent);
+        }
+    };
 
     private void setSearchEdit() {
         SpannableString msp = new SpannableString(getString(R.string.search_text));

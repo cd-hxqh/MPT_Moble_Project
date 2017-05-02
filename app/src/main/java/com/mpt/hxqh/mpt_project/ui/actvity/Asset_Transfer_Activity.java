@@ -52,7 +52,7 @@ public class Asset_Transfer_Activity extends BaseActivity implements SwipeRefres
     /**
      * 新增按钮
      **/
-    private Button addBtn;
+    private ImageView addBtn;
 
     LinearLayoutManager layoutManager;
 
@@ -103,7 +103,7 @@ public class Asset_Transfer_Activity extends BaseActivity implements SwipeRefres
     protected void findViewById() {
         backImageView = (ImageView) findViewById(R.id.title_back_id);
         titleTextView = (TextView) findViewById(R.id.title_name);
-        addBtn = (Button) findViewById(R.id.sbmit_id);
+        addBtn = (ImageView) findViewById(R.id.title_add);
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView_id);
         refresh_layout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
         nodatalayout = (LinearLayout) findViewById(R.id.have_not_data_id);
@@ -120,6 +120,7 @@ public class Asset_Transfer_Activity extends BaseActivity implements SwipeRefres
             }
         });
         titleTextView.setText(R.string.asset_transfer);
+        addBtn.setVisibility(View.VISIBLE);
         layoutManager = new LinearLayoutManager(Asset_Transfer_Activity.this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         layoutManager.scrollToPosition(0);
@@ -137,8 +138,17 @@ public class Asset_Transfer_Activity extends BaseActivity implements SwipeRefres
         refresh_layout.setRefreshing(true);
         initAdapter(new ArrayList<INVUSE>());
         getData(searchText);
+
+        addBtn.setOnClickListener(addOnClickListener);
     }
 
+    private View.OnClickListener addOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent(Asset_Transfer_Activity.this,Transfer_AddNew_Activity.class);
+            startActivity(intent);
+        }
+    };
 
     private void setSearchEdit() {
         SpannableString msp = new SpannableString(getString(R.string.search_text));

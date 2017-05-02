@@ -1,6 +1,8 @@
 package com.mpt.hxqh.mpt_project.ui.actvity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -67,6 +69,8 @@ public class Transfer_Details_Activity extends BaseActivity {
 
     ArrayList<INVUSELINE> items = new ArrayList<INVUSELINE>();
 
+    private FloatingActionButton addButton;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +99,8 @@ public class Transfer_Details_Activity extends BaseActivity {
         recyclerView = (RecyclerView) findViewById(R.id.dqgz10_recyclerView_id);
         refresh_layout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
         nodatalayout = (LinearLayout) findViewById(R.id.have_not_data_id);
+
+        addButton = (FloatingActionButton) findViewById(R.id.add_flaButton);
 
     }
 
@@ -131,6 +137,7 @@ public class Transfer_Details_Activity extends BaseActivity {
         initAdapter(new ArrayList<INVUSELINE>());
         getData();
 
+        addButton.setOnClickListener(addOnClickListener);
     }
 
     /**
@@ -171,7 +178,7 @@ public class Transfer_Details_Activity extends BaseActivity {
         invuseLineAdapter.setOnRecyclerViewItemClickListener(new BaseQuickAdapter.OnRecyclerViewItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-
+                Intent intent = new Intent();
             }
         });
     }
@@ -227,5 +234,13 @@ public class Transfer_Details_Activity extends BaseActivity {
     private void addData(final List<INVUSELINE> list) {
         invuseLineAdapter.addData(list);
     }
+
+    private View.OnClickListener addOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent(Transfer_Details_Activity.this,TransferLine_AddNew_Activity.class);
+            startActivity(intent);
+        }
+    };
 
 }

@@ -22,6 +22,7 @@ import com.mpt.hxqh.mpt_project.model.UDRETIRELINE;
 import com.mpt.hxqh.mpt_project.model.UDSTOCKT;
 import com.mpt.hxqh.mpt_project.model.UDTRANSFLINE;
 import com.mpt.hxqh.mpt_project.model.WORKORDER;
+import com.mpt.hxqh.mpt_project.model.WebResult;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -122,6 +123,20 @@ public class JsonUtils<E> {
             return results;
         }
 
+    }
+
+    /**
+     * 不分页解析返回的结果*
+     */
+    public static WebResult parsingWebResult(String data) {
+
+        String result = null;
+        WebResult webResult = new WebResult();
+        if (data.contains("|")){
+            webResult.event = data.split("\\|")[0];
+            webResult.returnStr = data.split("\\|")[1];
+        }
+        return webResult;
     }
 
 

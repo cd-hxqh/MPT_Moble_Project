@@ -18,4 +18,5 @@
     <dimen name="dp_14">14dp</dimen>
     <dimen name="sp_14">14sp</dimen>
     <dimen name="dimens_40dp">40dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
 </resources>

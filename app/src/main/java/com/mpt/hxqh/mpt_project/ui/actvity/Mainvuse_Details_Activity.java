@@ -1,6 +1,8 @@
 package com.mpt.hxqh.mpt_project.ui.actvity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -67,6 +69,8 @@ public class Mainvuse_Details_Activity extends BaseActivity {
 
     ArrayList<MAINVUSELINE> items = new ArrayList<MAINVUSELINE>();
 
+    private FloatingActionButton addButton;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,6 +101,7 @@ public class Mainvuse_Details_Activity extends BaseActivity {
         refresh_layout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
         nodatalayout = (LinearLayout) findViewById(R.id.have_not_data_id);
 
+        addButton = (FloatingActionButton) findViewById(R.id.add_flaButton);
     }
 
     @Override
@@ -131,6 +136,7 @@ public class Mainvuse_Details_Activity extends BaseActivity {
         initAdapter(new ArrayList<MAINVUSELINE>());
         getData();
 
+        addButton.setOnClickListener(addOnClickListener);
     }
 
     /**
@@ -228,4 +234,11 @@ public class Mainvuse_Details_Activity extends BaseActivity {
         maInvuseLineAdapter.addData(list);
     }
 
+    private View.OnClickListener addOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent(Mainvuse_Details_Activity.this,MainvuseLine_AddNew_Activity.class);
+            startActivity(intent);
+        }
+    };
 }

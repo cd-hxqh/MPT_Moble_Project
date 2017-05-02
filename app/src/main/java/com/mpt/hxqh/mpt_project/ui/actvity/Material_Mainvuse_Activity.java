@@ -47,6 +47,10 @@ public class Material_Mainvuse_Activity extends BaseActivity implements SwipeRef
      * 标题
      */
     private TextView titleTextView;
+    /**
+     * 新增按钮
+     **/
+    private ImageView addBtn;
 
 
     LinearLayoutManager layoutManager;
@@ -97,6 +101,7 @@ public class Material_Mainvuse_Activity extends BaseActivity implements SwipeRef
     protected void findViewById() {
         backImageView = (ImageView) findViewById(R.id.title_back_id);
         titleTextView = (TextView) findViewById(R.id.title_name);
+        addBtn = (ImageView) findViewById(R.id.title_add);
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView_id);
         refresh_layout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
         nodatalayout = (LinearLayout) findViewById(R.id.have_not_data_id);
@@ -113,6 +118,7 @@ public class Material_Mainvuse_Activity extends BaseActivity implements SwipeRef
             }
         });
         titleTextView.setText(R.string.material_refund_text);
+        addBtn.setVisibility(View.VISIBLE);
         layoutManager = new LinearLayoutManager(Material_Mainvuse_Activity.this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         layoutManager.scrollToPosition(0);
@@ -130,7 +136,17 @@ public class Material_Mainvuse_Activity extends BaseActivity implements SwipeRef
         refresh_layout.setRefreshing(true);
         initAdapter(new ArrayList<MAINVUSE>());
         getData(searchText);
+
+        addBtn.setOnClickListener(addOnClickListener);
     }
+
+    private View.OnClickListener addOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent(Material_Mainvuse_Activity.this,Mainvuse_AddNew_Activity.class);
+            startActivity(intent);
+        }
+    };
 
 
     private void setSearchEdit() {

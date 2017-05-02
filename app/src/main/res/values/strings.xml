@@ -84,6 +84,7 @@
     <string name="configure_text">Configure:</string>
     <string name="phase_text">Phase:</string>
     <string name="asset_transfer">Asset Transfer</string>
+    <string name="asset_transferline">Order Lines</string>
     <string name="order_text">Order:</string>
     <string name="from_storeroom_text">From Storeroom:</string>
     <string name="inventory_owner_text">Inventory Owner:</string>
@@ -106,6 +107,7 @@
     <string name="Material_outbound_text">Material Outbound</string>
     <string name="material_refund_text">Material Refund</string>
     <string name="inv_owner_text">Inv Owner:</string>
+    <string name="usetype_text2">Transfer Type:</string>
     <string name="line_type_text">Line Type</string>
     <string name="quantity_text">Qty</string>
     <string name="to_loc_text">To Loc</string>
@@ -115,5 +117,23 @@
     <string name="material_receive_text">Material Receive</string>
     <string name="revision_text">Revision:</string>
     <string name="material_transfer_text">Material Transfer</string>
+    <string name="invuselinenum_text">INVUSELINENUM</string>
+    <string name="invusenum_text">INVUSENUM</string>
+    <string name="usetype_text">Usage Type:</string>
+    <string name="linetype_text">Line Type:</string>
+    <string name="itemnum_text">Item:</string>
+    <string name="tostoreloc_text">To Storeroom:</string>
+    <string name="rotassetnum_text">Rotating Asset:</string>
+    <string name="issueto_text">Issue To:</string>
+    <string name="quantity_text2">Quantity:</string>
+    <string name="frombin_text">From Bin:</string>
+    <string name="tositeid_text">To Site:</string>
+    <string name="tobin_text">To Bin:</string>
+    <string name="conversion_text">Conversion Factor:</string>
+    <string name="newphyscnt_text">New Physical Count:</string>
+    <string name="remark_text">Remark:</string>
+    <string name="checkserial_text">New Serial:</string>
+    <string name="ischeck_text">Ischeck?</string>
+    <string name="orderqty_text">Quantity:</string>
 
 </resources>
