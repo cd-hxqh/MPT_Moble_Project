@@ -37,10 +37,11 @@ public class PoLine_AddNew_Activity extends BaseActivity {
 
 //    private TextView orderTextView; //Order
     private TextView itemnumTextView; //itemnum
-    private TextView conversionTextView; //conversion
+    private EditText conversionTextView; //conversion
     private EditText orderqtyTextView; //orderqty
 
     private String ponum;
+//    private String storeroom;
 
     private BaseAnimatorSet mBasIn;
     private BaseAnimatorSet mBasOut;
@@ -60,6 +61,7 @@ public class PoLine_AddNew_Activity extends BaseActivity {
 
     private void initData() {
         ponum = getIntent().getStringExtra("ponum");
+//        storeroom = getIntent().getStringExtra("storeroom");
     }
 
     @Override
@@ -70,7 +72,7 @@ public class PoLine_AddNew_Activity extends BaseActivity {
         submit = (Button) findViewById(R.id.sbmit_id);
 //        orderTextView = (TextView) findViewById(R.id.order_text_id);
         itemnumTextView = (TextView) findViewById(R.id.itemnum_text_id);
-        conversionTextView = (TextView) findViewById(R.id.conversion_text_id);
+        conversionTextView = (EditText) findViewById(R.id.conversion_text_id);
         orderqtyTextView = (EditText) findViewById(R.id.orderqty_text_id);
 
 //        recyclerView = (RecyclerView) findViewById(R.id.dqgz10_recyclerView_id);
@@ -86,8 +88,7 @@ public class PoLine_AddNew_Activity extends BaseActivity {
         submit.setText("save");
         submit.setVisibility(View.VISIBLE);
 
-//        from_storeroomTextView.setOnClickListener(locationTextViewOnClickListener);
-//        inventory_ownerTextView.setOnClickListener(ownerOnClickListener);
+        itemnumTextView.setOnClickListener(itemnumOnClickListener);
         submit.setOnClickListener(submitOnClickListener);
     }
 
@@ -105,6 +106,18 @@ public class PoLine_AddNew_Activity extends BaseActivity {
         @Override
         public void onClick(View v) {
             submitDataInfo();
+        }
+    };
+
+    /**
+     * itemnum
+     **/
+    private View.OnClickListener itemnumOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Intent intent = new Intent(PoLine_AddNew_Activity.this, ItemChooseActivity.class);
+//            intent.putExtra("storeroom",storeroom);
+            startActivityForResult(intent, 0);
         }
     };
 
@@ -190,9 +203,9 @@ public class PoLine_AddNew_Activity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (resultCode) {
-            case LocationChooseActivity.LOCATION_CODE:
-                String location = data.getExtras().getString("Location");
-//                from_storeroomTextView.setText(location);
+            case ItemChooseActivity.ITEM_CODE:
+                String item = data.getExtras().getString("Itemnum");
+                itemnumTextView.setText(item);
                 break;
 //            case RESULT_OK:
 //                String result = data.getExtras().getString("result");

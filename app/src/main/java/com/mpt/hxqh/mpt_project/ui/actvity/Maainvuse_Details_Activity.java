@@ -240,6 +240,8 @@ public class Maainvuse_Details_Activity extends BaseActivity {
         @Override
         public void onClick(View v) {
             Intent intent = new Intent(Maainvuse_Details_Activity.this,MaainvuseLine_AddNew_Activity.class);
+            intent.putExtra("invusenum",mainvuse.getINVUSENUM());
+            intent.putExtra("storeroom",mainvuse.getFROMSTORELOC());
             startActivity(intent);
         }
     };

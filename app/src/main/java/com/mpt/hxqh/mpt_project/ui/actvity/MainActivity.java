@@ -181,7 +181,7 @@ public class MainActivity extends BaseActivity {
         }
     };
     /**
-     * 采购接收
+     * 物料转移
      **/
     private View.OnClickListener maainvuseImagViewOnClickListener = new View.OnClickListener() {
         @Override

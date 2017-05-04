@@ -37,7 +37,7 @@ public class UdstocktLine_AddNew_Activity extends BaseActivity {
 
 //    private TextView orderTextView; //Order
     private TextView assetnumTextView; //assetnum
-    private TextView checkserialTextView; //checkserial
+    private EditText checkserialTextView; //checkserial
     private CheckBox ischeckTextView; //ischeck
     private EditText remarkTextView; //remark
 
@@ -71,7 +71,7 @@ public class UdstocktLine_AddNew_Activity extends BaseActivity {
         submit = (Button) findViewById(R.id.sbmit_id);
 //        orderTextView = (TextView) findViewById(R.id.order_text_id);
         assetnumTextView = (TextView) findViewById(R.id.assetnum_text_id);
-        checkserialTextView = (TextView) findViewById(R.id.checkserial_text_id);
+        checkserialTextView = (EditText) findViewById(R.id.checkserial_text_id);
         ischeckTextView = (CheckBox) findViewById(R.id.ischeck_text_id);
         remarkTextView = (EditText) findViewById(R.id.remark_text_id);
 
@@ -88,8 +88,7 @@ public class UdstocktLine_AddNew_Activity extends BaseActivity {
         submit.setText("save");
         submit.setVisibility(View.VISIBLE);
 
-//        from_storeroomTextView.setOnClickListener(locationTextViewOnClickListener);
-//        inventory_ownerTextView.setOnClickListener(ownerOnClickListener);
+        assetnumTextView.setOnClickListener(assetnumOnClickListener);
         submit.setOnClickListener(submitOnClickListener);
     }
 
@@ -107,6 +106,17 @@ public class UdstocktLine_AddNew_Activity extends BaseActivity {
         @Override
         public void onClick(View v) {
             submitDataInfo();
+        }
+    };
+
+    /**
+     * rotassetnum
+     **/
+    private View.OnClickListener assetnumOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Intent intent = new Intent(UdstocktLine_AddNew_Activity.this, AssetChooseActivity.class);
+            startActivityForResult(intent, 0);
         }
     };
 

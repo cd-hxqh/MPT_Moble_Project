@@ -7,13 +7,17 @@ import com.mpt.hxqh.mpt_project.bean.LoginResults;
 import com.mpt.hxqh.mpt_project.bean.Results;
 import com.mpt.hxqh.mpt_project.config.Constants;
 import com.mpt.hxqh.mpt_project.model.ASSET;
+import com.mpt.hxqh.mpt_project.model.INVBALANCES;
 import com.mpt.hxqh.mpt_project.model.INVUSE;
 import com.mpt.hxqh.mpt_project.model.INVUSELINE;
+import com.mpt.hxqh.mpt_project.model.ITEM;
 import com.mpt.hxqh.mpt_project.model.LOCATIONS;
 import com.mpt.hxqh.mpt_project.model.MAINVUSE;
 import com.mpt.hxqh.mpt_project.model.MAINVUSELINE;
+import com.mpt.hxqh.mpt_project.model.PERSON;
 import com.mpt.hxqh.mpt_project.model.PO;
 import com.mpt.hxqh.mpt_project.model.POLINE;
+import com.mpt.hxqh.mpt_project.model.SITE;
 import com.mpt.hxqh.mpt_project.model.UDASSETTRANSF;
 import com.mpt.hxqh.mpt_project.model.UDASST;
 import com.mpt.hxqh.mpt_project.model.UDASSTREP;
@@ -179,6 +183,194 @@ public class JsonUtils<E> {
 
                 }
                 list.add(locations);
+            }
+            return list;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * ITEM选择
+     */
+    public static ArrayList<ITEM> parsingITEM(Context ctx, String data) {
+        ArrayList<ITEM> list = null;
+        ITEM item = null;
+        try {
+            JSONArray jsonArray = new JSONArray(data);
+            JSONObject jsonObject;
+            list = new ArrayList<ITEM>();
+            Log.i(TAG, "jsonArray length=" + jsonArray.length());
+            for (int i = 0; i < jsonArray.length(); i++) {
+                item = new ITEM();
+                jsonObject = jsonArray.getJSONObject(i);
+                Field[] field = item.getClass().getDeclaredFields();        //获取实体类的所有属性，返回Field数组
+                for (int j = 0; j < field.length; j++) {     //遍历所有属性
+                    field[j].setAccessible(true);
+                    String name = field[j].getName();    //获取属性的名字
+                    Log.i(TAG, "name=" + name);
+                    if (jsonObject.has(name) && jsonObject.getString(name) != null && !jsonObject.getString(name).equals("")) {
+                        try {
+                            // 调用getter方法获取属性值
+                            Method getOrSet = item.getClass().getMethod("get" + name);
+                            Object value = getOrSet.invoke(item);
+                            if (value == null) {
+                                //调用setter方法设属性值
+                                Class[] parameterTypes = new Class[1];
+                                parameterTypes[0] = field[j].getType();
+                                getOrSet = item.getClass().getDeclaredMethod("set" + name, parameterTypes);
+                                getOrSet.invoke(item, jsonObject.getString(name));
+                            }
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                }
+                list.add(item);
+            }
+            return list;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * 人员选择
+     */
+    public static ArrayList<PERSON> parsingPERSON(Context ctx, String data) {
+        ArrayList<PERSON> list = null;
+        PERSON person = null;
+        try {
+            JSONArray jsonArray = new JSONArray(data);
+            JSONObject jsonObject;
+            list = new ArrayList<PERSON>();
+            Log.i(TAG, "jsonArray length=" + jsonArray.length());
+            for (int i = 0; i < jsonArray.length(); i++) {
+                person = new PERSON();
+                jsonObject = jsonArray.getJSONObject(i);
+                Field[] field = person.getClass().getDeclaredFields();        //获取实体类的所有属性，返回Field数组
+                for (int j = 0; j < field.length; j++) {     //遍历所有属性
+                    field[j].setAccessible(true);
+                    String name = field[j].getName();    //获取属性的名字
+                    Log.i(TAG, "name=" + name);
+                    if (jsonObject.has(name) && jsonObject.getString(name) != null && !jsonObject.getString(name).equals("")) {
+                        try {
+                            // 调用getter方法获取属性值
+                            Method getOrSet = person.getClass().getMethod("get" + name);
+                            Object value = getOrSet.invoke(person);
+                            if (value == null) {
+                                //调用setter方法设属性值
+                                Class[] parameterTypes = new Class[1];
+                                parameterTypes[0] = field[j].getType();
+                                getOrSet = person.getClass().getDeclaredMethod("set" + name, parameterTypes);
+                                getOrSet.invoke(person, jsonObject.getString(name));
+                            }
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                }
+                list.add(person);
+            }
+            return list;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * INVBALANCES
+     */
+    public static ArrayList<INVBALANCES> parsingINVBALANCES(Context ctx, String data) {
+        ArrayList<INVBALANCES> list = null;
+        INVBALANCES invbalances = null;
+        try {
+            JSONArray jsonArray = new JSONArray(data);
+            JSONObject jsonObject;
+            list = new ArrayList<INVBALANCES>();
+            Log.i(TAG, "jsonArray length=" + jsonArray.length());
+            for (int i = 0; i < jsonArray.length(); i++) {
+                invbalances = new INVBALANCES();
+                jsonObject = jsonArray.getJSONObject(i);
+                Field[] field = invbalances.getClass().getDeclaredFields();        //获取实体类的所有属性，返回Field数组
+                for (int j = 0; j < field.length; j++) {     //遍历所有属性
+                    field[j].setAccessible(true);
+                    String name = field[j].getName();    //获取属性的名字
+                    Log.i(TAG, "name=" + name);
+                    if (jsonObject.has(name) && jsonObject.getString(name) != null && !jsonObject.getString(name).equals("")) {
+                        try {
+                            // 调用getter方法获取属性值
+                            Method getOrSet = invbalances.getClass().getMethod("get" + name);
+                            Object value = getOrSet.invoke(invbalances);
+                            if (value == null) {
+                                //调用setter方法设属性值
+                                Class[] parameterTypes = new Class[1];
+                                parameterTypes[0] = field[j].getType();
+                                getOrSet = invbalances.getClass().getDeclaredMethod("set" + name, parameterTypes);
+                                getOrSet.invoke(invbalances, jsonObject.getString(name));
+                            }
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                }
+                list.add(invbalances);
+            }
+            return list;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * SITE
+     */
+    public static ArrayList<SITE> parsingSITE(Context ctx, String data) {
+        ArrayList<SITE> list = null;
+        SITE site = null;
+        try {
+            JSONArray jsonArray = new JSONArray(data);
+            JSONObject jsonObject;
+            list = new ArrayList<SITE>();
+            Log.i(TAG, "jsonArray length=" + jsonArray.length());
+            for (int i = 0; i < jsonArray.length(); i++) {
+                site = new SITE();
+                jsonObject = jsonArray.getJSONObject(i);
+                Field[] field = site.getClass().getDeclaredFields();        //获取实体类的所有属性，返回Field数组
+                for (int j = 0; j < field.length; j++) {     //遍历所有属性
+                    field[j].setAccessible(true);
+                    String name = field[j].getName();    //获取属性的名字
+                    Log.i(TAG, "name=" + name);
+                    if (jsonObject.has(name) && jsonObject.getString(name) != null && !jsonObject.getString(name).equals("")) {
+                        try {
+                            // 调用getter方法获取属性值
+                            Method getOrSet = site.getClass().getMethod("get" + name);
+                            Object value = getOrSet.invoke(site);
+                            if (value == null) {
+                                //调用setter方法设属性值
+                                Class[] parameterTypes = new Class[1];
+                                parameterTypes[0] = field[j].getType();
+                                getOrSet = site.getClass().getDeclaredMethod("set" + name, parameterTypes);
+                                getOrSet.invoke(site, jsonObject.getString(name));
+                            }
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                }
+                list.add(site);
             }
             return list;
         } catch (JSONException e) {

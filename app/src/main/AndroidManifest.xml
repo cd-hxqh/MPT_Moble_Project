@@ -61,6 +61,21 @@
             android:name=".ui.actvity.LocationChooseActivity"
             android:screenOrientation="portrait"></activity>
         <activity
+            android:name=".ui.actvity.ItemChooseActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".ui.actvity.AssetChooseActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".ui.actvity.InvbalancesChooseActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".ui.actvity.PersonChooseActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".ui.actvity.SiteChooseActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
             android:name=".ui.actvity.Asset_Details_Activity"
             android:screenOrientation="portrait"></activity>
         <activity

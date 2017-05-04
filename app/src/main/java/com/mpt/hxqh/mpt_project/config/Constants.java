@@ -52,6 +52,30 @@ public class Constants {
     //位置的表名
     public static final String LOCATIONS_NAME = "LOCATIONS";
 
+    //ITEMappid
+    public static final String ITEM_APPID = "ITEM" ;
+
+    //ITEM的表名
+    public static final String ITEM_NAME = "ITEM";
+
+    //人员appid
+    public static final String PERSON_APPID = "PERSON" ;
+
+    //人员的表名
+    public static final String PERSON_NAME = "PERSON";
+
+    //INVBALANCESappid
+    public static final String INVBALANCES_APPID = "INVBALANCES" ;
+
+    //INVBALANCES的表名
+    public static final String INVBALANCES_NAME = "INVBALANCES";
+
+    //SITEappid
+    public static final String SITE_APPID = "SITE" ;
+
+    //SITE的表名
+    public static final String SITE_NAME = "SITE";
+
     //资产appid
     public static final String UDMPTASSET_APPID = "UDMPTASSET" ;
 

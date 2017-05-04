@@ -234,6 +234,8 @@ public class Po_Details_Activity extends BaseActivity {
         @Override
         public void onClick(View v) {
             Intent intent = new Intent(Po_Details_Activity.this,PoLine_AddNew_Activity.class);
+            intent.putExtra("ponum",po.getPONUM());
+//            intent.putExtra("storeroom",po.g);
             startActivity(intent);
         }
     };

@@ -239,6 +239,8 @@ public class Transfer_Details_Activity extends BaseActivity {
         @Override
         public void onClick(View v) {
             Intent intent = new Intent(Transfer_Details_Activity.this,TransferLine_AddNew_Activity.class);
+            intent.putExtra("invusenum",invuse.getINVUSENUM());
+            intent.putExtra("storeroom",invuse.getFROMSTORELOC());
             startActivity(intent);
         }
     };

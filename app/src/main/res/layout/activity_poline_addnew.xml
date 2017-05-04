@@ -106,14 +106,17 @@
                         android:textColor="@color/light_black"
                         android:textSize="@dimen/dimens_16sp" />
 
-                    <TextView
+                    <EditText
                         android:id="@+id/conversion_text_id"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:drawableRight="@mipmap/ic_more"
+                        android:layout_marginLeft="@dimen/dimen_10"
+                        android:inputType="number"
                         android:background="@drawable/editsharp"
-                        android:gravity="center_vertical"/>
+                        android:gravity="right"
+                        android:hint="@string/have_not_data"
+                        android:textColor="@color/light_black"
+                        android:textSize="@dimen/dimens_16sp"/>
                 </LinearLayout>
 
                 <LinearLayout

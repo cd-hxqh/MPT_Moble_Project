@@ -7,6 +7,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -18,7 +19,9 @@ import com.flyco.animation.BaseAnimatorSet;
 import com.flyco.animation.BounceEnter.BounceTopEnter;
 import com.flyco.animation.SlideExit.SlideBottomExit;
 import com.flyco.dialog.listener.OnBtnClickL;
+import com.flyco.dialog.listener.OnOperItemClickL;
 import com.flyco.dialog.widget.NormalDialog;
+import com.flyco.dialog.widget.NormalListDialog;
 import com.mpt.hxqh.mpt_project.R;
 import com.mpt.hxqh.mpt_project.adpter.BaseQuickAdapter;
 import com.mpt.hxqh.mpt_project.adpter.MaInvuseLineAdapter;
@@ -60,6 +63,7 @@ public class Maainvuse_AddNew_Activity extends BaseActivity {
     private BaseAnimatorSet mBasIn;
     private BaseAnimatorSet mBasOut;
 
+    private String[] usetypeList = new String[]{"ISSUE","MIXED","TRANSFER"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,7 +103,8 @@ public class Maainvuse_AddNew_Activity extends BaseActivity {
         submit.setVisibility(View.VISIBLE);
 
         fromstoreroomTextView.setOnClickListener(locationTextViewOnClickListener);
-        invownerTextView.setOnClickListener(ownerOnClickListener);
+        usetypeTextView.setOnClickListener(usetypeOnClickListener);
+//        invownerTextView.setOnClickListener(ownerOnClickListener);
         submit.setOnClickListener(submitOnClickListener);
     }
 
@@ -117,6 +122,16 @@ public class Maainvuse_AddNew_Activity extends BaseActivity {
         @Override
         public void onClick(View v) {
             submitDataInfo();
+        }
+    };
+
+    /**
+     * usetype
+     **/
+    private View.OnClickListener usetypeOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            usetypeDialog();
         }
     };
 
@@ -141,6 +156,21 @@ public class Maainvuse_AddNew_Activity extends BaseActivity {
             startActivityForResult(intent, 0);
         }
     };
+
+    private void usetypeDialog(){
+        final NormalListDialog normalListDialog= new NormalListDialog(Maainvuse_AddNew_Activity.this,usetypeList);
+        normalListDialog.title("Usage Type")
+                .showAnim(mBasIn)//
+                .dismissAnim(mBasOut)//
+                .show();
+        normalListDialog.setOnOperItemClickL(new OnOperItemClickL() {
+            @Override
+            public void onOperItemClick(AdapterView<?> parent, View view, int position, long id) {
+                usetypeTextView.setText(usetypeList[position]);
+                normalListDialog.dismiss();
+            }
+        });
+    }
 
     /**
      * 提交数据*
@@ -203,7 +233,9 @@ public class Maainvuse_AddNew_Activity extends BaseActivity {
         switch (resultCode) {
             case LocationChooseActivity.LOCATION_CODE:
                 String location = data.getExtras().getString("Location");
+                String invowner = data.getExtras().getString("Invowner");
                 fromstoreroomTextView.setText(location);
+                invownerTextView.setText(invowner);
                 break;
 //            case RESULT_OK:
 //                String result = data.getExtras().getString("result");

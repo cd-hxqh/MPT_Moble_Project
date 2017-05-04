@@ -39,10 +39,11 @@ public class MainvuseLine_AddNew_Activity extends BaseActivity {
     private TextView itemnumTextView; //itemnum
     private TextView rotassetnumTextView; //rotassetnum
     private EditText quantityTextView; //quantity
-    private TextView newphyscntTextView;//newphyscnt
-    private TextView remarkTextView;//remark
+    private EditText newphyscntTextView;//newphyscnt
+    private EditText remarkTextView;//remark
 
     private String invusenum;
+    private String storeroom;
 
     private BaseAnimatorSet mBasIn;
     private BaseAnimatorSet mBasOut;
@@ -62,6 +63,7 @@ public class MainvuseLine_AddNew_Activity extends BaseActivity {
 
     private void initData() {
         invusenum = getIntent().getStringExtra("invusenum");
+        storeroom = getIntent().getStringExtra("storeroom");
     }
 
     @Override
@@ -75,8 +77,8 @@ public class MainvuseLine_AddNew_Activity extends BaseActivity {
         itemnumTextView = (TextView) findViewById(R.id.itemnum_text_id);
         rotassetnumTextView = (TextView) findViewById(R.id.rotassetnum_text_id);
         quantityTextView = (EditText) findViewById(R.id.quantity_text_id);
-        newphyscntTextView = (TextView) findViewById(R.id.newphyscnt_text_id);
-        remarkTextView = (TextView) findViewById(R.id.remark_text_id);
+        newphyscntTextView = (EditText) findViewById(R.id.newphyscnt_text_id);
+        remarkTextView = (EditText) findViewById(R.id.remark_text_id);
 
 //        recyclerView = (RecyclerView) findViewById(R.id.dqgz10_recyclerView_id);
 //        refresh_layout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
@@ -91,6 +93,9 @@ public class MainvuseLine_AddNew_Activity extends BaseActivity {
         submit.setText("save");
         submit.setVisibility(View.VISIBLE);
 
+        linetypeTextView.setText("Return");
+        itemnumTextView.setOnClickListener(itemnumOnClickListener);
+        rotassetnumTextView.setOnClickListener(rotassetnumOnClickListener);
 //        from_storeroomTextView.setOnClickListener(locationTextViewOnClickListener);
 //        inventory_ownerTextView.setOnClickListener(ownerOnClickListener);
         submit.setOnClickListener(submitOnClickListener);
@@ -110,6 +115,30 @@ public class MainvuseLine_AddNew_Activity extends BaseActivity {
         @Override
         public void onClick(View v) {
             submitDataInfo();
+        }
+    };
+
+
+    /**
+     * itemnum
+     **/
+    private View.OnClickListener itemnumOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Intent intent = new Intent(MainvuseLine_AddNew_Activity.this, ItemChooseActivity.class);
+            intent.putExtra("storeroom",storeroom);
+            startActivityForResult(intent, 0);
+        }
+    };
+
+    /**
+     * rotassetnum
+     **/
+    private View.OnClickListener rotassetnumOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Intent intent = new Intent(MainvuseLine_AddNew_Activity.this, AssetChooseActivity.class);
+            startActivityForResult(intent, 0);
         }
     };
 
@@ -195,9 +224,15 @@ public class MainvuseLine_AddNew_Activity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (resultCode) {
-            case LocationChooseActivity.LOCATION_CODE:
-                String location = data.getExtras().getString("Location");
-//                from_storeroomTextView.setText(location);
+            case ItemChooseActivity.ITEM_CODE:
+                String item = data.getExtras().getString("Itemnum");
+                itemnumTextView.setText(item);
+                break;
+            case AssetChooseActivity.ASSET_CODE:
+                String asset = data.getExtras().getString("Assetnum");
+                String itemnum = data.getExtras().getString("Itemnum");
+                rotassetnumTextView.setText(asset);
+                itemnumTextView.setText(itemnum);
                 break;
 //            case RESULT_OK:
 //                String result = data.getExtras().getString("result");

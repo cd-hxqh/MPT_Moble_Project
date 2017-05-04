@@ -22,11 +22,13 @@ import android.widget.TextView;
 
 import com.mpt.hxqh.mpt_project.R;
 import com.mpt.hxqh.mpt_project.adpter.BaseQuickAdapter;
+import com.mpt.hxqh.mpt_project.adpter.ItemAdapter;
 import com.mpt.hxqh.mpt_project.adpter.LocationAdapter;
 import com.mpt.hxqh.mpt_project.api.HttpManager;
 import com.mpt.hxqh.mpt_project.api.HttpRequestHandler;
 import com.mpt.hxqh.mpt_project.api.JsonUtils;
 import com.mpt.hxqh.mpt_project.bean.Results;
+import com.mpt.hxqh.mpt_project.model.ITEM;
 import com.mpt.hxqh.mpt_project.model.LOCATIONS;
 import com.mpt.hxqh.mpt_project.ui.widget.SwipeRefreshLayout;
 
@@ -71,7 +73,7 @@ public class ItemChooseActivity extends BaseActivity implements SwipeRefreshLayo
     /**
      * 适配器*
      */
-    private LocationAdapter locationAdapter;
+    private ItemAdapter locationAdapter;
     /**
      * 编辑框*
      */
@@ -82,18 +84,25 @@ public class ItemChooseActivity extends BaseActivity implements SwipeRefreshLayo
     private String searchText = "";
     private int page = 1;
 
-    ArrayList<LOCATIONS> items = new ArrayList<LOCATIONS>();
+    ArrayList<ITEM> items = new ArrayList<ITEM>();
 
+    private String storeroom;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_list);
+        initData();
         findViewById();
         initView();
 
     }
 
+    private void initData() {
+        if (getIntent().hasExtra("storeroom")) {
+            storeroom = getIntent().getStringExtra("storeroom");
+        }
+    }
 
     @Override
     protected void findViewById() {
@@ -110,7 +119,7 @@ public class ItemChooseActivity extends BaseActivity implements SwipeRefreshLayo
     @Override
     protected void initView() {
         backImageView.setOnClickListener(backImageViewOnClickListener);
-        titleTextView.setText("Location");
+        titleTextView.setText("Item");
         setSearchEdit();
 
         layoutManager = new LinearLayoutManager(ItemChooseActivity.this);
@@ -127,7 +136,7 @@ public class ItemChooseActivity extends BaseActivity implements SwipeRefreshLayo
         refresh_layout.setOnRefreshListener(this);
         refresh_layout.setOnLoadListener(this);
 
-        initAdapter(new ArrayList<LOCATIONS>());
+        initAdapter(new ArrayList<ITEM>());
         items = new ArrayList<>();
         getData(searchText);
     }
@@ -181,7 +190,7 @@ public class ItemChooseActivity extends BaseActivity implements SwipeRefreshLayo
                                     InputMethodManager.HIDE_NOT_ALWAYS);
                     searchText = search.getText().toString();
                     locationAdapter.removeAll(items);
-                    items = new ArrayList<LOCATIONS>();
+                    items = new ArrayList<ITEM>();
                     nodatalayout.setVisibility(View.GONE);
                     refresh_layout.setRefreshing(true);
                     page = 1;
@@ -198,7 +207,7 @@ public class ItemChooseActivity extends BaseActivity implements SwipeRefreshLayo
      * 获取数据*
      */
     private void getData(String search) {
-        HttpManager.getDataPagingInfo(ItemChooseActivity.this, HttpManager.getLocationUrl(search, page, 20), new HttpRequestHandler<Results>() {
+        HttpManager.getDataPagingInfo(ItemChooseActivity.this, HttpManager.getItemUrl(search,storeroom, page, 20), new HttpRequestHandler<Results>() {
             @Override
             public void onSuccess(Results results) {
                 Log.i(TAG, "data=" + results);
@@ -206,7 +215,7 @@ public class ItemChooseActivity extends BaseActivity implements SwipeRefreshLayo
 
             @Override
             public void onSuccess(Results results, int totalPages, int currentPage) {
-                ArrayList<LOCATIONS> item = JsonUtils.parsingLOCATIONS(ItemChooseActivity.this, results.getResultlist());
+                ArrayList<ITEM> item = JsonUtils.parsingITEM(ItemChooseActivity.this, results.getResultlist());
                 refresh_layout.setRefreshing(false);
                 refresh_layout.setLoading(false);
                 if (item == null || item.isEmpty()) {
@@ -215,8 +224,8 @@ public class ItemChooseActivity extends BaseActivity implements SwipeRefreshLayo
 
                     if (item != null || item.size() != 0) {
                         if (page == 1) {
-                            items = new ArrayList<LOCATIONS>();
-                            initAdapter(new ArrayList<LOCATIONS>());
+                            items = new ArrayList<ITEM>();
+                            initAdapter(new ArrayList<ITEM>());
                         }
                         for (int i = 0; i < item.size(); i++) {
                             items.add(item.get(i));
@@ -243,15 +252,15 @@ public class ItemChooseActivity extends BaseActivity implements SwipeRefreshLayo
     /**
      * 获取数据*
      */
-    private void initAdapter(final List<LOCATIONS> list) {
-        locationAdapter = new LocationAdapter(ItemChooseActivity.this, R.layout.list_item, list);
+    private void initAdapter(final List<ITEM> list) {
+        locationAdapter = new ItemAdapter(ItemChooseActivity.this, R.layout.list_item, list);
         recyclerView.setAdapter(locationAdapter);
         locationAdapter.setOnRecyclerViewItemClickListener(new BaseQuickAdapter.OnRecyclerViewItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
 
                 Intent intent = getIntent();
-                intent.putExtra("Location", list.get(position).getLOCATION());
+                intent.putExtra("Itemnum", list.get(position).getITEMNUM());
                 setResult(ITEM_CODE, intent);
                 finish();
 
@@ -262,7 +271,7 @@ public class ItemChooseActivity extends BaseActivity implements SwipeRefreshLayo
     /**
      * 添加数据*
      */
-    private void addData(final List<LOCATIONS> list) {
+    private void addData(final List<ITEM> list) {
         locationAdapter.addData(list);
     }
 }

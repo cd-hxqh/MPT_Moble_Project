@@ -82,7 +82,7 @@ public class Mainvuse_AddNew_Activity extends BaseActivity {
         submit.setVisibility(View.VISIBLE);
 
         fromstoreroomTextView.setOnClickListener(locationTextViewOnClickListener);
-        invownerTextView.setOnClickListener(ownerOnClickListener);
+//        invownerTextView.setOnClickListener(ownerOnClickListener);
         submit.setOnClickListener(submitOnClickListener);
     }
 
@@ -186,7 +186,9 @@ public class Mainvuse_AddNew_Activity extends BaseActivity {
         switch (resultCode) {
             case LocationChooseActivity.LOCATION_CODE:
                 String location = data.getExtras().getString("Location");
+                String invowner = data.getExtras().getString("Invowner");
                 fromstoreroomTextView.setText(location);
+                invownerTextView.setText(invowner);
                 break;
 //            case RESULT_OK:
 //                String result = data.getExtras().getString("result");

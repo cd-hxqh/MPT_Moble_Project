@@ -104,7 +104,7 @@ public class Transfer_AddNew_Activity extends BaseActivity {
         submit.setVisibility(View.VISIBLE);
 
         from_storeroomTextView.setOnClickListener(locationTextViewOnClickListener);
-        inventory_ownerTextView.setOnClickListener(ownerOnClickListener);
+//        inventory_ownerTextView.setOnClickListener(ownerOnClickListener);
         submit.setOnClickListener(submitOnClickListener);
     }
 
@@ -136,16 +136,16 @@ public class Transfer_AddNew_Activity extends BaseActivity {
         }
     };
 
-    /**
-     * 仓管员
-     **/
-    private View.OnClickListener ownerOnClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            Intent intent = new Intent(Transfer_AddNew_Activity.this, LocationChooseActivity.class);
-            startActivityForResult(intent, 0);
-        }
-    };
+//    /**
+//     * 仓管员
+//     **/
+//    private View.OnClickListener ownerOnClickListener = new View.OnClickListener() {
+//        @Override
+//        public void onClick(View view) {
+//            Intent intent = new Intent(Transfer_AddNew_Activity.this, LocationChooseActivity.class);
+//            startActivityForResult(intent, 0);
+//        }
+//    };
 
     /**
      * 提交数据*
@@ -208,7 +208,9 @@ public class Transfer_AddNew_Activity extends BaseActivity {
         switch (resultCode) {
             case LocationChooseActivity.LOCATION_CODE:
                 String location = data.getExtras().getString("Location");
+                String invowner = data.getExtras().getString("Invowner");
                 from_storeroomTextView.setText(location);
+                inventory_ownerTextView.setText(invowner);
                 break;
 //            case RESULT_OK:
 //                String result = data.getExtras().getString("result");

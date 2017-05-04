@@ -53,7 +53,7 @@ public class Udstockt_AddNew_Activity extends BaseActivity {
     private Button submit;
 
     private EditText descriptionTextView; //description
-    private TextView vendorView; //Vendor
+    private EditText vendorView; //Vendor
     private TextView locationTextView; //location
 
     private UDSTOCKT udstockt;
@@ -86,7 +86,7 @@ public class Udstockt_AddNew_Activity extends BaseActivity {
         submit = (Button) findViewById(R.id.sbmit_id);
 
         descriptionTextView = (EditText) findViewById(R.id.description_text_id);
-        vendorView = (TextView) findViewById(R.id.vendor_text_id);
+        vendorView = (EditText) findViewById(R.id.vendor_text_id);
         locationTextView = (TextView) findViewById(R.id.location_text_id);
 
     }
@@ -98,6 +98,7 @@ public class Udstockt_AddNew_Activity extends BaseActivity {
         submit.setText("save");
         submit.setVisibility(View.VISIBLE);
 
+        locationTextView.setOnClickListener(locationTextViewOnClickListener);
         submit.setOnClickListener(submitOnClickListener);
 
     }

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -14,7 +15,9 @@ import com.flyco.animation.BaseAnimatorSet;
 import com.flyco.animation.BounceEnter.BounceTopEnter;
 import com.flyco.animation.SlideExit.SlideBottomExit;
 import com.flyco.dialog.listener.OnBtnClickL;
+import com.flyco.dialog.listener.OnOperItemClickL;
 import com.flyco.dialog.widget.NormalDialog;
+import com.flyco.dialog.widget.NormalListDialog;
 import com.mpt.hxqh.mpt_project.R;
 import com.mpt.hxqh.mpt_project.config.Constants;
 import com.mpt.hxqh.mpt_project.model.INVUSE;
@@ -45,10 +48,14 @@ public class TransferLine_AddNew_Activity extends BaseActivity {
     private EditText quantityTextView; //quantity
 
     private String invusenum;
+    private String storeroom;
 
     private BaseAnimatorSet mBasIn;
     private BaseAnimatorSet mBasOut;
 
+    private String[] usetypeList = new String[]{"Issue","Return","Transfer"};
+
+    private String[] linetypeList = new String[]{"Item","Tool"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +71,7 @@ public class TransferLine_AddNew_Activity extends BaseActivity {
 
     private void initData() {
         invusenum = getIntent().getStringExtra("invusenum");
+        storeroom = getIntent().getStringExtra("storeroom");
     }
 
     @Override
@@ -95,8 +103,12 @@ public class TransferLine_AddNew_Activity extends BaseActivity {
         submit.setText("save");
         submit.setVisibility(View.VISIBLE);
 
-//        from_storeroomTextView.setOnClickListener(locationTextViewOnClickListener);
-//        inventory_ownerTextView.setOnClickListener(ownerOnClickListener);
+        usetypeTextView.setOnClickListener(usetypeOnClickListener);
+        linetypeTextView.setOnClickListener(linetypeOnClickListener);
+        itemnumTextView.setOnClickListener(itemnumOnClickListener);
+        tostorelocTextView.setOnClickListener(locationTextViewOnClickListener);
+        rotassetnumTextView.setOnClickListener(rotassetnumOnClickListener);
+        issuetoTextView.setOnClickListener(issuetoOnClickListener);
         submit.setOnClickListener(submitOnClickListener);
     }
 
@@ -118,6 +130,26 @@ public class TransferLine_AddNew_Activity extends BaseActivity {
     };
 
     /**
+     * usetype
+     **/
+    private View.OnClickListener usetypeOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            usetypeDialog();
+        }
+    };
+
+    /**
+     * linetype
+     **/
+    private View.OnClickListener linetypeOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            linetypeDialog();
+        }
+    };
+
+    /**
      * 位置
      **/
     private View.OnClickListener locationTextViewOnClickListener = new View.OnClickListener() {
@@ -129,15 +161,68 @@ public class TransferLine_AddNew_Activity extends BaseActivity {
     };
 
     /**
-     * 仓管员
+     * rotassetnum
      **/
-    private View.OnClickListener ownerOnClickListener = new View.OnClickListener() {
+    private View.OnClickListener rotassetnumOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            Intent intent = new Intent(TransferLine_AddNew_Activity.this, LocationChooseActivity.class);
+            Intent intent = new Intent(TransferLine_AddNew_Activity.this, AssetChooseActivity.class);
             startActivityForResult(intent, 0);
         }
     };
+
+    /**
+     * issueto
+     **/
+    private View.OnClickListener issuetoOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Intent intent = new Intent(TransferLine_AddNew_Activity.this, PersonChooseActivity.class);
+            startActivityForResult(intent, 0);
+        }
+    };
+
+    /**
+     * itemnum
+     **/
+    private View.OnClickListener itemnumOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Intent intent = new Intent(TransferLine_AddNew_Activity.this, ItemChooseActivity.class);
+            intent.putExtra("storeroom",storeroom);
+            startActivityForResult(intent, 0);
+        }
+    };
+
+    private void usetypeDialog(){
+        final NormalListDialog normalListDialog= new NormalListDialog(TransferLine_AddNew_Activity.this,usetypeList);
+        normalListDialog.title("Usage Type")
+                .showAnim(mBasIn)//
+                .dismissAnim(mBasOut)//
+                .show();
+        normalListDialog.setOnOperItemClickL(new OnOperItemClickL() {
+            @Override
+            public void onOperItemClick(AdapterView<?> parent, View view, int position, long id) {
+                usetypeTextView.setText(usetypeList[position]);
+                normalListDialog.dismiss();
+            }
+        });
+    }
+
+    private void linetypeDialog(){
+        final NormalListDialog normalListDialog= new NormalListDialog(TransferLine_AddNew_Activity.this,linetypeList);
+        normalListDialog.title("Usage Type")
+                .showAnim(mBasIn)//
+                .dismissAnim(mBasOut)//
+                .show();
+        normalListDialog.setOnOperItemClickL(new OnOperItemClickL() {
+            @Override
+            public void onOperItemClick(AdapterView<?> parent, View view, int position, long id) {
+                linetypeTextView.setText(linetypeList[position]);
+                normalListDialog.dismiss();
+            }
+        });
+    }
 
     /**
      * 提交数据*
@@ -201,7 +286,21 @@ public class TransferLine_AddNew_Activity extends BaseActivity {
         switch (resultCode) {
             case LocationChooseActivity.LOCATION_CODE:
                 String location = data.getExtras().getString("Location");
-//                from_storeroomTextView.setText(location);
+                tostorelocTextView.setText(location);
+                break;
+            case ItemChooseActivity.ITEM_CODE:
+                String item = data.getExtras().getString("Itemnum");
+                itemnumTextView.setText(item);
+                break;
+            case AssetChooseActivity.ASSET_CODE:
+                String asset = data.getExtras().getString("Assetnum");
+                String itemnum = data.getExtras().getString("Itemnum");
+                rotassetnumTextView.setText(asset);
+                itemnumTextView.setText(itemnum);
+                break;
+            case PersonChooseActivity.PERSON_CODE:
+                String personid = data.getExtras().getString("personid");
+                issuetoTextView.setText(personid);
                 break;
 //            case RESULT_OK:
 //                String result = data.getExtras().getString("result");

@@ -22,11 +22,13 @@ import android.widget.TextView;
 
 import com.mpt.hxqh.mpt_project.R;
 import com.mpt.hxqh.mpt_project.adpter.BaseQuickAdapter;
+import com.mpt.hxqh.mpt_project.adpter.InvbalancesAdapter;
 import com.mpt.hxqh.mpt_project.adpter.LocationAdapter;
 import com.mpt.hxqh.mpt_project.api.HttpManager;
 import com.mpt.hxqh.mpt_project.api.HttpRequestHandler;
 import com.mpt.hxqh.mpt_project.api.JsonUtils;
 import com.mpt.hxqh.mpt_project.bean.Results;
+import com.mpt.hxqh.mpt_project.model.INVBALANCES;
 import com.mpt.hxqh.mpt_project.model.LOCATIONS;
 import com.mpt.hxqh.mpt_project.ui.widget.SwipeRefreshLayout;
 
@@ -37,12 +39,12 @@ import java.util.List;
  * 选择项
  **/
 
-public class LocationChooseActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener, SwipeRefreshLayout.OnLoadListener {
+public class InvbalancesChooseActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener, SwipeRefreshLayout.OnLoadListener {
 
-    private static final String TAG = "ChooseActivity";
+    private static final String TAG = "InvbalancesChooseActivity";
 
 
-    public static final int LOCATION_CODE=1000;
+    public static final int INVBALANCES_CODE=1004;
 
     /**
      * 标题*
@@ -71,7 +73,7 @@ public class LocationChooseActivity extends BaseActivity implements SwipeRefresh
     /**
      * 适配器*
      */
-    private LocationAdapter locationAdapter;
+    private InvbalancesAdapter locationAdapter;
     /**
      * 编辑框*
      */
@@ -82,7 +84,7 @@ public class LocationChooseActivity extends BaseActivity implements SwipeRefresh
     private String searchText = "";
     private int page = 1;
 
-    ArrayList<LOCATIONS> items = new ArrayList<LOCATIONS>();
+    ArrayList<INVBALANCES> items = new ArrayList<INVBALANCES>();
 
 
     @Override
@@ -110,10 +112,10 @@ public class LocationChooseActivity extends BaseActivity implements SwipeRefresh
     @Override
     protected void initView() {
         backImageView.setOnClickListener(backImageViewOnClickListener);
-        titleTextView.setText("Location");
+        titleTextView.setText("Bin");
         setSearchEdit();
 
-        layoutManager = new LinearLayoutManager(LocationChooseActivity.this);
+        layoutManager = new LinearLayoutManager(InvbalancesChooseActivity.this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         layoutManager.scrollToPosition(0);
         recyclerView.setLayoutManager(layoutManager);
@@ -127,7 +129,7 @@ public class LocationChooseActivity extends BaseActivity implements SwipeRefresh
         refresh_layout.setOnRefreshListener(this);
         refresh_layout.setOnLoadListener(this);
 
-        initAdapter(new ArrayList<LOCATIONS>());
+        initAdapter(new ArrayList<INVBALANCES>());
         items = new ArrayList<>();
         getData(searchText);
     }
@@ -181,7 +183,7 @@ public class LocationChooseActivity extends BaseActivity implements SwipeRefresh
                                     InputMethodManager.HIDE_NOT_ALWAYS);
                     searchText = search.getText().toString();
                     locationAdapter.removeAll(items);
-                    items = new ArrayList<LOCATIONS>();
+                    items = new ArrayList<INVBALANCES>();
                     nodatalayout.setVisibility(View.GONE);
                     refresh_layout.setRefreshing(true);
                     page = 1;
@@ -198,15 +200,15 @@ public class LocationChooseActivity extends BaseActivity implements SwipeRefresh
      * 获取数据*
      */
     private void getData(String search) {
-        HttpManager.getDataPagingInfo(LocationChooseActivity.this, HttpManager.getLocationUrl(search, page, 20), new HttpRequestHandler<Results>() {
+        HttpManager.getDataPagingInfo(InvbalancesChooseActivity.this, HttpManager.getInvbalancesUrl(search, page, 20), new HttpRequestHandler<Results>() {
             @Override
             public void onSuccess(Results results) {
-                Log.i(TAG, "data=" + results);
+//                Log.i(TAG, "data=" + results);
             }
 
             @Override
             public void onSuccess(Results results, int totalPages, int currentPage) {
-                ArrayList<LOCATIONS> item = JsonUtils.parsingLOCATIONS(LocationChooseActivity.this, results.getResultlist());
+                ArrayList<INVBALANCES> item = JsonUtils.parsingINVBALANCES(InvbalancesChooseActivity.this, results.getResultlist());
                 refresh_layout.setRefreshing(false);
                 refresh_layout.setLoading(false);
                 if (item == null || item.isEmpty()) {
@@ -215,8 +217,8 @@ public class LocationChooseActivity extends BaseActivity implements SwipeRefresh
 
                     if (item != null || item.size() != 0) {
                         if (page == 1) {
-                            items = new ArrayList<LOCATIONS>();
-                            initAdapter(new ArrayList<LOCATIONS>());
+                            items = new ArrayList<INVBALANCES>();
+                            initAdapter(new ArrayList<INVBALANCES>());
                         }
                         for (int i = 0; i < item.size(); i++) {
                             items.add(item.get(i));
@@ -243,17 +245,16 @@ public class LocationChooseActivity extends BaseActivity implements SwipeRefresh
     /**
      * 获取数据*
      */
-    private void initAdapter(final List<LOCATIONS> list) {
-        locationAdapter = new LocationAdapter(LocationChooseActivity.this, R.layout.list_item, list);
+    private void initAdapter(final List<INVBALANCES> list) {
+        locationAdapter = new InvbalancesAdapter(InvbalancesChooseActivity.this, R.layout.list_item, list);
         recyclerView.setAdapter(locationAdapter);
         locationAdapter.setOnRecyclerViewItemClickListener(new BaseQuickAdapter.OnRecyclerViewItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
 
                 Intent intent = getIntent();
-                intent.putExtra("Location", list.get(position).getLOCATION());
-                intent.putExtra("Invowner", list.get(position).getINVOWNER());
-                setResult(LOCATION_CODE, intent);
+                intent.putExtra("binnum", list.get(position).getBINNUM());
+                setResult(INVBALANCES_CODE, intent);
                 finish();
 
             }
@@ -263,7 +264,7 @@ public class LocationChooseActivity extends BaseActivity implements SwipeRefresh
     /**
      * 添加数据*
      */
-    private void addData(final List<LOCATIONS> list) {
+    private void addData(final List<INVBALANCES> list) {
         locationAdapter.addData(list);
     }
 }

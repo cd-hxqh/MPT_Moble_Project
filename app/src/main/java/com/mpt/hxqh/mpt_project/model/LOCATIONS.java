@@ -12,6 +12,7 @@ public class LOCATIONS implements Serializable {
     public String LOCATION;//LOCATION
     public String SITEID;//SITEID
     public String TYPE;//TYPE
+    public String INVOWNER;//INVOWNER
 
     public String getDESCRIPTION() {
         return DESCRIPTION;
@@ -43,5 +44,13 @@ public class LOCATIONS implements Serializable {
 
     public void setTYPE(String TYPE) {
         this.TYPE = TYPE;
+    }
+
+    public String getINVOWNER() {
+        return INVOWNER;
+    }
+
+    public void setINVOWNER(String INVOWNER) {
+        this.INVOWNER = INVOWNER;
     }
 }

@@ -8,10 +8,18 @@ import java.io.Serializable;
  */
 
 public class ITEM implements Serializable {
+    public String ITEMNUM;//ITEMNUM
     public String DESCRIPTION;//DESCRIPTION
-    public String LOCATION;//LOCATION
-    public String SITEID;//SITEID
-    public String TYPE;//TYPE
+    public String COMMODITYGROUP;//COMMODITYGROUP
+    public String COMMODITY;//COMMODITY
+
+    public String getITEMNUM() {
+        return ITEMNUM;
+    }
+
+    public void setITEMNUM(String ITEMNUM) {
+        this.ITEMNUM = ITEMNUM;
+    }
 
     public String getDESCRIPTION() {
         return DESCRIPTION;
@@ -21,27 +29,19 @@ public class ITEM implements Serializable {
         this.DESCRIPTION = DESCRIPTION;
     }
 
-    public String getLOCATION() {
-        return LOCATION;
+    public String getCOMMODITYGROUP() {
+        return COMMODITYGROUP;
     }
 
-    public void setLOCATION(String LOCATION) {
-        this.LOCATION = LOCATION;
+    public void setCOMMODITYGROUP(String COMMODITYGROUP) {
+        this.COMMODITYGROUP = COMMODITYGROUP;
     }
 
-    public String getSITEID() {
-        return SITEID;
+    public String getCOMMODITY() {
+        return COMMODITY;
     }
 
-    public void setSITEID(String SITEID) {
-        this.SITEID = SITEID;
-    }
-
-    public String getTYPE() {
-        return TYPE;
-    }
-
-    public void setTYPE(String TYPE) {
-        this.TYPE = TYPE;
+    public void setCOMMODITY(String COMMODITY) {
+        this.COMMODITY = COMMODITY;
     }
 }

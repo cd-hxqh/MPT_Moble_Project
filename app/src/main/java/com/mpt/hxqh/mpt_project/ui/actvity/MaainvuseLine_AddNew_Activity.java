@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -14,7 +15,9 @@ import com.flyco.animation.BaseAnimatorSet;
 import com.flyco.animation.BounceEnter.BounceTopEnter;
 import com.flyco.animation.SlideExit.SlideBottomExit;
 import com.flyco.dialog.listener.OnBtnClickL;
+import com.flyco.dialog.listener.OnOperItemClickL;
 import com.flyco.dialog.widget.NormalDialog;
+import com.flyco.dialog.widget.NormalListDialog;
 import com.mpt.hxqh.mpt_project.R;
 import com.mpt.hxqh.mpt_project.config.Constants;
 import com.mpt.hxqh.mpt_project.model.WebResult;
@@ -34,7 +37,7 @@ public class MaainvuseLine_AddNew_Activity extends BaseActivity {
 
     private Button submit;
 
-//    private TextView orderTextView; //Order
+    //    private TextView orderTextView; //Order
     private TextView usetypeTextView; //usetype
     private TextView linetypeTextView; //linetype
     private TextView itemnumTextView; //itemnum
@@ -45,13 +48,15 @@ public class MaainvuseLine_AddNew_Activity extends BaseActivity {
     private TextView issuetoTextView; //issueto
     private EditText quantityTextView; //quantity
     private TextView tobinTextView;//tobin
-    private TextView conversionTextView;//conversion
+    private EditText conversionTextView;//conversion
 
     private String invusenum;
+    private String storeroom;
 
     private BaseAnimatorSet mBasIn;
     private BaseAnimatorSet mBasOut;
 
+    private String[] linetypeList = new String[]{"Item", "Tool"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +72,7 @@ public class MaainvuseLine_AddNew_Activity extends BaseActivity {
 
     private void initData() {
         invusenum = getIntent().getStringExtra("invusenum");
+        storeroom = getIntent().getStringExtra("storeroom");
     }
 
     @Override
@@ -86,7 +92,7 @@ public class MaainvuseLine_AddNew_Activity extends BaseActivity {
         issuetoTextView = (TextView) findViewById(R.id.issueto_text_id);
         quantityTextView = (EditText) findViewById(R.id.quantity_text_id);
         tobinTextView = (TextView) findViewById(R.id.tobin_text_id);
-        conversionTextView = (TextView) findViewById(R.id.conversion_text_id);
+        conversionTextView = (EditText) findViewById(R.id.conversion_text_id);
 //        statusTextView = (TextView) findViewById(R.id.status_text_id);
 
 //        recyclerView = (RecyclerView) findViewById(R.id.dqgz10_recyclerView_id);
@@ -103,7 +109,14 @@ public class MaainvuseLine_AddNew_Activity extends BaseActivity {
         submit.setVisibility(View.VISIBLE);
 
         usetypeTextView.setText("Transfer");
-
+        linetypeTextView.setOnClickListener(linetypeOnClickListener);
+        itemnumTextView.setOnClickListener(itemnumOnClickListener);
+        formbinTextView.setOnClickListener(formbinOnClickListener);
+        tositeTextView.setOnClickListener(siteOnClickListener);
+        tostorelocTextView.setOnClickListener(locationTextViewOnClickListener);
+        rotassetnumTextView.setOnClickListener(rotassetnumOnClickListener);
+        issuetoTextView.setOnClickListener(issuetoOnClickListener);
+        tobinTextView.setOnClickListener(tobinOnClickListener);
 //        from_storeroomTextView.setOnClickListener(locationTextViewOnClickListener);
 //        inventory_ownerTextView.setOnClickListener(ownerOnClickListener);
         submit.setOnClickListener(submitOnClickListener);
@@ -127,12 +140,80 @@ public class MaainvuseLine_AddNew_Activity extends BaseActivity {
     };
 
     /**
+     * linetype
+     **/
+    private View.OnClickListener linetypeOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            linetypeDialog();
+        }
+    };
+
+    /**
+     * itemnum
+     **/
+    private View.OnClickListener itemnumOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Intent intent = new Intent(MaainvuseLine_AddNew_Activity.this, ItemChooseActivity.class);
+            intent.putExtra("storeroom", storeroom);
+            startActivityForResult(intent, 0);
+        }
+    };
+
+    /**
      * 位置
      **/
     private View.OnClickListener locationTextViewOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
             Intent intent = new Intent(MaainvuseLine_AddNew_Activity.this, LocationChooseActivity.class);
+            startActivityForResult(intent, 0);
+        }
+    };
+
+    private View.OnClickListener formbinOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Intent intent = new Intent(MaainvuseLine_AddNew_Activity.this, InvbalancesChooseActivity.class);
+            startActivityForResult(intent, 0);
+        }
+    };
+
+    private View.OnClickListener tobinOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Intent intent = new Intent(MaainvuseLine_AddNew_Activity.this, InvbalancesChooseActivity.class);
+            startActivityForResult(intent, 1);
+        }
+    };
+
+    private View.OnClickListener siteOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Intent intent = new Intent(MaainvuseLine_AddNew_Activity.this, SiteChooseActivity.class);
+            startActivityForResult(intent, 0);
+        }
+    };
+
+    /**
+     * rotassetnum
+     **/
+    private View.OnClickListener rotassetnumOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Intent intent = new Intent(MaainvuseLine_AddNew_Activity.this, AssetChooseActivity.class);
+            startActivityForResult(intent, 0);
+        }
+    };
+
+    /**
+     * issueto
+     **/
+    private View.OnClickListener issuetoOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Intent intent = new Intent(MaainvuseLine_AddNew_Activity.this, PersonChooseActivity.class);
             startActivityForResult(intent, 0);
         }
     };
@@ -147,6 +228,21 @@ public class MaainvuseLine_AddNew_Activity extends BaseActivity {
             startActivityForResult(intent, 0);
         }
     };
+
+    private void linetypeDialog() {
+        final NormalListDialog normalListDialog = new NormalListDialog(MaainvuseLine_AddNew_Activity.this, linetypeList);
+        normalListDialog.title("Usage Type")
+                .showAnim(mBasIn)//
+                .dismissAnim(mBasOut)//
+                .show();
+        normalListDialog.setOnOperItemClickL(new OnOperItemClickL() {
+            @Override
+            public void onOperItemClick(AdapterView<?> parent, View view, int position, long id) {
+                linetypeTextView.setText(linetypeList[position]);
+                normalListDialog.dismiss();
+            }
+        });
+    }
 
     /**
      * 提交数据*
@@ -181,11 +277,11 @@ public class MaainvuseLine_AddNew_Activity extends BaseActivity {
         new AsyncTask<String, String, WebResult>() {
             @Override
             protected WebResult doInBackground(String... strings) {
-                WebResult reviseresult = AndroidClientService.AddMatoutbLin(MaainvuseLine_AddNew_Activity.this, invusenum,itemnumTextView.getText().toString(),
+                WebResult reviseresult = AndroidClientService.AddMatoutbLin(MaainvuseLine_AddNew_Activity.this, invusenum, itemnumTextView.getText().toString(),
                         formbinTextView.getText().toString(), usetypeTextView.getText().toString(), linetypeTextView.getText().toString()
                         , tositeTextView.getText().toString(), rotassetnumTextView.getText().toString(), quantityTextView.getText().toString()
                         , tostorelocTextView.getText().toString(), tobinTextView.getText().toString(), issuetoTextView.getText().toString()
-                        , AccountUtils.getpersonId(MaainvuseLine_AddNew_Activity.this),conversionTextView.getText().toString(), Constants.TRANSFER_URL);
+                        , AccountUtils.getpersonId(MaainvuseLine_AddNew_Activity.this), conversionTextView.getText().toString(), Constants.TRANSFER_URL);
                 return reviseresult;
             }
 
@@ -210,9 +306,35 @@ public class MaainvuseLine_AddNew_Activity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (resultCode) {
+            case ItemChooseActivity.ITEM_CODE:
+                String item = data.getExtras().getString("Itemnum");
+                itemnumTextView.setText(item);
+                break;
+            case InvbalancesChooseActivity.INVBALANCES_CODE:
+                String binnum = data.getExtras().getString("binnum");
+                if (requestCode == 0) {
+                    formbinTextView.setText(binnum);
+                } else {
+                    tobinTextView.setText(binnum);
+                }
+                break;
+            case SiteChooseActivity.SITE_CODE:
+                String siteid = data.getExtras().getString("siteid");
+                tositeTextView.setText(siteid);
+                break;
             case LocationChooseActivity.LOCATION_CODE:
                 String location = data.getExtras().getString("Location");
-//                from_storeroomTextView.setText(location);
+                tostorelocTextView.setText(location);
+                break;
+            case AssetChooseActivity.ASSET_CODE:
+                String asset = data.getExtras().getString("Assetnum");
+                String itemnum = data.getExtras().getString("Itemnum");
+                rotassetnumTextView.setText(asset);
+                itemnumTextView.setText(itemnum);
+                break;
+            case PersonChooseActivity.PERSON_CODE:
+                String personid = data.getExtras().getString("personid");
+                issuetoTextView.setText(personid);
                 break;
 //            case RESULT_OK:
 //                String result = data.getExtras().getString("result");
