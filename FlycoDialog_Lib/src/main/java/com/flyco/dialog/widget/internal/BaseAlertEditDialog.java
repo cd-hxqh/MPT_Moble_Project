@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.flyco.dialog.listener.OnBtnClickL;
 import com.flyco.dialog.listener.OnBtnEditClickL;
 import com.flyco.dialog.widget.base.BaseDialog;
 
@@ -208,6 +209,10 @@ public abstract class BaseAlertEditDialog<T extends BaseAlertEditDialog<T>> exte
     public T content(String content) {
         mContent = content;
         return (T) this;
+    }
+
+    public String getContent() {
+        return mTvContent.getText().toString();
     }
 
     /** set content gravity(设置正文内容,显示位置) */

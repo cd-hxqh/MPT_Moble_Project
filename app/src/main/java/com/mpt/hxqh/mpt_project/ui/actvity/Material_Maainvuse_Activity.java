@@ -21,11 +21,13 @@ import android.widget.TextView;
 
 import com.mpt.hxqh.mpt_project.R;
 import com.mpt.hxqh.mpt_project.adpter.BaseQuickAdapter;
+import com.mpt.hxqh.mpt_project.adpter.InvuseAdapter;
 import com.mpt.hxqh.mpt_project.adpter.MainvuseAdapter;
 import com.mpt.hxqh.mpt_project.api.HttpManager;
 import com.mpt.hxqh.mpt_project.api.HttpRequestHandler;
 import com.mpt.hxqh.mpt_project.api.JsonUtils;
 import com.mpt.hxqh.mpt_project.bean.Results;
+import com.mpt.hxqh.mpt_project.model.INVUSE;
 import com.mpt.hxqh.mpt_project.model.MAINVUSE;
 import com.mpt.hxqh.mpt_project.ui.widget.SwipeRefreshLayout;
 
@@ -71,7 +73,7 @@ public class Material_Maainvuse_Activity extends BaseActivity implements SwipeRe
     /**
      * 适配器*
      */
-    private MainvuseAdapter mainvuseAdapter;
+    private InvuseAdapter mainvuseAdapter;
     /**
      * 编辑框*
      */
@@ -83,7 +85,7 @@ public class Material_Maainvuse_Activity extends BaseActivity implements SwipeRe
     private int page = 1;
 
 
-    ArrayList<MAINVUSE> items = new ArrayList<MAINVUSE>();
+    ArrayList<INVUSE> items = new ArrayList<INVUSE>();
 
 
 
@@ -134,7 +136,7 @@ public class Material_Maainvuse_Activity extends BaseActivity implements SwipeRe
         refresh_layout.setOnLoadListener(this);
 
         refresh_layout.setRefreshing(true);
-        initAdapter(new ArrayList<MAINVUSE>());
+        initAdapter(new ArrayList<INVUSE>());
         getData(searchText);
 
         addBtn.setOnClickListener(addOnClickListener);
@@ -168,7 +170,7 @@ public class Material_Maainvuse_Activity extends BaseActivity implements SwipeRe
                                     InputMethodManager.HIDE_NOT_ALWAYS);
                     searchText = search.getText().toString();
                     mainvuseAdapter.removeAll(items);
-                    items = new ArrayList<MAINVUSE>();
+                    items = new ArrayList<INVUSE>();
                     nodatalayout.setVisibility(View.GONE);
                     refresh_layout.setRefreshing(true);
                     page = 1;
@@ -191,7 +193,7 @@ public class Material_Maainvuse_Activity extends BaseActivity implements SwipeRe
 
             @Override
             public void onSuccess(Results results, int totalPages, int currentPage) {
-                ArrayList<MAINVUSE> item = JsonUtils.parsingMAINVUSE(results.getResultlist());
+                ArrayList<INVUSE> item = JsonUtils.parsingINVUSE(results.getResultlist());
                 refresh_layout.setRefreshing(false);
                 refresh_layout.setLoading(false);
                 if (item == null || item.isEmpty()) {
@@ -200,7 +202,7 @@ public class Material_Maainvuse_Activity extends BaseActivity implements SwipeRe
 
                     if (item != null || item.size() != 0) {
                         if (page == 1) {
-                            items = new ArrayList<MAINVUSE>();
+                            items = new ArrayList<INVUSE>();
                             initAdapter(items);
                         }
                         for (int i = 0; i < item.size(); i++) {
@@ -226,9 +228,9 @@ public class Material_Maainvuse_Activity extends BaseActivity implements SwipeRe
     /**
      * 获取数据*
      */
-    private void initAdapter(final List<MAINVUSE> list) {
+    private void initAdapter(final List<INVUSE> list) {
         nodatalayout.setVisibility(View.GONE);
-        mainvuseAdapter = new MainvuseAdapter(Material_Maainvuse_Activity.this, R.layout.list_asset_transfer, list);
+        mainvuseAdapter = new InvuseAdapter(Material_Maainvuse_Activity.this, R.layout.list_asset_transfer, list);
         recyclerView.setAdapter(mainvuseAdapter);
         mainvuseAdapter.setOnRecyclerViewItemClickListener(new BaseQuickAdapter.OnRecyclerViewItemClickListener() {
             @Override
@@ -245,7 +247,7 @@ public class Material_Maainvuse_Activity extends BaseActivity implements SwipeRe
     /**
      * 添加数据*
      */
-    private void addData(final List<MAINVUSE> list) {
+    private void addData(final List<INVUSE> list) {
         mainvuseAdapter.addData(list);
     }
 

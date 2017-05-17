@@ -9,6 +9,7 @@
     <string name="pass_word_text">Pass Word</string>
     <string name="remenber_pass_text">Remember the password</string>
     <string name="login_text">Login</string>
+    <string name="ip_config">IP Config</string>
 
 
     <string name="login_error_empty_user">用户名不能为空</string>

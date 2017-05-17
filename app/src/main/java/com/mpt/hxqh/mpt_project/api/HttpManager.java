@@ -63,7 +63,7 @@ public class HttpManager {
         if (vlaue.equals("")) {
             return "{'appid':'" + Constants.SITE_APPID + "','objectname':'" + Constants.SITE_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read'}";
         } else {
-            return "{'appid':'" + Constants.SITE_APPID + "','objectname':'" + Constants.SITE_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','sinorsearch':{'SITEID':'" + vlaue + "','DESCRIPTION':'" + vlaue + "'}}";
+            return "{'appid':'" + Constants.SITE_APPID + "','objectname':'" + Constants.SITE_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','sinorsearch':{'BINNUM':'" + vlaue + "','LOTNUM':'" + vlaue + "'}}";
         }
     }
 
@@ -309,7 +309,7 @@ public class HttpManager {
     public static void loginWithUsername(final Context cxt, final String username, final String password, String imei,
                                          final HttpRequestHandler<String> handler) {
 
-        String ip_adress = Constants.HTTP_API_IP + Constants.SIGN_IN_URL;
+        String ip_adress = AccountUtils.getIpAddress(cxt) + Constants.SIGN_IN_URL;
 
         Log.i(TAG, "ip_adress=" + ip_adress);
         AsyncHttpClient client = new AsyncHttpClient();
@@ -381,7 +381,7 @@ public class HttpManager {
      */
     public static void getDataPagingInfo(final Context cxt, String data, final HttpRequestHandler<Results> handler) {
         Log.i(TAG, "data=" + data);
-        String url = Constants.HTTP_API_IP + Constants.BASE_URL;
+        String url = AccountUtils.getIpAddress(cxt) + Constants.BASE_URL;
         AsyncHttpClient client = new AsyncHttpClient();
         RequestParams params = new RequestParams();
         params.put("data", data);

@@ -12,7 +12,7 @@ public class Constants {
      * 默认*
      */
     public static final String HTTP_API_IP = "http://45.112.178.119:9080";
-
+//    public static final String HTTP_API_IP = "http://192.168.1.119:7001";
 
 
     /**

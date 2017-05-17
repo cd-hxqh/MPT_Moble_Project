@@ -51,7 +51,7 @@ public class AndroidClientService {
      */
     public static WebResult startwf(Context context, String processname, String mbo, String keyValue, String key, String loginid) {
 
-        String url = Constants.HTTP_API_IP + Constants.WORK_FLOW_URL;
+        String url = AccountUtils.getIpAddress(context) + Constants.WORK_FLOW_URL;
         Log.e("发送工作流",url);
         SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         soapEnvelope.implicitTypes = true;
@@ -88,7 +88,7 @@ public class AndroidClientService {
      * @return
      */
     public static WebResult approve(Context context, String processname, String mbo, String keyValue, String key, String zx, String desc,String loginid) {
-        String url = Constants.HTTP_API_IP + Constants.WORK_FLOW_URL;
+        String url = AccountUtils.getIpAddress(context) + Constants.WORK_FLOW_URL;
         SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         soapEnvelope.implicitTypes = true;
         soapEnvelope.dotNet = true;
@@ -138,7 +138,7 @@ public class AndroidClientService {
         soapReq.addProperty("INVOWNER", invowner);//仓管员
         soapReq.addProperty("CREATEBY", createby);//创建人
         soapEnvelope.setOutputSoapObject(soapReq);
-        HttpTransportSE httpTransport = new HttpTransportSE(Constants.HTTP_API_IP + url, timeOut);
+        HttpTransportSE httpTransport = new HttpTransportSE(AccountUtils.getIpAddress(context) + url, timeOut);
         try {
             httpTransport.call("urn:action", soapEnvelope);
         } catch (IOException | XmlPullParserException e) {
@@ -178,7 +178,7 @@ public class AndroidClientService {
         soapReq.addProperty("ISSUETO", issueto);//
         soapReq.addProperty("QUANTITY", quantity);//
         soapEnvelope.setOutputSoapObject(soapReq);
-        HttpTransportSE httpTransport = new HttpTransportSE(Constants.HTTP_API_IP + url, timeOut);
+        HttpTransportSE httpTransport = new HttpTransportSE(AccountUtils.getIpAddress(context) + url, timeOut);
         try {
             httpTransport.call("urn:action", soapEnvelope);
         } catch (IOException | XmlPullParserException e) {
@@ -213,7 +213,7 @@ public class AndroidClientService {
         soapReq.addProperty("INVOWNER", invowner);//仓管员
         soapReq.addProperty("USETYPE", usetype);//交易类型
         soapEnvelope.setOutputSoapObject(soapReq);
-        HttpTransportSE httpTransport = new HttpTransportSE(Constants.HTTP_API_IP + url, timeOut);
+        HttpTransportSE httpTransport = new HttpTransportSE(AccountUtils.getIpAddress(context) + url, timeOut);
         try {
             httpTransport.call("urn:action", soapEnvelope);
         } catch (IOException | XmlPullParserException e) {
@@ -259,7 +259,7 @@ public class AndroidClientService {
         soapReq.addProperty("ENTERBY", enterby);//
         soapReq.addProperty("CONVERSION", conversion);//
         soapEnvelope.setOutputSoapObject(soapReq);
-        HttpTransportSE httpTransport = new HttpTransportSE(Constants.HTTP_API_IP + url, timeOut);
+        HttpTransportSE httpTransport = new HttpTransportSE(AccountUtils.getIpAddress(context) + url, timeOut);
         try {
             httpTransport.call("urn:action", soapEnvelope);
         } catch (IOException | XmlPullParserException e) {
@@ -294,7 +294,7 @@ public class AndroidClientService {
         soapReq.addProperty("INVOWNER", invowner);//仓管员
         soapReq.addProperty("CREATEBY", createby);//
         soapEnvelope.setOutputSoapObject(soapReq);
-        HttpTransportSE httpTransport = new HttpTransportSE(Constants.HTTP_API_IP + url, timeOut);
+        HttpTransportSE httpTransport = new HttpTransportSE(AccountUtils.getIpAddress(context) + url, timeOut);
         try {
             httpTransport.call("urn:action", soapEnvelope);
         } catch (IOException | XmlPullParserException e) {
@@ -334,7 +334,7 @@ public class AndroidClientService {
         soapReq.addProperty("NEWPHYSCNT", newphyscnt);//
         soapReq.addProperty("REMARK", remark);//
         soapEnvelope.setOutputSoapObject(soapReq);
-        HttpTransportSE httpTransport = new HttpTransportSE(Constants.HTTP_API_IP + url, timeOut);
+        HttpTransportSE httpTransport = new HttpTransportSE(AccountUtils.getIpAddress(context) + url, timeOut);
         try {
             httpTransport.call("urn:action", soapEnvelope);
         } catch (IOException | XmlPullParserException e) {
@@ -370,7 +370,7 @@ public class AndroidClientService {
         soapReq.addProperty("CREATEBY", createby);//创建人
         soapReq.addProperty("VISITD", visitd);//更新时间
         soapEnvelope.setOutputSoapObject(soapReq);
-        HttpTransportSE httpTransport = new HttpTransportSE(Constants.HTTP_API_IP + url, timeOut);
+        HttpTransportSE httpTransport = new HttpTransportSE(AccountUtils.getIpAddress(context) + url, timeOut);
         try {
             httpTransport.call("urn:action", soapEnvelope);
         } catch (IOException | XmlPullParserException e) {
@@ -407,7 +407,7 @@ public class AndroidClientService {
         soapReq.addProperty("REMARK", remark);//
         soapReq.addProperty("ISCHECK", ischeck);//
         soapEnvelope.setOutputSoapObject(soapReq);
-        HttpTransportSE httpTransport = new HttpTransportSE(Constants.HTTP_API_IP + url, timeOut);
+        HttpTransportSE httpTransport = new HttpTransportSE(AccountUtils.getIpAddress(context) + url, timeOut);
         try {
             httpTransport.call("urn:action", soapEnvelope);
         } catch (IOException | XmlPullParserException e) {
@@ -440,7 +440,7 @@ public class AndroidClientService {
         soapReq.addProperty("DESCRIPTION", description);//描述
         soapReq.addProperty("USERID", userid);//位置
         soapEnvelope.setOutputSoapObject(soapReq);
-        HttpTransportSE httpTransport = new HttpTransportSE(Constants.HTTP_API_IP + url, timeOut);
+        HttpTransportSE httpTransport = new HttpTransportSE(AccountUtils.getIpAddress(context) + url, timeOut);
         try {
             httpTransport.call("urn:action", soapEnvelope);
         } catch (IOException | XmlPullParserException e) {
@@ -477,7 +477,7 @@ public class AndroidClientService {
         soapReq.addProperty("CONVERSION", conversion);//
         soapReq.addProperty("ORDERQTY", orderqty);//
         soapEnvelope.setOutputSoapObject(soapReq);
-        HttpTransportSE httpTransport = new HttpTransportSE(Constants.HTTP_API_IP + url, timeOut);
+        HttpTransportSE httpTransport = new HttpTransportSE(AccountUtils.getIpAddress(context) + url, timeOut);
         try {
             httpTransport.call("urn:action", soapEnvelope);
         } catch (IOException | XmlPullParserException e) {
@@ -510,7 +510,7 @@ public class AndroidClientService {
         soapReq.addProperty("mboKey", mboKey);//表主键 如：WONUM
         soapReq.addProperty("mboKeyValue", mboKeyValue);//表主键值
         soapEnvelope.setOutputSoapObject(soapReq);
-        HttpTransportSE httpTransport = new HttpTransportSE(Constants.HTTP_API_IP+ url, timeOut);
+        HttpTransportSE httpTransport = new HttpTransportSE(AccountUtils.getIpAddress(context)+ url, timeOut);
         try {
             httpTransport.call("urn:action", soapEnvelope);
         } catch (IOException | XmlPullParserException e) {
@@ -548,7 +548,7 @@ public class AndroidClientService {
         soapReq.addProperty("ownertable", ownertable);//表名
         soapReq.addProperty("ownerid", ownerid);//表主键值
         soapEnvelope.setOutputSoapObject(soapReq);
-        HttpTransportSE httpTransport = new HttpTransportSE(Constants.HTTP_API_IP + url, timeOut);
+        HttpTransportSE httpTransport = new HttpTransportSE(AccountUtils.getIpAddress(context) + url, timeOut);
         try {
             httpTransport.call("urn:action", soapEnvelope);
         } catch (IOException | XmlPullParserException e) {

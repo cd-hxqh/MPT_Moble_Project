@@ -235,6 +235,7 @@
                         android:id="@+id/quantity_text_id"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:inputType="number"
                         android:layout_marginLeft="@dimen/dimen_10"
                         android:background="@drawable/editsharp"
                         android:gravity="right"

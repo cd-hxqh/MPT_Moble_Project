@@ -338,6 +338,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/dimen_10"
+                        android:inputType="number"
                         android:background="@drawable/editsharp"
                         android:gravity="right"
                         android:hint="@string/have_not_data"

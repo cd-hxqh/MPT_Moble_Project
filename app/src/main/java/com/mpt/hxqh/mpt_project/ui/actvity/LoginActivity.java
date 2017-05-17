@@ -1,6 +1,7 @@
 package com.mpt.hxqh.mpt_project.ui.actvity;
 
 import android.content.Intent;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
 import android.view.View;
@@ -8,11 +9,19 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.flyco.animation.BaseAnimatorSet;
+import com.flyco.animation.BounceEnter.BounceTopEnter;
+import com.flyco.animation.SlideExit.SlideBottomExit;
+import com.flyco.dialog.listener.OnBtnClickL;
+import com.flyco.dialog.listener.OnBtnEditClickL;
+import com.flyco.dialog.widget.NormalEditTextDialog;
 import com.mpt.hxqh.mpt_project.R;
 import com.mpt.hxqh.mpt_project.api.HttpManager;
 import com.mpt.hxqh.mpt_project.api.HttpRequestHandler;
+import com.mpt.hxqh.mpt_project.config.Constants;
 import com.mpt.hxqh.mpt_project.dialog.FlippingLoadingDialog;
 import com.mpt.hxqh.mpt_project.manager.AppManager;
 import com.mpt.hxqh.mpt_project.unit.AccountUtils;
@@ -37,6 +46,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
     private boolean isRemember; //是否记住密码
 
+    private TextView ipconfig;
+
 
     String userName; //用户名
 
@@ -46,6 +57,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
     protected FlippingLoadingDialog mLoadingDialog;
 
+    private BaseAnimatorSet mBasIn;
+    private BaseAnimatorSet mBasOut;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +72,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
         findViewById();
         initView();
+
+        mBasIn = new BounceTopEnter();
+        mBasOut = new SlideBottomExit();
     }
 
     @Override
@@ -67,6 +83,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         mPassword = (EditText) findViewById(R.id.user_login_password);
         checkBox = (CheckBox) findViewById(R.id.isremenber_password);
         mLogin = (Button) findViewById(R.id.user_login);
+
+        ipconfig = (TextView) findViewById(R.id.ipconfig);
     }
 
     @Override
@@ -80,7 +98,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         checkBox.setOnCheckedChangeListener(cheBoxOnCheckedChangListener);
         mLogin.setOnClickListener(this);
 
-
+        if (AccountUtils.getIpAddress(LoginActivity.this)==null||AccountUtils.getIpAddress(LoginActivity.this).equals("")){
+            AccountUtils.setIpAddress(LoginActivity.this,Constants.HTTP_API_IP);
+        }
+        ipconfig.setOnClickListener(ipOnClickListener);
     }
 
     private CompoundButton.OnCheckedChangeListener cheBoxOnCheckedChangListener = new CompoundButton.OnCheckedChangeListener() {
@@ -171,6 +192,36 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         if (mLoadingDialog == null)
             mLoadingDialog = new FlippingLoadingDialog(this, msg);
         return mLoadingDialog;
+    }
+
+    private View.OnClickListener ipOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            setIP();
+        }
+    };
+
+    private void setIP(){
+        final NormalEditTextDialog editTextDialog = new NormalEditTextDialog(LoginActivity.this);
+        editTextDialog.title("Configure IP")
+                .content(AccountUtils.getIpAddress(LoginActivity.this))
+                .showAnim(mBasIn)//
+                .dismissAnim(mBasOut)//
+                .show();
+        editTextDialog.setOnBtnClickL(
+                new OnBtnEditClickL() {
+                    @Override
+                    public void onBtnClick(String text) {
+                        editTextDialog.dismiss();
+                    }
+                }, new OnBtnEditClickL() {
+                    @Override
+                    public void onBtnClick(String text) {
+                        AccountUtils.setIpAddress(LoginActivity.this,text);
+                        editTextDialog.dismiss();
+                    }
+                }
+        );
     }
 
 

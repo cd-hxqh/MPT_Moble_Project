@@ -13,11 +13,14 @@ import android.widget.TextView;
 
 import com.mpt.hxqh.mpt_project.R;
 import com.mpt.hxqh.mpt_project.adpter.BaseQuickAdapter;
+import com.mpt.hxqh.mpt_project.adpter.InvuseLineAdapter;
 import com.mpt.hxqh.mpt_project.adpter.MaInvuseLineAdapter;
 import com.mpt.hxqh.mpt_project.api.HttpManager;
 import com.mpt.hxqh.mpt_project.api.HttpRequestHandler;
 import com.mpt.hxqh.mpt_project.api.JsonUtils;
 import com.mpt.hxqh.mpt_project.bean.Results;
+import com.mpt.hxqh.mpt_project.model.INVUSE;
+import com.mpt.hxqh.mpt_project.model.INVUSELINE;
 import com.mpt.hxqh.mpt_project.model.MAINVUSE;
 import com.mpt.hxqh.mpt_project.model.MAINVUSELINE;
 import com.mpt.hxqh.mpt_project.ui.widget.SwipeRefreshLayout;
@@ -42,7 +45,7 @@ public class Maainvuse_Details_Activity extends BaseActivity {
     private TextView invownerTextView; //invowner
     private TextView statusTextView; //status
 
-    private MAINVUSE mainvuse;
+    private INVUSE mainvuse;
 
     /**
      * 行表
@@ -63,11 +66,11 @@ public class Maainvuse_Details_Activity extends BaseActivity {
     /**
      * 适配器*
      */
-    private MaInvuseLineAdapter maInvuseLineAdapter;
+    private InvuseLineAdapter maInvuseLineAdapter;
 
     private int page = 1;
 
-    ArrayList<MAINVUSELINE> items = new ArrayList<MAINVUSELINE>();
+    ArrayList<INVUSELINE> items = new ArrayList<INVUSELINE>();
 
     private FloatingActionButton addButton;
 
@@ -82,7 +85,7 @@ public class Maainvuse_Details_Activity extends BaseActivity {
     }
 
     private void initData() {
-        mainvuse = (MAINVUSE) getIntent().getSerializableExtra("mainvuse");
+        mainvuse = (INVUSE) getIntent().getSerializableExtra("mainvuse");
     }
 
     @Override
@@ -134,7 +137,7 @@ public class Maainvuse_Details_Activity extends BaseActivity {
         refresh_layout.setOnLoadListener(refreshOnLoadListener);
 
         refresh_layout.setRefreshing(true);
-        initAdapter(new ArrayList<MAINVUSELINE>());
+        initAdapter(new ArrayList<INVUSELINE>());
         getData();
 
         addButton.setOnClickListener(addOnClickListener);
@@ -172,9 +175,9 @@ public class Maainvuse_Details_Activity extends BaseActivity {
     /**
      * 获取数据*
      */
-    private void initAdapter(final List<MAINVUSELINE> list) {
+    private void initAdapter(final List<INVUSELINE> list) {
         nodatalayout.setVisibility(View.GONE);
-        maInvuseLineAdapter = new MaInvuseLineAdapter(Maainvuse_Details_Activity.this, R.layout.list_transfer_item, list);
+        maInvuseLineAdapter = new InvuseLineAdapter(Maainvuse_Details_Activity.this, R.layout.list_transfer_item, list);
         recyclerView.setAdapter(maInvuseLineAdapter);
         maInvuseLineAdapter.setOnRecyclerViewItemClickListener(new BaseQuickAdapter.OnRecyclerViewItemClickListener() {
             @Override
@@ -196,7 +199,7 @@ public class Maainvuse_Details_Activity extends BaseActivity {
 
             @Override
             public void onSuccess(Results results, int totalPages, int currentPage) {
-                ArrayList<MAINVUSELINE> item = JsonUtils.parsingMAINVUSELINE(results.getResultlist());
+                ArrayList<INVUSELINE> item = JsonUtils.parsingINVUSELINE(results.getResultlist());
                 refresh_layout.setRefreshing(false);
                 refresh_layout.setLoading(false);
                 if (item == null || item.isEmpty()) {
@@ -205,7 +208,7 @@ public class Maainvuse_Details_Activity extends BaseActivity {
 
                     if (item != null || item.size() != 0) {
                         if (page == 1) {
-                            items = new ArrayList<MAINVUSELINE>();
+                            items = new ArrayList<INVUSELINE>();
                             initAdapter(items);
                         }
                         for (int i = 0; i < item.size(); i++) {
@@ -232,7 +235,7 @@ public class Maainvuse_Details_Activity extends BaseActivity {
     /**
      * 添加数据*
      */
-    private void addData(final List<MAINVUSELINE> list) {
+    private void addData(final List<INVUSELINE> list) {
         maInvuseLineAdapter.addData(list);
     }
 
