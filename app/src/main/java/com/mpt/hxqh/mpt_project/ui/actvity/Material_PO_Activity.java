@@ -14,11 +14,17 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.flyco.animation.BaseAnimatorSet;
+import com.flyco.animation.BounceEnter.BounceTopEnter;
+import com.flyco.animation.SlideExit.SlideBottomExit;
+import com.flyco.dialog.listener.OnBtnClickL;
+import com.flyco.dialog.widget.NormalDialog;
 import com.mpt.hxqh.mpt_project.R;
 import com.mpt.hxqh.mpt_project.adpter.BaseQuickAdapter;
 import com.mpt.hxqh.mpt_project.adpter.PoAdapter;
@@ -26,6 +32,7 @@ import com.mpt.hxqh.mpt_project.api.HttpManager;
 import com.mpt.hxqh.mpt_project.api.HttpRequestHandler;
 import com.mpt.hxqh.mpt_project.api.JsonUtils;
 import com.mpt.hxqh.mpt_project.bean.Results;
+import com.mpt.hxqh.mpt_project.manager.AppManager;
 import com.mpt.hxqh.mpt_project.model.PO;
 import com.mpt.hxqh.mpt_project.ui.widget.SwipeRefreshLayout;
 
@@ -81,9 +88,13 @@ public class Material_PO_Activity extends BaseActivity implements SwipeRefreshLa
     private String searchText = "";
     private int page = 1;
 
+    private LinearLayout buttonLayout;
+    private Button quit;
+    private Button option;
 
     ArrayList<PO> items = new ArrayList<PO>();
-
+    private BaseAnimatorSet mBasIn;
+    private BaseAnimatorSet mBasOut;
 
 
     @Override
@@ -93,6 +104,8 @@ public class Material_PO_Activity extends BaseActivity implements SwipeRefreshLa
         findViewById();
         initView();
 
+        mBasIn = new BounceTopEnter();
+        mBasOut = new SlideBottomExit();
     }
 
 
@@ -101,10 +114,14 @@ public class Material_PO_Activity extends BaseActivity implements SwipeRefreshLa
         backImageView = (ImageView) findViewById(R.id.title_back_id);
         titleTextView = (TextView) findViewById(R.id.title_name);
         addBtn = (ImageView) findViewById(R.id.title_add);
+
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView_id);
         refresh_layout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
         nodatalayout = (LinearLayout) findViewById(R.id.have_not_data_id);
         search = (EditText) findViewById(R.id.search_edit);
+        buttonLayout = (LinearLayout) findViewById(R.id.button_layout);
+        quit = (Button) findViewById(R.id.quit);
+        option = (Button) findViewById(R.id.option);
     }
 
     @Override
@@ -118,6 +135,7 @@ public class Material_PO_Activity extends BaseActivity implements SwipeRefreshLa
         });
         titleTextView.setText(R.string.material_receive_text);
         addBtn.setVisibility(View.VISIBLE);
+        buttonLayout.setVisibility(View.VISIBLE);
         layoutManager = new LinearLayoutManager(Material_PO_Activity.this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         layoutManager.scrollToPosition(0);
@@ -137,6 +155,7 @@ public class Material_PO_Activity extends BaseActivity implements SwipeRefreshLa
         getData(searchText);
 
         addBtn.setOnClickListener(addOnClickListener);
+        quit.setOnClickListener(quitOnClickListener);
     }
 
     private View.OnClickListener addOnClickListener = new View.OnClickListener() {
@@ -144,6 +163,31 @@ public class Material_PO_Activity extends BaseActivity implements SwipeRefreshLa
         public void onClick(View v) {
             Intent intent = new Intent(Material_PO_Activity.this,PO_AddNew_Activity.class);
             startActivity(intent);
+        }
+    };
+
+    private View.OnClickListener quitOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            final NormalDialog dialog = new NormalDialog(Material_PO_Activity.this);
+            dialog.content("Sure to exit?")//
+                    .showAnim(mBasIn)//
+                    .dismissAnim(mBasOut)//
+                    .show();
+            dialog.setOnBtnClickL(
+                    new OnBtnClickL() {
+                        @Override
+                        public void onBtnClick() {
+                            dialog.dismiss();
+                        }
+                    },
+                    new OnBtnClickL() {
+                        @Override
+                        public void onBtnClick() {
+                            AppManager.AppExit(Material_PO_Activity.this);
+                        }
+                    });
+
         }
     };
 

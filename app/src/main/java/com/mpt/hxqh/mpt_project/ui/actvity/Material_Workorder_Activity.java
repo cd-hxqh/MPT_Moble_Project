@@ -14,11 +14,17 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.flyco.animation.BaseAnimatorSet;
+import com.flyco.animation.BounceEnter.BounceTopEnter;
+import com.flyco.animation.SlideExit.SlideBottomExit;
+import com.flyco.dialog.listener.OnBtnClickL;
+import com.flyco.dialog.widget.NormalDialog;
 import com.mpt.hxqh.mpt_project.R;
 import com.mpt.hxqh.mpt_project.adpter.BaseQuickAdapter;
 import com.mpt.hxqh.mpt_project.adpter.WorkOrderAdapter;
@@ -26,6 +32,7 @@ import com.mpt.hxqh.mpt_project.api.HttpManager;
 import com.mpt.hxqh.mpt_project.api.HttpRequestHandler;
 import com.mpt.hxqh.mpt_project.api.JsonUtils;
 import com.mpt.hxqh.mpt_project.bean.Results;
+import com.mpt.hxqh.mpt_project.manager.AppManager;
 import com.mpt.hxqh.mpt_project.model.WORKORDER;
 import com.mpt.hxqh.mpt_project.ui.widget.SwipeRefreshLayout;
 
@@ -77,10 +84,13 @@ public class Material_Workorder_Activity extends BaseActivity implements SwipeRe
      */
     private String searchText = "";
     private int page = 1;
-
+    private LinearLayout buttonLayout;
+    private Button quit;
+    private Button option;
 
     ArrayList<WORKORDER> items = new ArrayList<WORKORDER>();
-
+    private BaseAnimatorSet mBasIn;
+    private BaseAnimatorSet mBasOut;
 
 
     @Override
@@ -90,6 +100,8 @@ public class Material_Workorder_Activity extends BaseActivity implements SwipeRe
         findViewById();
         initView();
 
+        mBasIn = new BounceTopEnter();
+        mBasOut = new SlideBottomExit();
     }
 
 
@@ -101,6 +113,9 @@ public class Material_Workorder_Activity extends BaseActivity implements SwipeRe
         refresh_layout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
         nodatalayout = (LinearLayout) findViewById(R.id.have_not_data_id);
         search = (EditText) findViewById(R.id.search_edit);
+        buttonLayout = (LinearLayout) findViewById(R.id.button_layout);
+        quit = (Button) findViewById(R.id.quit);
+        option = (Button) findViewById(R.id.option);
     }
 
     @Override
@@ -113,6 +128,7 @@ public class Material_Workorder_Activity extends BaseActivity implements SwipeRe
             }
         });
         titleTextView.setText(R.string.Material_outbound_text);
+        buttonLayout.setVisibility(View.VISIBLE);
         layoutManager = new LinearLayoutManager(Material_Workorder_Activity.this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         layoutManager.scrollToPosition(0);
@@ -130,8 +146,34 @@ public class Material_Workorder_Activity extends BaseActivity implements SwipeRe
         refresh_layout.setRefreshing(true);
         initAdapter(new ArrayList<WORKORDER>());
         getData(searchText);
+
+        quit.setOnClickListener(quitOnClickListener);
     }
 
+    private View.OnClickListener quitOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            final NormalDialog dialog = new NormalDialog(Material_Workorder_Activity.this);
+            dialog.content("Sure to exit?")//
+                    .showAnim(mBasIn)//
+                    .dismissAnim(mBasOut)//
+                    .show();
+            dialog.setOnBtnClickL(
+                    new OnBtnClickL() {
+                        @Override
+                        public void onBtnClick() {
+                            dialog.dismiss();
+                        }
+                    },
+                    new OnBtnClickL() {
+                        @Override
+                        public void onBtnClick() {
+                            AppManager.AppExit(Material_Workorder_Activity.this);
+                        }
+                    });
+
+        }
+    };
 
     private void setSearchEdit() {
         SpannableString msp = new SpannableString(getString(R.string.search_text));
@@ -217,11 +259,11 @@ public class Material_Workorder_Activity extends BaseActivity implements SwipeRe
         workOrderAdapter.setOnRecyclerViewItemClickListener(new BaseQuickAdapter.OnRecyclerViewItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-//                Intent intent = new Intent(Material_Workorder_Activity.this, Udretire_Details_Activity.class);
-//                Bundle bundle = new Bundle();
-//                bundle.putSerializable("workorder", items.get(position));
-//                intent.putExtras(bundle);
-//                startActivityForResult(intent, 0);
+                Intent intent = new Intent(Material_Workorder_Activity.this, Workorder_Details_Activity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("workorder", items.get(position));
+                intent.putExtras(bundle);
+                startActivityForResult(intent, 0);
             }
         });
     }

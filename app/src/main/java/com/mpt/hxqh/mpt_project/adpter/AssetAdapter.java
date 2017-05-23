@@ -34,8 +34,8 @@ public class AssetAdapter extends BaseQuickAdapter<ASSET> {
         helper.setText(R.id.location_text_id, item.getLOCATION());
         helper.setText(R.id.sn_text_id, item.getSERIALNUM());
         helper.setText(R.id.category_text_id, item.getCONFIGURE());
+        helper.setText(R.id.item_text_id, item.getITEMNUM());
         helper.setText(R.id.type_text_id, item.getASSETTYPE());
-        helper.setText(R.id.type_text_id, item.getITEMNUM());
     }
 
 

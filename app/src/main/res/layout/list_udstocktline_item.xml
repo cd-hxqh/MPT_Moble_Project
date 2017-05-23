@@ -15,8 +15,8 @@
             android:id="@+id/type_text_id"
             android:layout_width="0dp"
             android:layout_height="@dimen/dimens_40dp"
-            android:layout_weight="1"
-            android:gravity="center"
+            android:layout_weight="0.5"
+            android:layout_marginLeft="5dp"
             android:text="@string/have_not_data"
             android:textColor="@color/black"></TextView>
 
@@ -27,7 +27,6 @@
             android:layout_weight="1"
             android:ellipsize="end"
             android:ems="5"
-            android:gravity="center"
             android:singleLine="true"
             android:text="@string/have_not_data"
             android:textColor="@color/black"></TextView>
@@ -36,7 +35,7 @@
             android:id="@+id/desc_text_id"
             android:layout_width="0dp"
             android:layout_height="@dimen/dimens_40dp"
-            android:layout_weight="1.5"
+            android:layout_weight="1"
             android:ellipsize="end"
             android:ems="10"
             android:gravity="center"
@@ -47,7 +46,7 @@
         <TextView
             android:id="@+id/storeroom_text_id"
             android:layout_width="0dp"
-            android:layout_height="@dimen/dimens_50dp"
+            android:layout_height="@dimen/dimens_40dp"
             android:layout_weight="1"
             android:gravity="center"
             android:text="@string/have_not_data"

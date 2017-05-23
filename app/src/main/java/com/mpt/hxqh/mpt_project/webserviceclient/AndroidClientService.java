@@ -288,7 +288,7 @@ public class AndroidClientService {
         SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         soapEnvelope.implicitTypes = true;
         soapEnvelope.dotNet = true;
-        SoapObject soapReq = new SoapObject(NAMESPACE, "mptmobileserviceAddMatoutb");
+        SoapObject soapReq = new SoapObject(NAMESPACE, "mptmobileserviceAddMatRf");
         soapReq.addProperty("DESCRIPTION", description);//描述
         soapReq.addProperty("FROMSTORELOC", fromstoreloc);//库存
         soapReq.addProperty("INVOWNER", invowner);//仓管员
@@ -476,6 +476,145 @@ public class AndroidClientService {
         soapReq.addProperty("ITEMNUM", itemnum);//
         soapReq.addProperty("CONVERSION", conversion);//
         soapReq.addProperty("ORDERQTY", orderqty);//
+        soapEnvelope.setOutputSoapObject(soapReq);
+        HttpTransportSE httpTransport = new HttpTransportSE(AccountUtils.getIpAddress(context) + url, timeOut);
+        try {
+            httpTransport.call("urn:action", soapEnvelope);
+        } catch (IOException | XmlPullParserException e) {
+//            e.printStackTrace();
+            return null;
+        }
+        String obj = null;
+        WebResult webResult = null;
+        try {
+            obj = soapEnvelope.getResponse().toString();
+
+            Log.i(TAG, "obj=" + obj);
+            webResult = JsonUtils.parsingWebResult(obj);
+        } catch (SoapFault soapFault) {
+            soapFault.printStackTrace();
+        }
+        return webResult;
+    }
+
+    /**
+     * 资产维修新增方法
+     * @return
+     */
+    public static WebResult AddRepair(Context context, String description,String location,String repairdate,String createby, String url) {
+
+        SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+        soapEnvelope.implicitTypes = true;
+        soapEnvelope.dotNet = true;
+        SoapObject soapReq = new SoapObject(NAMESPACE, "mptmobileserviceAddRepair");
+        soapReq.addProperty("DESCRIPTION", description);//描述
+        soapReq.addProperty("LOCATION", location);//位置
+        soapReq.addProperty("REPAIRDATE", repairdate);//维修时间
+        soapReq.addProperty("CREATEBY", createby);//创建人
+        soapEnvelope.setOutputSoapObject(soapReq);
+        HttpTransportSE httpTransport = new HttpTransportSE(AccountUtils.getIpAddress(context) + url, timeOut);
+        try {
+            httpTransport.call("urn:action", soapEnvelope);
+        } catch (IOException | XmlPullParserException e) {
+//            e.printStackTrace();
+            return null;
+        }
+        String obj = null;
+        WebResult webResult = null;
+        try {
+            obj = soapEnvelope.getResponse().toString();
+
+            Log.i(TAG, "obj=" + obj);
+            webResult = JsonUtils.parsingWebResult(obj);
+        } catch (SoapFault soapFault) {
+            soapFault.printStackTrace();
+        }
+        return webResult;
+    }
+
+    /**
+     * 资产维修新增行方法
+     * @return
+     */
+    public static WebResult AddRepairLine(Context context, String repairnum,String udrepdate,String udasstnum, String url) {
+
+        SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+        soapEnvelope.implicitTypes = true;
+        soapEnvelope.dotNet = true;
+        SoapObject soapReq = new SoapObject(NAMESPACE, "mptmobileserviceAddRepairLine");
+        soapReq.addProperty("REPAIRNUM", repairnum);//资产维修主表单号
+        soapReq.addProperty("UDREPDATE", udrepdate);//维修日期
+        soapReq.addProperty("UDASSTNUM", udasstnum);//选项框资产编号
+        soapEnvelope.setOutputSoapObject(soapReq);
+        HttpTransportSE httpTransport = new HttpTransportSE(AccountUtils.getIpAddress(context) + url, timeOut);
+        try {
+            httpTransport.call("urn:action", soapEnvelope);
+        } catch (IOException | XmlPullParserException e) {
+//            e.printStackTrace();
+            return null;
+        }
+        String obj = null;
+        WebResult webResult = null;
+        try {
+            obj = soapEnvelope.getResponse().toString();
+
+            Log.i(TAG, "obj=" + obj);
+            webResult = JsonUtils.parsingWebResult(obj);
+        } catch (SoapFault soapFault) {
+            soapFault.printStackTrace();
+        }
+        return webResult;
+    }
+
+    /**
+     * 资产报废新增方法
+     * @return
+     */
+    public static WebResult AddRetire(Context context, String description,String location,String retireloc,String retiredate,String createby, String url) {
+
+        SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+        soapEnvelope.implicitTypes = true;
+        soapEnvelope.dotNet = true;
+        SoapObject soapReq = new SoapObject(NAMESPACE, "mptmobileserviceAddRetire");
+        soapReq.addProperty("DESCRIPTION", description);//描述
+        soapReq.addProperty("LOCATION", location);//位置
+        soapReq.addProperty("RETIRELOC", retireloc);//报废后位置
+        soapReq.addProperty("RETIREDATE", retiredate);//报废日期
+        soapReq.addProperty("CREATEBY", createby);//创建人
+        soapEnvelope.setOutputSoapObject(soapReq);
+        HttpTransportSE httpTransport = new HttpTransportSE(AccountUtils.getIpAddress(context) + url, timeOut);
+        try {
+            httpTransport.call("urn:action", soapEnvelope);
+        } catch (IOException | XmlPullParserException e) {
+//            e.printStackTrace();
+            return null;
+        }
+        String obj = null;
+        WebResult webResult = null;
+        try {
+            obj = soapEnvelope.getResponse().toString();
+
+            Log.i(TAG, "obj=" + obj);
+            webResult = JsonUtils.parsingWebResult(obj);
+        } catch (SoapFault soapFault) {
+            soapFault.printStackTrace();
+        }
+        return webResult;
+    }
+
+    /**
+     * 资产报废新增行方法
+     * @return
+     */
+    public static WebResult AddRetireLine(Context context, String description,String location,String retireloc, String url) {
+
+        SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+        soapEnvelope.implicitTypes = true;
+        soapEnvelope.dotNet = true;
+        SoapObject soapReq = new SoapObject(NAMESPACE, "mptmobileserviceAddRetireLine");
+        soapReq.addProperty("RETIRENUM", description);//资产报废主表单号
+        soapReq.addProperty("ASSETNUM", location);//资产编号
+        soapReq.addProperty("RETIREDATE", retireloc);//报废日期
         soapEnvelope.setOutputSoapObject(soapReq);
         HttpTransportSE httpTransport = new HttpTransportSE(AccountUtils.getIpAddress(context) + url, timeOut);
         try {

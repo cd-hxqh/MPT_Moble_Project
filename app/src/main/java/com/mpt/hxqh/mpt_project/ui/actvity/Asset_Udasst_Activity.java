@@ -20,6 +20,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.flyco.animation.BaseAnimatorSet;
+import com.flyco.animation.BounceEnter.BounceTopEnter;
+import com.flyco.animation.SlideExit.SlideBottomExit;
+import com.flyco.dialog.listener.OnBtnClickL;
+import com.flyco.dialog.widget.NormalDialog;
 import com.mpt.hxqh.mpt_project.R;
 import com.mpt.hxqh.mpt_project.adpter.BaseQuickAdapter;
 import com.mpt.hxqh.mpt_project.adpter.UdasstAdapter;
@@ -28,6 +33,7 @@ import com.mpt.hxqh.mpt_project.api.HttpRequestHandler;
 import com.mpt.hxqh.mpt_project.api.JsonUtils;
 import com.mpt.hxqh.mpt_project.bean.Results;
 import com.mpt.hxqh.mpt_project.dialog.FlippingLoadingDialog;
+import com.mpt.hxqh.mpt_project.manager.AppManager;
 import com.mpt.hxqh.mpt_project.model.UDASST;
 import com.mpt.hxqh.mpt_project.ui.widget.SwipeRefreshLayout;
 
@@ -52,7 +58,7 @@ public class Asset_Udasst_Activity extends BaseActivity implements SwipeRefreshL
     /**
      * 新增按钮
      **/
-    private Button addBtn;
+    private ImageView addBtn;
 
     LinearLayoutManager layoutManager;
 
@@ -83,11 +89,16 @@ public class Asset_Udasst_Activity extends BaseActivity implements SwipeRefreshL
     private String searchText = "";
     private int page = 1;
 
+    private LinearLayout buttonLayout;
+    private Button quit;
+    private Button option;
 
     ArrayList<UDASST> items = new ArrayList<UDASST>();
 
 
     protected FlippingLoadingDialog mLoadingDialog;
+    private BaseAnimatorSet mBasIn;
+    private BaseAnimatorSet mBasOut;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,6 +107,8 @@ public class Asset_Udasst_Activity extends BaseActivity implements SwipeRefreshL
         findViewById();
         initView();
 
+        mBasIn = new BounceTopEnter();
+        mBasOut = new SlideBottomExit();
     }
 
 
@@ -103,10 +116,14 @@ public class Asset_Udasst_Activity extends BaseActivity implements SwipeRefreshL
     protected void findViewById() {
         backImageView = (ImageView) findViewById(R.id.title_back_id);
         titleTextView = (TextView) findViewById(R.id.title_name);
+        addBtn = (ImageView) findViewById(R.id.title_add);
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView_id);
         refresh_layout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
         nodatalayout = (LinearLayout) findViewById(R.id.have_not_data_id);
         search = (EditText) findViewById(R.id.search_edit);
+        buttonLayout = (LinearLayout) findViewById(R.id.button_layout);
+        quit = (Button) findViewById(R.id.quit);
+        option = (Button) findViewById(R.id.option);
     }
 
     @Override
@@ -119,6 +136,8 @@ public class Asset_Udasst_Activity extends BaseActivity implements SwipeRefreshL
             }
         });
         titleTextView.setText(R.string.asset_repair_text);
+        addBtn.setVisibility(View.VISIBLE);
+        buttonLayout.setVisibility(View.VISIBLE);
         layoutManager = new LinearLayoutManager(Asset_Udasst_Activity.this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         layoutManager.scrollToPosition(0);
@@ -136,8 +155,51 @@ public class Asset_Udasst_Activity extends BaseActivity implements SwipeRefreshL
         refresh_layout.setRefreshing(true);
         initAdapter(new ArrayList<UDASST>());
         getData(searchText);
+
+        addBtn.setOnClickListener(addOnClickListener);
+        quit.setOnClickListener(quitOnClickListener);
+        option.setOnClickListener(optionOnClickListener);
     }
 
+    private View.OnClickListener addOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent(Asset_Udasst_Activity.this,Udasst_AddNew_Activity.class);
+            startActivity(intent);
+        }
+    };
+
+    private View.OnClickListener quitOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            final NormalDialog dialog = new NormalDialog(Asset_Udasst_Activity.this);
+            dialog.content("Sure to exit?")//
+                    .showAnim(mBasIn)//
+                    .dismissAnim(mBasOut)//
+                    .show();
+            dialog.setOnBtnClickL(
+                    new OnBtnClickL() {
+                        @Override
+                        public void onBtnClick() {
+                            dialog.dismiss();
+                        }
+                    },
+                    new OnBtnClickL() {
+                        @Override
+                        public void onBtnClick() {
+                            AppManager.AppExit(Asset_Udasst_Activity.this);
+                        }
+                    });
+
+        }
+    };
+
+    private View.OnClickListener optionOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+
+        }
+    };
 
     private void setSearchEdit() {
         SpannableString msp = new SpannableString(getString(R.string.search_text));

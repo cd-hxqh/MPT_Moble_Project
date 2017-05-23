@@ -37,6 +37,8 @@ public class Udassettransf_Details_Activity extends BaseActivity {
     private TextView orderTextView; //order
     private TextView descriptionTextView; //description
     private TextView depTextView; //From Department
+    private TextView fromlocTextView;//
+    private TextView tositeTextView;//
     private TextView statusTextView; //status
 
     private UDASSETTRANSF udassettransf;
@@ -89,6 +91,8 @@ public class Udassettransf_Details_Activity extends BaseActivity {
         orderTextView = (TextView) findViewById(R.id.order_text_id);
         descriptionTextView = (TextView) findViewById(R.id.description_text_id);
         depTextView = (TextView) findViewById(R.id.from_department_text_id);
+        fromlocTextView = (TextView) findViewById(R.id.fromloc_text_id);
+        tositeTextView = (TextView) findViewById(R.id.tosite_text_id);
         statusTextView = (TextView) findViewById(R.id.status_text_id);
 
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView_id);
@@ -106,6 +110,8 @@ public class Udassettransf_Details_Activity extends BaseActivity {
             orderTextView.setText(udassettransf.getASSETTRANNUM());
             descriptionTextView.setText(udassettransf.getDESCRIPTION());
             depTextView.setText(udassettransf.getFROMDEPT());
+            fromlocTextView.setText(udassettransf.getFROMLOC());
+            tositeTextView.setText(udassettransf.getTOSITE());
             statusTextView.setText(udassettransf.getSTATUS());
         }
 

@@ -18,38 +18,35 @@ import com.flyco.animation.SlideExit.SlideBottomExit;
 import com.mpt.hxqh.mpt_project.R;
 import com.mpt.hxqh.mpt_project.adpter.BaseQuickAdapter;
 import com.mpt.hxqh.mpt_project.adpter.InvuseLineAdapter;
-import com.mpt.hxqh.mpt_project.adpter.MaInvuseLineAdapter;
 import com.mpt.hxqh.mpt_project.api.HttpManager;
 import com.mpt.hxqh.mpt_project.api.HttpRequestHandler;
 import com.mpt.hxqh.mpt_project.api.JsonUtils;
 import com.mpt.hxqh.mpt_project.bean.Results;
 import com.mpt.hxqh.mpt_project.model.INVUSE;
 import com.mpt.hxqh.mpt_project.model.INVUSELINE;
-import com.mpt.hxqh.mpt_project.model.MAINVUSE;
-import com.mpt.hxqh.mpt_project.model.MAINVUSELINE;
+import com.mpt.hxqh.mpt_project.model.WORKORDER;
 import com.mpt.hxqh.mpt_project.ui.widget.SwipeRefreshLayout;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 物料转移详情
+ * 物料出库详情
  **/
-public class Maainvuse_Details_Activity extends BaseActivity {
+public class Workorder_Details_Activity extends BaseActivity {
 
-    private static final String TAG = "Mainvuse_Details_Activity";
+    private static final String TAG = "Workorder_Details_Activity";
 
     private ImageView backImageView; //返回按钮
 
     private TextView titleTextView; //标题
 
-    private TextView orderTextView; //order
+    private TextView TransferTextView; //order
     private TextView descriptionTextView; //description
-    private TextView fromstoreroomTextView; //fromstoreroom
-    private TextView invownerTextView; //invowner
-    private TextView statusTextView; //status
+    private TextView statusTextView; //fromstoreroom
+    private TextView statusdatetextview; //invowner
 
-    private INVUSE mainvuse;
+    private WORKORDER workorder;
 
     /**
      * 行表
@@ -86,7 +83,7 @@ public class Maainvuse_Details_Activity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_mainvuse_details);
+        setContentView(R.layout.activity_workorder_details);
         initData();
         findViewById();
         initView();
@@ -96,7 +93,7 @@ public class Maainvuse_Details_Activity extends BaseActivity {
     }
 
     private void initData() {
-        mainvuse = (INVUSE) getIntent().getSerializableExtra("mainvuse");
+        workorder = (WORKORDER) getIntent().getSerializableExtra("workorder");
     }
 
     @Override
@@ -105,11 +102,10 @@ public class Maainvuse_Details_Activity extends BaseActivity {
         backImageView = (ImageView) findViewById(R.id.title_back_id);
         titleTextView = (TextView) findViewById(R.id.title_name);
 
-        orderTextView = (TextView) findViewById(R.id.order_text_id);
+        TransferTextView = (TextView) findViewById(R.id.wonum_text_id);
         descriptionTextView = (TextView) findViewById(R.id.description_text_id);
-        fromstoreroomTextView = (TextView) findViewById(R.id.from_storeroom_text_id);
-        invownerTextView = (TextView) findViewById(R.id.inv_owner_text_id);
         statusTextView = (TextView) findViewById(R.id.status_text_id);
+        statusdatetextview = (TextView) findViewById(R.id.statusdate_text_id);
 
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView_id);
         refresh_layout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
@@ -122,18 +118,17 @@ public class Maainvuse_Details_Activity extends BaseActivity {
     @Override
     protected void initView() {
         backImageView.setOnClickListener(backImageViewOnClickListener);
-        titleTextView.setText(R.string.material_transfer_text);
+        titleTextView.setText(R.string.Material_outbound_text);
 
-        if (mainvuse != null) {
-            orderTextView.setText(mainvuse.getINVUSENUM());
-            descriptionTextView.setText(mainvuse.getDESCRIPTION());
-            fromstoreroomTextView.setText(mainvuse.getFROMSTORELOC());
-            invownerTextView.setText(mainvuse.getINVOWNER());
-            statusTextView.setText(mainvuse.getSTATUS());
+        if (workorder != null) {
+            TransferTextView.setText(workorder.getWONUM());
+            descriptionTextView.setText(workorder.getDESCRIPTION());
+            statusTextView.setText(workorder.getSTATUS());
+            statusdatetextview.setText(workorder.getSTATUSDATE());
         }
 
 
-        layoutManager = new LinearLayoutManager(Maainvuse_Details_Activity.this);
+        layoutManager = new LinearLayoutManager(Workorder_Details_Activity.this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         layoutManager.scrollToPosition(0);
         recyclerView.setLayoutManager(layoutManager);
@@ -188,7 +183,7 @@ public class Maainvuse_Details_Activity extends BaseActivity {
      */
     private void initAdapter(final List<INVUSELINE> list) {
         nodatalayout.setVisibility(View.GONE);
-        maInvuseLineAdapter = new InvuseLineAdapter(Maainvuse_Details_Activity.this, R.layout.list_transfer_item, list);
+        maInvuseLineAdapter = new InvuseLineAdapter(Workorder_Details_Activity.this, R.layout.list_transfer_item, list);
         recyclerView.setAdapter(maInvuseLineAdapter);
         maInvuseLineAdapter.setOnRecyclerViewItemClickListener(new BaseQuickAdapter.OnRecyclerViewItemClickListener() {
             @Override
@@ -203,7 +198,7 @@ public class Maainvuse_Details_Activity extends BaseActivity {
      * 获取数据*
      */
     private void getData() {
-        HttpManager.getDataPagingInfo(Maainvuse_Details_Activity.this, HttpManager.getMAAINVUSELINEURL(mainvuse.getINVUSENUM(), page, 20), new HttpRequestHandler<Results>() {
+        HttpManager.getDataPagingInfo(Workorder_Details_Activity.this, HttpManager.getMAAINVUSELINEURL(workorder.getWONUM(), page, 20), new HttpRequestHandler<Results>() {
             @Override
             public void onSuccess(Results results) {
             }
@@ -253,9 +248,9 @@ public class Maainvuse_Details_Activity extends BaseActivity {
     private View.OnClickListener addOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            Intent intent = new Intent(Maainvuse_Details_Activity.this,MaainvuseLine_AddNew_Activity.class);
-            intent.putExtra("invusenum",mainvuse.getINVUSENUM());
-            intent.putExtra("storeroom",mainvuse.getFROMSTORELOC());
+            Intent intent = new Intent(Workorder_Details_Activity.this,MaainvuseLine_AddNew_Activity.class);
+//            intent.putExtra("invusenum",workorder.getINVUSENUM());
+//            intent.putExtra("storeroom",workorder.getFROMSTORELOC());
             startActivity(intent);
         }
     };

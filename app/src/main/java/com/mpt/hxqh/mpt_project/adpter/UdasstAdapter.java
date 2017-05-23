@@ -32,7 +32,7 @@ public class UdasstAdapter extends BaseQuickAdapter<UDASST> {
     @Override
     protected void convert(BaseViewHolder helper, UDASST item) {
 //        helper.setText(R.id.location_text_id, item.getLOCATION());
-        helper.setText(R.id.num_text_id, item.getUDASSTNUM());
+        helper.setText(R.id.num_text_id, item.getREPAIRNUM());
         helper.setText(R.id.description_text, item.getDESCRIPTION());
         helper.setText(R.id.status_text_id, item.getUDSTATUS());
     }

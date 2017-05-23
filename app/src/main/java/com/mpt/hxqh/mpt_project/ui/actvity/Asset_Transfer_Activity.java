@@ -20,6 +20,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.flyco.animation.BaseAnimatorSet;
+import com.flyco.animation.BounceEnter.BounceTopEnter;
+import com.flyco.animation.SlideExit.SlideBottomExit;
+import com.flyco.dialog.listener.OnBtnClickL;
+import com.flyco.dialog.widget.NormalDialog;
 import com.mpt.hxqh.mpt_project.R;
 import com.mpt.hxqh.mpt_project.adpter.BaseQuickAdapter;
 import com.mpt.hxqh.mpt_project.adpter.InvuseAdapter;
@@ -28,6 +33,7 @@ import com.mpt.hxqh.mpt_project.api.HttpRequestHandler;
 import com.mpt.hxqh.mpt_project.api.JsonUtils;
 import com.mpt.hxqh.mpt_project.bean.Results;
 import com.mpt.hxqh.mpt_project.dialog.FlippingLoadingDialog;
+import com.mpt.hxqh.mpt_project.manager.AppManager;
 import com.mpt.hxqh.mpt_project.model.INVUSE;
 import com.mpt.hxqh.mpt_project.ui.widget.SwipeRefreshLayout;
 
@@ -83,11 +89,17 @@ public class Asset_Transfer_Activity extends BaseActivity implements SwipeRefres
     private String searchText = "";
     private int page = 1;
 
+    private LinearLayout buttonLayout;
+    private Button quit;
+    private Button option;
+
 
     ArrayList<INVUSE> items = new ArrayList<INVUSE>();
 
 
     protected FlippingLoadingDialog mLoadingDialog;
+    private BaseAnimatorSet mBasIn;
+    private BaseAnimatorSet mBasOut;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,6 +108,8 @@ public class Asset_Transfer_Activity extends BaseActivity implements SwipeRefres
         findViewById();
         initView();
 
+        mBasIn = new BounceTopEnter();
+        mBasOut = new SlideBottomExit();
     }
 
 
@@ -108,6 +122,9 @@ public class Asset_Transfer_Activity extends BaseActivity implements SwipeRefres
         refresh_layout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
         nodatalayout = (LinearLayout) findViewById(R.id.have_not_data_id);
         search = (EditText) findViewById(R.id.search_edit);
+        buttonLayout = (LinearLayout) findViewById(R.id.button_layout);
+        quit = (Button) findViewById(R.id.quit);
+        option = (Button) findViewById(R.id.option);
     }
 
     @Override
@@ -121,6 +138,7 @@ public class Asset_Transfer_Activity extends BaseActivity implements SwipeRefres
         });
         titleTextView.setText(R.string.asset_transfer);
         addBtn.setVisibility(View.VISIBLE);
+        buttonLayout.setVisibility(View.VISIBLE);
         layoutManager = new LinearLayoutManager(Asset_Transfer_Activity.this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         layoutManager.scrollToPosition(0);
@@ -140,6 +158,7 @@ public class Asset_Transfer_Activity extends BaseActivity implements SwipeRefres
         getData(searchText);
 
         addBtn.setOnClickListener(addOnClickListener);
+        quit.setOnClickListener(quitOnClickListener);
     }
 
     private View.OnClickListener addOnClickListener = new View.OnClickListener() {
@@ -147,6 +166,31 @@ public class Asset_Transfer_Activity extends BaseActivity implements SwipeRefres
         public void onClick(View v) {
             Intent intent = new Intent(Asset_Transfer_Activity.this,Transfer_AddNew_Activity.class);
             startActivity(intent);
+        }
+    };
+
+    private View.OnClickListener quitOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            final NormalDialog dialog = new NormalDialog(Asset_Transfer_Activity.this);
+            dialog.content("Sure to exit?")//
+                    .showAnim(mBasIn)//
+                    .dismissAnim(mBasOut)//
+                    .show();
+            dialog.setOnBtnClickL(
+                    new OnBtnClickL() {
+                        @Override
+                        public void onBtnClick() {
+                            dialog.dismiss();
+                        }
+                    },
+                    new OnBtnClickL() {
+                        @Override
+                        public void onBtnClick() {
+                            AppManager.AppExit(Asset_Transfer_Activity.this);
+                        }
+                    });
+
         }
     };
 

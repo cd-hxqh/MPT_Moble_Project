@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -37,7 +38,9 @@ public class Asset_Search_Activity extends BaseActivity {
     private TextView titleTextView; //标题
 
     private TextView locationTextView; //位置
-    private TextView snTextView; //SN
+    private EditText snTextView; //SN
+    private ImageView snImg;
+    private TextView itemnumTextView; //itemnum
 
     private Button searchBtn;
 
@@ -83,7 +86,9 @@ public class Asset_Search_Activity extends BaseActivity {
         backImageView = (ImageView) findViewById(R.id.title_back_id);
         titleTextView = (TextView) findViewById(R.id.title_name);
         locationTextView = (TextView) findViewById(R.id.location_text_id);
-        snTextView = (TextView) findViewById(R.id.sn_text_id);
+        snTextView = (EditText) findViewById(R.id.sn_text_id);
+        snImg = (ImageView) findViewById(R.id.sn_img);
+        itemnumTextView = (TextView) findViewById(R.id.itemnum_text_id);
         searchBtn = (Button) findViewById(R.id.search_btn_id);
 
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView_id);
@@ -96,7 +101,9 @@ public class Asset_Search_Activity extends BaseActivity {
         backImageView.setOnClickListener(backImageViewOnClickListener);
         titleTextView.setText(R.string.asset_text);
         locationTextView.setOnClickListener(locationTextViewOnClickListener);
-        snTextView.setOnClickListener(snEditTextOnClickListener);
+//        snTextView.setOnClickListener(snEditTextOnClickListener);
+        snImg.setOnClickListener(snEditTextOnClickListener);
+        itemnumTextView.setOnClickListener(itemnumOnClickListener);
         searchBtn.setOnClickListener(searchBtnOnClickListener);
 
         layoutManager = new LinearLayoutManager(Asset_Search_Activity.this);
@@ -138,6 +145,18 @@ public class Asset_Search_Activity extends BaseActivity {
 
         }
     };
+
+    /**
+     * itemnum
+     **/
+    private View.OnClickListener itemnumOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Intent intent = new Intent(Asset_Search_Activity.this, ItemChooseActivity.class);
+            startActivityForResult(intent, 0);
+        }
+    };
+
     /**
      * sn
      **/
@@ -198,6 +217,10 @@ public class Asset_Search_Activity extends BaseActivity {
                 String result = data.getExtras().getString("result");
                 snTextView.setText(result);
                 break;
+            case ItemChooseActivity.ITEM_CODE:
+                String item = data.getExtras().getString("Itemnum");
+                itemnumTextView.setText(item);
+                break;
         }
     }
 
@@ -212,7 +235,8 @@ public class Asset_Search_Activity extends BaseActivity {
      * 获取数据*
      */
     private void getData() {
-        HttpManager.getDataPagingInfo(Asset_Search_Activity.this, HttpManager.getAssetUrl(locationTextView.getText().toString(), snTextView.getText().toString(), "", page, 20), new HttpRequestHandler<Results>() {
+        HttpManager.getDataPagingInfo(Asset_Search_Activity.this, HttpManager.getAssetUrl(locationTextView.getText().toString(),
+                snTextView.getText().toString(), itemnumTextView.getText().toString(), page, 20), new HttpRequestHandler<Results>() {
             @Override
             public void onSuccess(Results results) {
                 mLoadingDialog.dismiss();

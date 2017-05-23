@@ -11,6 +11,8 @@ public class UDASSETTRANSF implements Serializable {
     public String ASSETTRANNUM;//ASSETTRANNUM
     public String DESCRIPTION;//DESCRIPTION
     public String FROMDEPT;//FROMDEPT
+    public String FROMLOC;//FROMLOC
+    public String TOSITE;//TOSITE
     public String STATUS;//STATUS
 
     public String getASSETTRANNUM() {
@@ -43,5 +45,21 @@ public class UDASSETTRANSF implements Serializable {
 
     public void setSTATUS(String STATUS) {
         this.STATUS = STATUS;
+    }
+
+    public String getFROMLOC() {
+        return FROMLOC;
+    }
+
+    public void setFROMLOC(String FROMLOC) {
+        this.FROMLOC = FROMLOC;
+    }
+
+    public String getTOSITE() {
+        return TOSITE;
+    }
+
+    public void setTOSITE(String TOSITE) {
+        this.TOSITE = TOSITE;
     }
 }

@@ -77,7 +77,7 @@ public class Mainvuse_AddNew_Activity extends BaseActivity {
     @Override
     protected void initView() {
         backImageView.setOnClickListener(backImageViewOnClickListener);
-        titleTextView.setText(R.string.material_transfer_text);
+        titleTextView.setText(R.string.material_refund_text);
         submit.setText("save");
         submit.setVisibility(View.VISIBLE);
 

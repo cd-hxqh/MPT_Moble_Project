@@ -14,12 +14,14 @@ import android.widget.TextView;
 import com.mpt.hxqh.mpt_project.R;
 import com.mpt.hxqh.mpt_project.adpter.BaseQuickAdapter;
 import com.mpt.hxqh.mpt_project.adpter.UdretirelineAdapter;
+import com.mpt.hxqh.mpt_project.adpter.UdstockineAdapter;
 import com.mpt.hxqh.mpt_project.api.HttpManager;
 import com.mpt.hxqh.mpt_project.api.HttpRequestHandler;
 import com.mpt.hxqh.mpt_project.api.JsonUtils;
 import com.mpt.hxqh.mpt_project.bean.Results;
 import com.mpt.hxqh.mpt_project.model.UDRETIRELINE;
 import com.mpt.hxqh.mpt_project.model.UDSTOCKT;
+import com.mpt.hxqh.mpt_project.model.UDSTOCKTLINE;
 import com.mpt.hxqh.mpt_project.ui.widget.SwipeRefreshLayout;
 
 import java.util.ArrayList;
@@ -36,8 +38,9 @@ public class Udstockt_Details_Activity extends BaseActivity {
 
     private TextView titleTextView; //标题
 
+    private TextView orderTextView;//order
     private TextView vendorView; //Vendor
-    private TextView orderTextView; //Order
+    private TextView descriptionTextView; //Order
     private TextView locationTextView; //location
     private TextView statusTextView; //status
 
@@ -62,11 +65,11 @@ public class Udstockt_Details_Activity extends BaseActivity {
     /**
      * 适配器*
      */
-    private UdretirelineAdapter udretirelineAdapter;
+    private UdstockineAdapter udstockineAdapter;
 
     private int page = 1;
 
-    ArrayList<UDRETIRELINE> items = new ArrayList<UDRETIRELINE>();
+    ArrayList<UDSTOCKTLINE> items = new ArrayList<UDSTOCKTLINE>();
 
     private FloatingActionButton addButton;
 
@@ -89,8 +92,9 @@ public class Udstockt_Details_Activity extends BaseActivity {
         backImageView = (ImageView) findViewById(R.id.title_back_id);
         titleTextView = (TextView) findViewById(R.id.title_name);
 
-        vendorView = (TextView) findViewById(R.id.vendor_text_id);
         orderTextView = (TextView) findViewById(R.id.order_text_id);
+        vendorView = (TextView) findViewById(R.id.vendor_text_id);
+        descriptionTextView = (TextView) findViewById(R.id.description_text_id);
         locationTextView = (TextView) findViewById(R.id.location_text_id);
         statusTextView = (TextView) findViewById(R.id.status_text_id);
 
@@ -107,8 +111,9 @@ public class Udstockt_Details_Activity extends BaseActivity {
         titleTextView.setText(R.string.material_stocktaking_text);
 
         if (udstockt != null) {
+            orderTextView.setText(udstockt.getSTOCKTNUM());
             vendorView.setText(udstockt.getVENDOR());
-            orderTextView.setText(udstockt.getDESCRIPTION());
+            descriptionTextView.setText(udstockt.getDESCRIPTION());
             locationTextView.setText(udstockt.getLOCATION());
             statusTextView.setText(udstockt.getSTATUS());
         }
@@ -129,7 +134,7 @@ public class Udstockt_Details_Activity extends BaseActivity {
         refresh_layout.setOnLoadListener(refreshOnLoadListener);
 
         refresh_layout.setRefreshing(true);
-        initAdapter(new ArrayList<UDRETIRELINE>());
+        initAdapter(new ArrayList<UDSTOCKTLINE>());
         getData();
 
         addButton.setOnClickListener(addOnClickListener);
@@ -166,11 +171,11 @@ public class Udstockt_Details_Activity extends BaseActivity {
     /**
      * 获取数据*
      */
-    private void initAdapter(final List<UDRETIRELINE> list) {
+    private void initAdapter(final List<UDSTOCKTLINE> list) {
         nodatalayout.setVisibility(View.GONE);
-        udretirelineAdapter = new UdretirelineAdapter(Udstockt_Details_Activity.this, R.layout.list_transfer_item, list);
-        recyclerView.setAdapter(udretirelineAdapter);
-        udretirelineAdapter.setOnRecyclerViewItemClickListener(new BaseQuickAdapter.OnRecyclerViewItemClickListener() {
+        udstockineAdapter = new UdstockineAdapter(Udstockt_Details_Activity.this, R.layout.list_udstocktline_item, list);
+        recyclerView.setAdapter(udstockineAdapter);
+        udstockineAdapter.setOnRecyclerViewItemClickListener(new BaseQuickAdapter.OnRecyclerViewItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
 
@@ -183,14 +188,14 @@ public class Udstockt_Details_Activity extends BaseActivity {
      * 获取数据*
      */
     private void getData() {
-        HttpManager.getDataPagingInfo(Udstockt_Details_Activity.this, HttpManager.getUDRETIRELINEURL(udstockt.getSTOCKTNUM(), page, 20), new HttpRequestHandler<Results>() {
+        HttpManager.getDataPagingInfo(Udstockt_Details_Activity.this, HttpManager.getUDSTOCKTLINEURL(udstockt.getSTOCKTNUM(), page, 20), new HttpRequestHandler<Results>() {
             @Override
             public void onSuccess(Results results) {
             }
 
             @Override
             public void onSuccess(Results results, int totalPages, int currentPage) {
-                ArrayList<UDRETIRELINE> item = JsonUtils.parsingUDRETIRELINE(results.getResultlist());
+                ArrayList<UDSTOCKTLINE> item = JsonUtils.parsingUDSTOCKTLINE(results.getResultlist());
                 refresh_layout.setRefreshing(false);
                 refresh_layout.setLoading(false);
                 if (item == null || item.isEmpty()) {
@@ -199,7 +204,7 @@ public class Udstockt_Details_Activity extends BaseActivity {
 
                     if (item != null || item.size() != 0) {
                         if (page == 1) {
-                            items = new ArrayList<UDRETIRELINE>();
+                            items = new ArrayList<UDSTOCKTLINE>();
                             initAdapter(items);
                         }
                         for (int i = 0; i < item.size(); i++) {
@@ -226,14 +231,15 @@ public class Udstockt_Details_Activity extends BaseActivity {
     /**
      * 添加数据*
      */
-    private void addData(final List<UDRETIRELINE> list) {
-        udretirelineAdapter.addData(list);
+    private void addData(final List<UDSTOCKTLINE> list) {
+        udstockineAdapter.addData(list);
     }
 
     private View.OnClickListener addOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             Intent intent = new Intent(Udstockt_Details_Activity.this,UdstocktLine_AddNew_Activity.class);
+            intent.putExtra("stocktnum",udstockt.getSTOCKTNUM());
             startActivity(intent);
         }
     };

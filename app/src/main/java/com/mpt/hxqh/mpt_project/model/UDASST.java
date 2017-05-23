@@ -10,6 +10,7 @@ import java.io.Serializable;
 public class UDASST implements Serializable {
     public String DESCRIPTION;//DESCRIPTION
     public String LOCATION;//LOCATION
+    public String REPAIRNUM;//REPAIRNUM
     public String UDASSTNUM;//UDASSTNUM
     public String UDINSTALLDATE;//UDINSTALLDATE
     public String UDSTATUS;//UDSTATUS
@@ -52,5 +53,13 @@ public class UDASST implements Serializable {
 
     public void setUDSTATUS(String UDSTATUS) {
         this.UDSTATUS = UDSTATUS;
+    }
+
+    public String getREPAIRNUM() {
+        return REPAIRNUM;
+    }
+
+    public void setREPAIRNUM(String REPAIRNUM) {
+        this.REPAIRNUM = REPAIRNUM;
     }
 }

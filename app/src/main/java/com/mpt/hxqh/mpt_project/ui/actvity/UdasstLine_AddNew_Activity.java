@@ -19,15 +19,16 @@ import com.flyco.dialog.widget.NormalDialog;
 import com.mpt.hxqh.mpt_project.R;
 import com.mpt.hxqh.mpt_project.config.Constants;
 import com.mpt.hxqh.mpt_project.model.WebResult;
-import com.mpt.hxqh.mpt_project.unit.AccountUtils;
+import com.mpt.hxqh.mpt_project.unit.DateTimeSelect;
+import com.mpt.hxqh.mpt_project.unit.DateTimeSelect2;
 import com.mpt.hxqh.mpt_project.webserviceclient.AndroidClientService;
 
 /**
- * 物料盘点新增行
+ * 资产维修新增行
  **/
-public class UdstocktLine_AddNew_Activity extends BaseActivity {
+public class UdasstLine_AddNew_Activity extends BaseActivity {
 
-    private static final String TAG = "MainvuseLine_AddNew_Activity";
+    private static final String TAG = "UdasstLine_AddNew_Activity";
 
     private ImageView backImageView; //返回按钮
 
@@ -36,12 +37,10 @@ public class UdstocktLine_AddNew_Activity extends BaseActivity {
     private Button submit;
 
 //    private TextView orderTextView; //Order
-    private TextView assetnumTextView; //assetnum
-    private EditText checkserialTextView; //checkserial
-    private CheckBox ischeckTextView; //ischeck
-    private EditText remarkTextView; //remark
+    private TextView udasstnumTextView; //udasstnum
+    private TextView udrepdateTextView; //udrepdate
 
-    private String stocktnum;
+    private String repairnum;
 
     private BaseAnimatorSet mBasIn;
     private BaseAnimatorSet mBasOut;
@@ -50,7 +49,7 @@ public class UdstocktLine_AddNew_Activity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_udstocktline_addnew);
+        setContentView(R.layout.activity_udasstline_addnew);
         initData();
         findViewById();
         initView();
@@ -60,7 +59,7 @@ public class UdstocktLine_AddNew_Activity extends BaseActivity {
     }
 
     private void initData() {
-        stocktnum = getIntent().getStringExtra("stocktnum");
+        repairnum = getIntent().getStringExtra("repairnum");
     }
 
     @Override
@@ -70,10 +69,8 @@ public class UdstocktLine_AddNew_Activity extends BaseActivity {
         titleTextView = (TextView) findViewById(R.id.title_name);
         submit = (Button) findViewById(R.id.sbmit_id);
 //        orderTextView = (TextView) findViewById(R.id.order_text_id);
-        assetnumTextView = (TextView) findViewById(R.id.assetnum_text_id);
-        checkserialTextView = (EditText) findViewById(R.id.checkserial_text_id);
-        ischeckTextView = (CheckBox) findViewById(R.id.ischeck_text_id);
-        remarkTextView = (EditText) findViewById(R.id.remark_text_id);
+        udasstnumTextView = (TextView) findViewById(R.id.assetnum_text_id);
+        udrepdateTextView = (TextView) findViewById(R.id.udrepdate_text_id);
 
 //        recyclerView = (RecyclerView) findViewById(R.id.dqgz10_recyclerView_id);
 //        refresh_layout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
@@ -88,7 +85,8 @@ public class UdstocktLine_AddNew_Activity extends BaseActivity {
         submit.setText("save");
         submit.setVisibility(View.VISIBLE);
 
-        assetnumTextView.setOnClickListener(assetnumOnClickListener);
+        udasstnumTextView.setOnClickListener(assetnumOnClickListener);
+        udrepdateTextView.setOnClickListener(DateOnClickListener);
         submit.setOnClickListener(submitOnClickListener);
     }
 
@@ -115,30 +113,18 @@ public class UdstocktLine_AddNew_Activity extends BaseActivity {
     private View.OnClickListener assetnumOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            Intent intent = new Intent(UdstocktLine_AddNew_Activity.this, AssetChooseActivity.class);
+            Intent intent = new Intent(UdasstLine_AddNew_Activity.this, AssetChooseActivity.class);
             startActivityForResult(intent, 0);
         }
     };
 
     /**
-     * 位置
+     *
      **/
-    private View.OnClickListener locationTextViewOnClickListener = new View.OnClickListener() {
+    private View.OnClickListener DateOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            Intent intent = new Intent(UdstocktLine_AddNew_Activity.this, LocationChooseActivity.class);
-            startActivityForResult(intent, 0);
-        }
-    };
-
-    /**
-     * 仓管员
-     **/
-    private View.OnClickListener ownerOnClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            Intent intent = new Intent(UdstocktLine_AddNew_Activity.this, LocationChooseActivity.class);
-            startActivityForResult(intent, 0);
+            new DateTimeSelect2(UdasstLine_AddNew_Activity.this, udrepdateTextView).showDialog();
         }
     };
 
@@ -146,7 +132,7 @@ public class UdstocktLine_AddNew_Activity extends BaseActivity {
      * 提交数据*
      */
     private void submitDataInfo() {
-        final NormalDialog dialog = new NormalDialog(UdstocktLine_AddNew_Activity.this);
+        final NormalDialog dialog = new NormalDialog(UdasstLine_AddNew_Activity.this);
         dialog.content("Sure to save?")//
                 .showAnim(mBasIn)//
                 .dismissAnim(mBasOut)//
@@ -175,9 +161,9 @@ public class UdstocktLine_AddNew_Activity extends BaseActivity {
         new AsyncTask<String, String, WebResult>() {
             @Override
             protected WebResult doInBackground(String... strings) {
-                WebResult reviseresult = AndroidClientService.AddMatStoLine(UdstocktLine_AddNew_Activity.this, stocktnum,assetnumTextView.getText().toString(),
-                        checkserialTextView.getText().toString(), remarkTextView.getText().toString()
-                        , ischeckTextView.isChecked()?"true":"false",Constants.TRANSFER_URL);
+                WebResult reviseresult = AndroidClientService.AddRepairLine(UdasstLine_AddNew_Activity.this, repairnum,
+                        udrepdateTextView.getText().toString(), udasstnumTextView.getText().toString()
+                        , Constants.TRANSFER_URL);
                 return reviseresult;
             }
 
@@ -185,9 +171,9 @@ public class UdstocktLine_AddNew_Activity extends BaseActivity {
             protected void onPostExecute(WebResult workResult) {
                 super.onPostExecute(workResult);
                 if (workResult == null) {
-                    Toast.makeText(UdstocktLine_AddNew_Activity.this, "false", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(UdasstLine_AddNew_Activity.this, "false", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(UdstocktLine_AddNew_Activity.this, workResult.returnStr, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(UdasstLine_AddNew_Activity.this, workResult.returnStr, Toast.LENGTH_SHORT).show();
 //                    setResult(100);
                     finish();
                 }
@@ -204,7 +190,7 @@ public class UdstocktLine_AddNew_Activity extends BaseActivity {
         switch (resultCode) {
             case AssetChooseActivity.ASSET_CODE:
                 String asset = data.getExtras().getString("Assetnum");
-                assetnumTextView.setText(asset);
+                udasstnumTextView.setText(asset);
                 break;
 //            case RESULT_OK:
 //                String result = data.getExtras().getString("result");

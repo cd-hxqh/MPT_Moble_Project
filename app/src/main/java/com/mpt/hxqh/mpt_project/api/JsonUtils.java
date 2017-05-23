@@ -24,6 +24,7 @@ import com.mpt.hxqh.mpt_project.model.UDASSTREP;
 import com.mpt.hxqh.mpt_project.model.UDRETIRE;
 import com.mpt.hxqh.mpt_project.model.UDRETIRELINE;
 import com.mpt.hxqh.mpt_project.model.UDSTOCKT;
+import com.mpt.hxqh.mpt_project.model.UDSTOCKTLINE;
 import com.mpt.hxqh.mpt_project.model.UDTRANSFLINE;
 import com.mpt.hxqh.mpt_project.model.WORKORDER;
 import com.mpt.hxqh.mpt_project.model.WebResult;
@@ -963,6 +964,51 @@ public class JsonUtils<E> {
 
                 }
                 list.add(udstockt);
+            }
+            return list;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * 物料盘点
+     */
+    public static ArrayList<UDSTOCKTLINE> parsingUDSTOCKTLINE(String data) {
+        ArrayList<UDSTOCKTLINE> list = null;
+        UDSTOCKTLINE udstocktline = null;
+        try {
+            JSONArray jsonArray = new JSONArray(data);
+            JSONObject jsonObject;
+            list = new ArrayList<UDSTOCKTLINE>();
+            for (int i = 0; i < jsonArray.length(); i++) {
+                udstocktline = new UDSTOCKTLINE();
+                jsonObject = jsonArray.getJSONObject(i);
+                Field[] field = udstocktline.getClass().getDeclaredFields();        //获取实体类的所有属性，返回Field数组
+                for (int j = 0; j < field.length; j++) {     //遍历所有属性
+                    field[j].setAccessible(true);
+                    String name = field[j].getName();    //获取属性的名字
+                    if (jsonObject.has(name) && jsonObject.getString(name) != null && !jsonObject.getString(name).equals("")) {
+                        try {
+                            // 调用getter方法获取属性值
+                            Method getOrSet = udstocktline.getClass().getMethod("get" + name);
+                            Object value = getOrSet.invoke(udstocktline);
+                            if (value == null) {
+                                //调用setter方法设属性值
+                                Class[] parameterTypes = new Class[1];
+                                parameterTypes[0] = field[j].getType();
+                                getOrSet = udstocktline.getClass().getDeclaredMethod("set" + name, parameterTypes);
+                                getOrSet.invoke(udstocktline, jsonObject.getString(name));
+                            }
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                }
+                list.add(udstocktline);
             }
             return list;
         } catch (JSONException e) {

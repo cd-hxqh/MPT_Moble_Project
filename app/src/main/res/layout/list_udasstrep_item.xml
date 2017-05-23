@@ -14,7 +14,7 @@
         <TextView
             android:id="@+id/sn_text_id"
             android:layout_width="0dp"
-            android:layout_height="@dimen/dimens_40dp"
+            android:layout_height="@dimen/dimens_50dp"
             android:layout_weight="1"
             android:gravity="center"
             android:text="@string/have_not_data"

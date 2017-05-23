@@ -9,7 +9,10 @@
     <string name="pass_word_text">Pass Word</string>
     <string name="remenber_pass_text">Remember the password</string>
     <string name="login_text">Login</string>
-    <string name="ip_config">IP Config</string>
+    <string name="ip_config">Configure</string>
+    <string name="quit2">Quit</string>
+    <string name="properties">Properties</string>
+    <string name="option">Option</string>
 
 
     <string name="login_error_empty_user">用户名不能为空</string>
@@ -94,15 +97,17 @@
     <string name="to_storeroom_text">To Storeroom</string>
     <string name="descrition_text">Descrition</string>
     <string name="asset_repair_text">Asset Repair</string>
-    <string name="install_date1_text">Install Date:</string>
+    <string name="install_date1_text">Repair Date:</string>
     <string name="sn_text1">SN</string>
     <string name="location_text_id">Location</string>
     <string name="repair_date_text">Repair Date</string>
     <string name="asset_retirement_text">Asset Retirement</string>
     <string name="retire_no_text">Retire No:</string>
     <string name="retire_date_text">Retire Date:</string>
-    <string name="asset_management_text">Asset Management</string>
+    <string name="asset_management_text">Asset Movement</string>
     <string name="from_department_text">From Dep:</string>
+    <string name="fromloc_text">Fromloc:</string>
+    <string name="tosite_text">Target Location:</string>
     <string name="assetnum_text">Assetnum</string>
     <string name="desc_text">Desc</string>
     <string name="Material_outbound_text">Material Outbound</string>
@@ -136,5 +141,13 @@
     <string name="checkserial_text">New Serial:</string>
     <string name="ischeck_text">Ischeck?</string>
     <string name="orderqty_text">Quantity:</string>
+    <string name="wonum_text">Transfer:</string>
+    <string name="status_text">Status:</string>
+    <string name="statusdate_text">Status Date:</string>
+    <string name="line_text">Line:</string>
+    <string name="udrepdate_text">Repair Date:</string>
+    <string name="udasstnum_text">Asset/Spare:</string>
+    <string name="retireloc_text">Retire to Location:</string>
+    <string name="retiredate_text">Retire Date:</string>
 
 </resources>

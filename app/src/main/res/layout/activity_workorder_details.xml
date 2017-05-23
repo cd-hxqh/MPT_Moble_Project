@@ -1,5 +1,6 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/light_gray"
@@ -13,12 +14,14 @@
 
     <ScrollView
         android:id="@+id/scrollview_id"
+        android:layout_below="@id/title_id"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/title_id"
+        android:layout_marginTop="50dp"
         android:background="@color/white"
         android:fillViewport="true"
-        android:scrollbars="vertical">
+        android:scrollbars="vertical"
+        >
 
         <LinearLayout
             android:id="@+id/container"
@@ -46,12 +49,12 @@
                     <TextView
                         android:layout_width="@dimen/dimens_80dp"
                         android:layout_height="wrap_content"
-                        android:text="@string/order_text"
+                        android:text="@string/wonum_text"
                         android:textColor="@color/light_black"
                         android:textSize="@dimen/dimens_16sp" />
 
                     <TextView
-                        android:id="@+id/order_text_id"
+                        android:id="@+id/wonum_text_id"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/dimen_10"
@@ -104,88 +107,7 @@
                         android:layout_width="@dimen/dimens_80dp"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:text="@string/from_department_text"
-                        android:textColor="@color/light_black"
-                        android:textSize="@dimen/dimens_16sp" />
-
-                    <TextView
-                        android:id="@+id/from_department_text_id"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/dimen_10"
-                        android:background="@drawable/editsharp"
-                        android:gravity="right"
-                        android:hint="@string/have_not_data"
-                        android:textColor="@color/light_black"
-                        android:textSize="@dimen/dimens_16sp" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:padding="@dimen/size_5dp">
-
-                    <TextView
-                        android:layout_width="@dimen/dimens_80dp"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:text="@string/fromloc_text"
-                        android:textColor="@color/light_black"
-                        android:textSize="@dimen/dimens_16sp" />
-
-                    <TextView
-                        android:id="@+id/fromloc_text_id"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/dimen_10"
-                        android:background="@drawable/editsharp"
-                        android:gravity="right"
-                        android:hint="@string/have_not_data"
-                        android:textColor="@color/light_black"
-                        android:textSize="@dimen/dimens_16sp" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:padding="@dimen/size_5dp">
-
-                    <TextView
-                        android:layout_width="@dimen/dimens_80dp"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:text="@string/tosite_text"
-                        android:textColor="@color/light_black"
-                        android:textSize="@dimen/dimens_16sp" />
-
-                    <TextView
-                        android:id="@+id/tosite_text_id"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/dimen_10"
-                        android:background="@drawable/editsharp"
-                        android:gravity="right"
-                        android:hint="@string/have_not_data"
-                        android:textColor="@color/light_black"
-                        android:textSize="@dimen/dimens_16sp" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:padding="@dimen/size_5dp">
-
-                    <TextView
-                        android:layout_width="@dimen/dimens_80dp"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:text="@string/po_status"
+                        android:text="@string/status_text"
                         android:textColor="@color/light_black"
                         android:textSize="@dimen/dimens_16sp" />
 
@@ -201,6 +123,32 @@
                         android:textSize="@dimen/dimens_16sp" />
                 </LinearLayout>
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/size_5dp">
+
+                    <TextView
+                        android:layout_width="@dimen/dimens_80dp"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:text="@string/statusdate_text"
+                        android:textColor="@color/light_black"
+                        android:textSize="@dimen/dimens_16sp" />
+
+                    <TextView
+                        android:id="@+id/statusdate_text_id"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/dimen_10"
+                        android:background="@drawable/editsharp"
+                        android:gravity="right"
+                        android:hint="@string/have_not_data"
+                        android:textColor="@color/light_black"
+                        android:textSize="@dimen/dimens_16sp" />
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -222,19 +170,7 @@
                         android:layout_weight="1"
                         android:background="@color/light_bule"
                         android:gravity="center"
-                        android:text="@string/assetnum_text"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/dimens_16sp" />
-
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="@dimen/dimens_40dp"
-                        android:layout_marginLeft="1dp"
-                        android:layout_weight="1"
-                        android:background="@color/light_bule"
-                        android:gravity="center"
-                        android:text="From Site"
+                        android:text="@string/line_type_text"
                         android:textColor="@color/black"
                         android:textSize="@dimen/dimens_16sp" />
 
@@ -245,7 +181,29 @@
                         android:layout_weight="1"
                         android:background="@color/light_bule"
                         android:gravity="center"
-                        android:text="To Site"
+                        android:text="@string/to_loc_text"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/dimens_16sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/dimens_40dp"
+                        android:layout_marginLeft="1dp"
+                        android:layout_weight="1"
+                        android:background="@color/light_bule"
+                        android:gravity="center"
+                        android:text="@string/to_storeroom1_text"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/dimens_16sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/dimens_40dp"
+                        android:layout_marginLeft="1dp"
+                        android:layout_weight="1"
+                        android:background="@color/light_bule"
+                        android:gravity="center"
+                        android:text="@string/quantity_text"
                         android:textColor="@color/black"
                         android:textSize="@dimen/dimens_16sp" />
 
@@ -288,5 +246,14 @@
 
         </LinearLayout>
     </ScrollView>
-
-</RelativeLayout>
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/add_flaButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        app:borderWidth="0dp"
+        android:layout_margin="@dimen/fab_margin"
+        app:backgroundTint="@color/colorPrimaryDark"
+        android:background="@drawable/floatbutton"
+        android:src="@drawable/ic_add" />
+</android.support.design.widget.CoordinatorLayout>

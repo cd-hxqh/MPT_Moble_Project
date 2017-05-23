@@ -48,6 +48,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
     private TextView ipconfig;
 
+    private TextView quit;
+    private TextView properties;
 
     String userName; //用户名
 
@@ -85,6 +87,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         mLogin = (Button) findViewById(R.id.user_login);
 
         ipconfig = (TextView) findViewById(R.id.ipconfig);
+        quit = (TextView) findViewById(R.id.quit);
+        properties = (TextView) findViewById(R.id.properties);
     }
 
     @Override
@@ -94,6 +98,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         if (isChecked) {
             mUsername.setText(AccountUtils.getUserName(LoginActivity.this));
             mPassword.setText(AccountUtils.getUserPassword(LoginActivity.this));
+            checkBox.setChecked(isChecked);
         }
         checkBox.setOnCheckedChangeListener(cheBoxOnCheckedChangListener);
         mLogin.setOnClickListener(this);
@@ -102,6 +107,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             AccountUtils.setIpAddress(LoginActivity.this,Constants.HTTP_API_IP);
         }
         ipconfig.setOnClickListener(ipOnClickListener);
+        quit.setOnClickListener(quitOnClickListener);
+        properties.setOnClickListener(propertiesOnClickListener);
     }
 
     private CompoundButton.OnCheckedChangeListener cheBoxOnCheckedChangListener = new CompoundButton.OnCheckedChangeListener() {
@@ -198,6 +205,20 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         @Override
         public void onClick(View v) {
             setIP();
+        }
+    };
+
+    private View.OnClickListener quitOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            AppManager.AppExit(LoginActivity.this);
+        }
+    };
+
+    private View.OnClickListener propertiesOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+
         }
     };
 

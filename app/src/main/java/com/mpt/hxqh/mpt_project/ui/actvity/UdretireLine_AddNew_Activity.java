@@ -5,8 +5,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,15 +17,16 @@ import com.flyco.dialog.widget.NormalDialog;
 import com.mpt.hxqh.mpt_project.R;
 import com.mpt.hxqh.mpt_project.config.Constants;
 import com.mpt.hxqh.mpt_project.model.WebResult;
-import com.mpt.hxqh.mpt_project.unit.AccountUtils;
+import com.mpt.hxqh.mpt_project.unit.DateTimeSelect;
+import com.mpt.hxqh.mpt_project.unit.DateTimeSelect2;
 import com.mpt.hxqh.mpt_project.webserviceclient.AndroidClientService;
 
 /**
- * 物料盘点新增行
+ * 资产报废新增行
  **/
-public class UdstocktLine_AddNew_Activity extends BaseActivity {
+public class UdretireLine_AddNew_Activity extends BaseActivity {
 
-    private static final String TAG = "MainvuseLine_AddNew_Activity";
+    private static final String TAG = "UdretireLine_AddNew_Activity";
 
     private ImageView backImageView; //返回按钮
 
@@ -37,11 +36,9 @@ public class UdstocktLine_AddNew_Activity extends BaseActivity {
 
 //    private TextView orderTextView; //Order
     private TextView assetnumTextView; //assetnum
-    private EditText checkserialTextView; //checkserial
-    private CheckBox ischeckTextView; //ischeck
-    private EditText remarkTextView; //remark
+    private TextView retiredateTextView; //retiredate
 
-    private String stocktnum;
+    private String repairnum;
 
     private BaseAnimatorSet mBasIn;
     private BaseAnimatorSet mBasOut;
@@ -50,7 +47,7 @@ public class UdstocktLine_AddNew_Activity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_udstocktline_addnew);
+        setContentView(R.layout.activity_udretireline_addnew);
         initData();
         findViewById();
         initView();
@@ -60,7 +57,7 @@ public class UdstocktLine_AddNew_Activity extends BaseActivity {
     }
 
     private void initData() {
-        stocktnum = getIntent().getStringExtra("stocktnum");
+        repairnum = getIntent().getStringExtra("repairnum");
     }
 
     @Override
@@ -71,9 +68,7 @@ public class UdstocktLine_AddNew_Activity extends BaseActivity {
         submit = (Button) findViewById(R.id.sbmit_id);
 //        orderTextView = (TextView) findViewById(R.id.order_text_id);
         assetnumTextView = (TextView) findViewById(R.id.assetnum_text_id);
-        checkserialTextView = (EditText) findViewById(R.id.checkserial_text_id);
-        ischeckTextView = (CheckBox) findViewById(R.id.ischeck_text_id);
-        remarkTextView = (EditText) findViewById(R.id.remark_text_id);
+        retiredateTextView = (TextView) findViewById(R.id.retiredate_text_id);
 
 //        recyclerView = (RecyclerView) findViewById(R.id.dqgz10_recyclerView_id);
 //        refresh_layout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
@@ -84,11 +79,12 @@ public class UdstocktLine_AddNew_Activity extends BaseActivity {
     @Override
     protected void initView() {
         backImageView.setOnClickListener(backImageViewOnClickListener);
-        titleTextView.setText(R.string.asset_transferline);
+        titleTextView.setText(R.string.asset_retirement_text);
         submit.setText("save");
         submit.setVisibility(View.VISIBLE);
 
         assetnumTextView.setOnClickListener(assetnumOnClickListener);
+        retiredateTextView.setOnClickListener(DateOnClickListener);
         submit.setOnClickListener(submitOnClickListener);
     }
 
@@ -115,30 +111,18 @@ public class UdstocktLine_AddNew_Activity extends BaseActivity {
     private View.OnClickListener assetnumOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            Intent intent = new Intent(UdstocktLine_AddNew_Activity.this, AssetChooseActivity.class);
+            Intent intent = new Intent(UdretireLine_AddNew_Activity.this, AssetChooseActivity.class);
             startActivityForResult(intent, 0);
         }
     };
 
     /**
-     * 位置
+     *
      **/
-    private View.OnClickListener locationTextViewOnClickListener = new View.OnClickListener() {
+    private View.OnClickListener DateOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            Intent intent = new Intent(UdstocktLine_AddNew_Activity.this, LocationChooseActivity.class);
-            startActivityForResult(intent, 0);
-        }
-    };
-
-    /**
-     * 仓管员
-     **/
-    private View.OnClickListener ownerOnClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            Intent intent = new Intent(UdstocktLine_AddNew_Activity.this, LocationChooseActivity.class);
-            startActivityForResult(intent, 0);
+            new DateTimeSelect(UdretireLine_AddNew_Activity.this, retiredateTextView).showDialog();
         }
     };
 
@@ -146,7 +130,7 @@ public class UdstocktLine_AddNew_Activity extends BaseActivity {
      * 提交数据*
      */
     private void submitDataInfo() {
-        final NormalDialog dialog = new NormalDialog(UdstocktLine_AddNew_Activity.this);
+        final NormalDialog dialog = new NormalDialog(UdretireLine_AddNew_Activity.this);
         dialog.content("Sure to save?")//
                 .showAnim(mBasIn)//
                 .dismissAnim(mBasOut)//
@@ -175,9 +159,9 @@ public class UdstocktLine_AddNew_Activity extends BaseActivity {
         new AsyncTask<String, String, WebResult>() {
             @Override
             protected WebResult doInBackground(String... strings) {
-                WebResult reviseresult = AndroidClientService.AddMatStoLine(UdstocktLine_AddNew_Activity.this, stocktnum,assetnumTextView.getText().toString(),
-                        checkserialTextView.getText().toString(), remarkTextView.getText().toString()
-                        , ischeckTextView.isChecked()?"true":"false",Constants.TRANSFER_URL);
+                WebResult reviseresult = AndroidClientService.AddRetireLine(UdretireLine_AddNew_Activity.this, repairnum,
+                        assetnumTextView.getText().toString(), retiredateTextView.getText().toString()
+                        , Constants.TRANSFER_URL);
                 return reviseresult;
             }
 
@@ -185,9 +169,9 @@ public class UdstocktLine_AddNew_Activity extends BaseActivity {
             protected void onPostExecute(WebResult workResult) {
                 super.onPostExecute(workResult);
                 if (workResult == null) {
-                    Toast.makeText(UdstocktLine_AddNew_Activity.this, "false", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(UdretireLine_AddNew_Activity.this, "false", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(UdstocktLine_AddNew_Activity.this, workResult.returnStr, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(UdretireLine_AddNew_Activity.this, workResult.returnStr, Toast.LENGTH_SHORT).show();
 //                    setResult(100);
                     finish();
                 }
