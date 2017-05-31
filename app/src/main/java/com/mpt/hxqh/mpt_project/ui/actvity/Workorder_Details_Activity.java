@@ -7,6 +7,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -15,16 +16,26 @@ import android.widget.TextView;
 import com.flyco.animation.BaseAnimatorSet;
 import com.flyco.animation.BounceEnter.BounceTopEnter;
 import com.flyco.animation.SlideExit.SlideBottomExit;
+import com.flyco.dialog.listener.OnBtnClickL;
+import com.flyco.dialog.listener.OnOperItemClickL;
+import com.flyco.dialog.widget.NormalDialog;
+import com.flyco.dialog.widget.NormalListDialog;
 import com.mpt.hxqh.mpt_project.R;
 import com.mpt.hxqh.mpt_project.adpter.BaseQuickAdapter;
 import com.mpt.hxqh.mpt_project.adpter.InvuseLineAdapter;
+import com.mpt.hxqh.mpt_project.adpter.MainvuseAdapter;
+import com.mpt.hxqh.mpt_project.adpter.MatusetransAdapter;
+import com.mpt.hxqh.mpt_project.adpter.WpmaterialAdapter;
 import com.mpt.hxqh.mpt_project.api.HttpManager;
 import com.mpt.hxqh.mpt_project.api.HttpRequestHandler;
 import com.mpt.hxqh.mpt_project.api.JsonUtils;
 import com.mpt.hxqh.mpt_project.bean.Results;
+import com.mpt.hxqh.mpt_project.manager.AppManager;
 import com.mpt.hxqh.mpt_project.model.INVUSE;
 import com.mpt.hxqh.mpt_project.model.INVUSELINE;
+import com.mpt.hxqh.mpt_project.model.MATUSETRANS;
 import com.mpt.hxqh.mpt_project.model.WORKORDER;
+import com.mpt.hxqh.mpt_project.model.WPMATERIAL;
 import com.mpt.hxqh.mpt_project.ui.widget.SwipeRefreshLayout;
 
 import java.util.ArrayList;
@@ -67,18 +78,26 @@ public class Workorder_Details_Activity extends BaseActivity {
     /**
      * 适配器*
      */
-    private InvuseLineAdapter maInvuseLineAdapter;
+    private WpmaterialAdapter wpmaterialAdapter;
+    private MatusetransAdapter matusetransAdapter;
+
+    private Button planButton;
+    private Button actualButton;
 
     private int page = 1;
     private LinearLayout buttonLayout;
     private Button quit;
     private Button option;
 
-    ArrayList<INVUSELINE> items = new ArrayList<INVUSELINE>();
+    ArrayList<WPMATERIAL> item1 = new ArrayList<WPMATERIAL>();
+    ArrayList<MATUSETRANS> item2 = new ArrayList<MATUSETRANS>();
+    private int position = 0;
 
-    private FloatingActionButton addButton;
+//    private FloatingActionButton addButton;
     private BaseAnimatorSet mBasIn;
     private BaseAnimatorSet mBasOut;
+
+    private String[] optionList = new String[]{"Back", "Route","Add Plan","Add Actural"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,7 +130,12 @@ public class Workorder_Details_Activity extends BaseActivity {
         refresh_layout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
         nodatalayout = (LinearLayout) findViewById(R.id.have_not_data_id);
 
-        addButton = (FloatingActionButton) findViewById(R.id.add_flaButton);
+        planButton = (Button) findViewById(R.id.plan_button);
+        actualButton = (Button) findViewById(R.id.actual_button);
+        buttonLayout = (LinearLayout) findViewById(R.id.button_layout);
+        quit = (Button) findViewById(R.id.quit);
+        option = (Button) findViewById(R.id.option);
+//        addButton = (FloatingActionButton) findViewById(R.id.add_flaButton);
 
     }
 
@@ -120,6 +144,7 @@ public class Workorder_Details_Activity extends BaseActivity {
         backImageView.setOnClickListener(backImageViewOnClickListener);
         titleTextView.setText(R.string.Material_outbound_text);
 
+        buttonLayout.setVisibility(View.VISIBLE);
         if (workorder != null) {
             TransferTextView.setText(workorder.getWONUM());
             descriptionTextView.setText(workorder.getDESCRIPTION());
@@ -143,11 +168,15 @@ public class Workorder_Details_Activity extends BaseActivity {
         refresh_layout.setOnLoadListener(refreshOnLoadListener);
 
         refresh_layout.setRefreshing(true);
-        initAdapter(new ArrayList<INVUSELINE>());
-        getData();
+        initAdapter1(new ArrayList<WPMATERIAL>());
+        getData1();
 
-        addButton.setOnClickListener(addOnClickListener);
+        planButton.setOnClickListener(planOnClickListener);
+        actualButton.setOnClickListener(actualOnClickListener);
+//        addButton.setOnClickListener(addOnClickListener);
 
+        quit.setOnClickListener(quitOnClickListener);
+        option.setOnClickListener(optionOnClickListener);
     }
 
     /**
@@ -160,12 +189,100 @@ public class Workorder_Details_Activity extends BaseActivity {
         }
     };
 
+    private View.OnClickListener quitOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            final NormalDialog dialog = new NormalDialog(Workorder_Details_Activity.this);
+            dialog.content("Sure to exit?")//
+                    .showAnim(mBasIn)//
+                    .dismissAnim(mBasOut)//
+                    .show();
+            dialog.setOnBtnClickL(
+                    new OnBtnClickL() {
+                        @Override
+                        public void onBtnClick() {
+                            dialog.dismiss();
+                        }
+                    },
+                    new OnBtnClickL() {
+                        @Override
+                        public void onBtnClick() {
+                            AppManager.AppExit(Workorder_Details_Activity.this);
+                        }
+                    });
+
+        }
+    };
+
+    private View.OnClickListener optionOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            final NormalListDialog normalListDialog = new NormalListDialog(Workorder_Details_Activity.this, optionList);
+            normalListDialog.title("Option")
+                    .showAnim(mBasIn)//
+                    .dismissAnim(mBasOut)//
+                    .show();
+            normalListDialog.setOnOperItemClickL(new OnOperItemClickL() {
+                @Override
+                public void onOperItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                    linetypeTextView.setText(linetypeList[position]);
+                    switch (position){
+                        case 0://Back
+                            finish();
+                            normalListDialog.dismiss();
+                            break;
+                        case 1://Route
+                            break;
+                        case 2://Add plan
+                            Intent intent1 = new Intent(Workorder_Details_Activity.this,Wpmaterial_AddNew_Activity.class);
+                            intent1.putExtra("wonum",workorder.getWONUM());
+                            startActivity(intent1);
+                            normalListDialog.dismiss();
+                            break;
+                        case 3://Add actural
+                            Intent intent2 = new Intent(Workorder_Details_Activity.this,Matusetrans_AddNew_Activity.class);
+                            intent2.putExtra("wonum",workorder.getWONUM());
+                            startActivity(intent2);
+                            normalListDialog.dismiss();
+                            break;
+                    }
+                    normalListDialog.dismiss();
+                }
+            });
+        }
+    };
+
+    private View.OnClickListener planOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            position = 0;
+            initAdapter1(new ArrayList<WPMATERIAL>());
+            getData1();
+            planButton.setBackgroundResource(R.drawable.button_selector);
+            actualButton.setBackgroundResource(R.drawable.button_selector2);
+        }
+    };
+
+    private View.OnClickListener actualOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            position = 1;
+            initAdapter2(new ArrayList<MATUSETRANS>());
+            getData2();
+            planButton.setBackgroundResource(R.drawable.button_selector2);
+            actualButton.setBackgroundResource(R.drawable.button_selector);
+        }
+    };
 
     private SwipeRefreshLayout.OnRefreshListener refreshOnRefreshListener = new SwipeRefreshLayout.OnRefreshListener() {
         @Override
         public void onRefresh() {
             page = 1;
-            getData();
+            if (position == 0) {
+                getData1();
+            }else {
+                getData2();
+            }
         }
     };
 
@@ -173,7 +290,11 @@ public class Workorder_Details_Activity extends BaseActivity {
         @Override
         public void onLoad() {
             page++;
-            getData();
+            if (position == 0) {
+                getData1();
+            }else {
+                getData2();
+            }
         }
     };
 
@@ -181,11 +302,26 @@ public class Workorder_Details_Activity extends BaseActivity {
     /**
      * 获取数据*
      */
-    private void initAdapter(final List<INVUSELINE> list) {
+    private void initAdapter1(final List<WPMATERIAL> list) {
         nodatalayout.setVisibility(View.GONE);
-        maInvuseLineAdapter = new InvuseLineAdapter(Workorder_Details_Activity.this, R.layout.list_transfer_item, list);
-        recyclerView.setAdapter(maInvuseLineAdapter);
-        maInvuseLineAdapter.setOnRecyclerViewItemClickListener(new BaseQuickAdapter.OnRecyclerViewItemClickListener() {
+        wpmaterialAdapter = new WpmaterialAdapter(Workorder_Details_Activity.this, R.layout.list_udassettransf_item, list);
+        recyclerView.setAdapter(wpmaterialAdapter);
+        wpmaterialAdapter.setOnRecyclerViewItemClickListener(new BaseQuickAdapter.OnRecyclerViewItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+
+            }
+        });
+    }
+
+    /**
+     * 获取数据*
+     */
+    private void initAdapter2(final List<MATUSETRANS> list) {
+        nodatalayout.setVisibility(View.GONE);
+        matusetransAdapter = new MatusetransAdapter(Workorder_Details_Activity.this, R.layout.list_udassettransf_item, list);
+        recyclerView.setAdapter(matusetransAdapter);
+        matusetransAdapter.setOnRecyclerViewItemClickListener(new BaseQuickAdapter.OnRecyclerViewItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
 
@@ -197,15 +333,15 @@ public class Workorder_Details_Activity extends BaseActivity {
     /**
      * 获取数据*
      */
-    private void getData() {
-        HttpManager.getDataPagingInfo(Workorder_Details_Activity.this, HttpManager.getMAAINVUSELINEURL(workorder.getWONUM(), page, 20), new HttpRequestHandler<Results>() {
+    private void getData1() {
+        HttpManager.getDataPagingInfo(Workorder_Details_Activity.this, HttpManager.getWPMATERIALURL(workorder.getWONUM(), page, 20), new HttpRequestHandler<Results>() {
             @Override
             public void onSuccess(Results results) {
             }
 
             @Override
             public void onSuccess(Results results, int totalPages, int currentPage) {
-                ArrayList<INVUSELINE> item = JsonUtils.parsingINVUSELINE(results.getResultlist());
+                ArrayList<WPMATERIAL> item = JsonUtils.parsingWPMATERIAL(results.getResultlist());
                 refresh_layout.setRefreshing(false);
                 refresh_layout.setLoading(false);
                 if (item == null || item.isEmpty()) {
@@ -214,17 +350,17 @@ public class Workorder_Details_Activity extends BaseActivity {
 
                     if (item != null || item.size() != 0) {
                         if (page == 1) {
-                            items = new ArrayList<INVUSELINE>();
-                            initAdapter(items);
+                            item1 = new ArrayList<WPMATERIAL>();
+                            initAdapter1(item1);
                         }
                         for (int i = 0; i < item.size(); i++) {
-                            items.add(item.get(i));
+                            item1.add(item.get(i));
                         }
                         addData(item);
                     }
                     nodatalayout.setVisibility(View.GONE);
 
-                    initAdapter(items);
+                    initAdapter1(item1);
                 }
             }
 
@@ -234,15 +370,63 @@ public class Workorder_Details_Activity extends BaseActivity {
                 nodatalayout.setVisibility(View.VISIBLE);
             }
         });
+    }
 
+    /**
+     * 获取数据*
+     */
+    private void getData2() {
+        HttpManager.getDataPagingInfo(Workorder_Details_Activity.this, HttpManager.getMATUSETRANSURL(workorder.getWONUM(), page, 20), new HttpRequestHandler<Results>() {
+            @Override
+            public void onSuccess(Results results) {
+            }
+
+            @Override
+            public void onSuccess(Results results, int totalPages, int currentPage) {
+                ArrayList<MATUSETRANS> item = JsonUtils.parsingMATUSETRANS(results.getResultlist());
+                refresh_layout.setRefreshing(false);
+                refresh_layout.setLoading(false);
+                if (item == null || item.isEmpty()) {
+                    nodatalayout.setVisibility(View.VISIBLE);
+                } else {
+
+                    if (item != null || item.size() != 0) {
+                        if (page == 1) {
+                            item2 = new ArrayList<MATUSETRANS>();
+                            initAdapter2(item2);
+                        }
+                        for (int i = 0; i < item.size(); i++) {
+                            item2.add(item.get(i));
+                        }
+                        addData2(item);
+                    }
+                    nodatalayout.setVisibility(View.GONE);
+
+                    initAdapter2(item2);
+                }
+            }
+
+            @Override
+            public void onFailure(String error) {
+                refresh_layout.setRefreshing(false);
+                nodatalayout.setVisibility(View.VISIBLE);
+            }
+        });
     }
 
 
     /**
      * 添加数据*
      */
-    private void addData(final List<INVUSELINE> list) {
-        maInvuseLineAdapter.addData(list);
+    private void addData(final List<WPMATERIAL> list) {
+        wpmaterialAdapter.addData(list);
+    }
+
+    /**
+     * 添加数据*
+     */
+    private void addData2(final List<MATUSETRANS> list) {
+        matusetransAdapter.addData(list);
     }
 
     private View.OnClickListener addOnClickListener = new View.OnClickListener() {

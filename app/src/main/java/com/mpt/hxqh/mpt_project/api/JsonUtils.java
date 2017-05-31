@@ -14,6 +14,8 @@ import com.mpt.hxqh.mpt_project.model.ITEM;
 import com.mpt.hxqh.mpt_project.model.LOCATIONS;
 import com.mpt.hxqh.mpt_project.model.MAINVUSE;
 import com.mpt.hxqh.mpt_project.model.MAINVUSELINE;
+import com.mpt.hxqh.mpt_project.model.MATUSETRANS;
+import com.mpt.hxqh.mpt_project.model.MEASUREUNIT;
 import com.mpt.hxqh.mpt_project.model.PERSON;
 import com.mpt.hxqh.mpt_project.model.PO;
 import com.mpt.hxqh.mpt_project.model.POLINE;
@@ -27,6 +29,7 @@ import com.mpt.hxqh.mpt_project.model.UDSTOCKT;
 import com.mpt.hxqh.mpt_project.model.UDSTOCKTLINE;
 import com.mpt.hxqh.mpt_project.model.UDTRANSFLINE;
 import com.mpt.hxqh.mpt_project.model.WORKORDER;
+import com.mpt.hxqh.mpt_project.model.WPMATERIAL;
 import com.mpt.hxqh.mpt_project.model.WebResult;
 
 import org.json.JSONArray;
@@ -392,6 +395,51 @@ public class JsonUtils<E> {
             list = new ArrayList<ASSET>();
             for (int i = 0; i < jsonArray.length(); i++) {
                 asset = new ASSET();
+                jsonObject = jsonArray.getJSONObject(i);
+                Field[] field = asset.getClass().getDeclaredFields();        //获取实体类的所有属性，返回Field数组
+                for (int j = 0; j < field.length; j++) {     //遍历所有属性
+                    field[j].setAccessible(true);
+                    String name = field[j].getName();    //获取属性的名字
+                    Log.i(TAG, "name=" + name);
+                    if (jsonObject.has(name) && jsonObject.getString(name) != null && !jsonObject.getString(name).equals("")) {
+                        try {
+                            // 调用getter方法获取属性值
+                            Method getOrSet = asset.getClass().getMethod("get" + name);
+                            Object value = getOrSet.invoke(asset);
+                            if (value == null) {
+                                //调用setter方法设属性值
+                                Class[] parameterTypes = new Class[1];
+                                parameterTypes[0] = field[j].getType();
+                                getOrSet = asset.getClass().getDeclaredMethod("set" + name, parameterTypes);
+                                getOrSet.invoke(asset, jsonObject.getString(name));
+                            }
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                }
+                list.add(asset);
+            }
+            return list;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     */
+    public static ArrayList<MEASUREUNIT> parsingMEASUREUNIT(String data) {
+        ArrayList<MEASUREUNIT> list = null;
+        MEASUREUNIT asset = null;
+        try {
+            JSONArray jsonArray = new JSONArray(data);
+            JSONObject jsonObject;
+            list = new ArrayList<MEASUREUNIT>();
+            for (int i = 0; i < jsonArray.length(); i++) {
+                asset = new MEASUREUNIT();
                 jsonObject = jsonArray.getJSONObject(i);
                 Field[] field = asset.getClass().getDeclaredFields();        //获取实体类的所有属性，返回Field数组
                 for (int j = 0; j < field.length; j++) {     //遍历所有属性
@@ -828,6 +876,96 @@ public class JsonUtils<E> {
 
                 }
                 list.add(workorder);
+            }
+            return list;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * 物料出库计划
+     */
+    public static ArrayList<WPMATERIAL> parsingWPMATERIAL(String data) {
+        ArrayList<WPMATERIAL> list = null;
+        WPMATERIAL wpmaterial = null;
+        try {
+            JSONArray jsonArray = new JSONArray(data);
+            JSONObject jsonObject;
+            list = new ArrayList<WPMATERIAL>();
+            for (int i = 0; i < jsonArray.length(); i++) {
+                wpmaterial = new WPMATERIAL();
+                jsonObject = jsonArray.getJSONObject(i);
+                Field[] field = wpmaterial.getClass().getDeclaredFields();        //获取实体类的所有属性，返回Field数组
+                for (int j = 0; j < field.length; j++) {     //遍历所有属性
+                    field[j].setAccessible(true);
+                    String name = field[j].getName();    //获取属性的名字
+                    if (jsonObject.has(name) && jsonObject.getString(name) != null && !jsonObject.getString(name).equals("")) {
+                        try {
+                            // 调用getter方法获取属性值
+                            Method getOrSet = wpmaterial.getClass().getMethod("get" + name);
+                            Object value = getOrSet.invoke(wpmaterial);
+                            if (value == null) {
+                                //调用setter方法设属性值
+                                Class[] parameterTypes = new Class[1];
+                                parameterTypes[0] = field[j].getType();
+                                getOrSet = wpmaterial.getClass().getDeclaredMethod("set" + name, parameterTypes);
+                                getOrSet.invoke(wpmaterial, jsonObject.getString(name));
+                            }
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                }
+                list.add(wpmaterial);
+            }
+            return list;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * 物料出库实际
+     */
+    public static ArrayList<MATUSETRANS> parsingMATUSETRANS(String data) {
+        ArrayList<MATUSETRANS> list = null;
+        MATUSETRANS matusetrans = null;
+        try {
+            JSONArray jsonArray = new JSONArray(data);
+            JSONObject jsonObject;
+            list = new ArrayList<MATUSETRANS>();
+            for (int i = 0; i < jsonArray.length(); i++) {
+                matusetrans = new MATUSETRANS();
+                jsonObject = jsonArray.getJSONObject(i);
+                Field[] field = matusetrans.getClass().getDeclaredFields();        //获取实体类的所有属性，返回Field数组
+                for (int j = 0; j < field.length; j++) {     //遍历所有属性
+                    field[j].setAccessible(true);
+                    String name = field[j].getName();    //获取属性的名字
+                    if (jsonObject.has(name) && jsonObject.getString(name) != null && !jsonObject.getString(name).equals("")) {
+                        try {
+                            // 调用getter方法获取属性值
+                            Method getOrSet = matusetrans.getClass().getMethod("get" + name);
+                            Object value = getOrSet.invoke(matusetrans);
+                            if (value == null) {
+                                //调用setter方法设属性值
+                                Class[] parameterTypes = new Class[1];
+                                parameterTypes[0] = field[j].getType();
+                                getOrSet = matusetrans.getClass().getDeclaredMethod("set" + name, parameterTypes);
+                                getOrSet.invoke(matusetrans, jsonObject.getString(name));
+                            }
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                }
+                list.add(matusetrans);
             }
             return list;
         } catch (JSONException e) {

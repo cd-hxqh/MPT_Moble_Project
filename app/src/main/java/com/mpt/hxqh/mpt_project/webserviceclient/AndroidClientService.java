@@ -637,6 +637,198 @@ public class AndroidClientService {
     }
 
     /**
+     * 资产移动新增方法
+     * @return
+     */
+    public static WebResult AddMove(Context context, String description,String fromloc,String tosite,String createby, String url) {
+
+        SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+        soapEnvelope.implicitTypes = true;
+        soapEnvelope.dotNet = true;
+        SoapObject soapReq = new SoapObject(NAMESPACE, "mptmobileserviceAddMove");
+        soapReq.addProperty("DESCRIPTION", description);//描述
+        soapReq.addProperty("FROMLOC", fromloc);//来的位置
+        soapReq.addProperty("TOSITE", tosite);//目标位置
+        soapReq.addProperty("CREATEBY", createby);//创建人
+        soapEnvelope.setOutputSoapObject(soapReq);
+        HttpTransportSE httpTransport = new HttpTransportSE(AccountUtils.getIpAddress(context) + url, timeOut);
+        try {
+            httpTransport.call("urn:action", soapEnvelope);
+        } catch (IOException | XmlPullParserException e) {
+//            e.printStackTrace();
+            return null;
+        }
+        String obj = null;
+        WebResult webResult = null;
+        try {
+            obj = soapEnvelope.getResponse().toString();
+
+            Log.i(TAG, "obj=" + obj);
+            webResult = JsonUtils.parsingWebResult(obj);
+        } catch (SoapFault soapFault) {
+            soapFault.printStackTrace();
+        }
+        return webResult;
+    }
+
+    /**
+     * 资产移动新增行方法
+     * @return
+     */
+    public static WebResult AddMoveLine(Context context, String assettrannum,String assetnum,String fromsite,String tosite,String createby, String url) {
+
+        SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+        soapEnvelope.implicitTypes = true;
+        soapEnvelope.dotNet = true;
+        SoapObject soapReq = new SoapObject(NAMESPACE, "mptmobileserviceAddMoveLine");
+        soapReq.addProperty("ASSETTRANNUM", assettrannum);//资产移动主表单号
+        soapReq.addProperty("ASSETNUM", assetnum);//资产编号
+        soapReq.addProperty("FROMSITE", fromsite);//从哪个位置
+        soapReq.addProperty("TOSITE", tosite);//到哪个位置
+        soapReq.addProperty("CREATEBY", createby);//创建人
+        soapEnvelope.setOutputSoapObject(soapReq);
+        HttpTransportSE httpTransport = new HttpTransportSE(AccountUtils.getIpAddress(context) + url, timeOut);
+        try {
+            httpTransport.call("urn:action", soapEnvelope);
+        } catch (IOException | XmlPullParserException e) {
+//            e.printStackTrace();
+            return null;
+        }
+        String obj = null;
+        WebResult webResult = null;
+        try {
+            obj = soapEnvelope.getResponse().toString();
+
+            Log.i(TAG, "obj=" + obj);
+            webResult = JsonUtils.parsingWebResult(obj);
+        } catch (SoapFault soapFault) {
+            soapFault.printStackTrace();
+        }
+        return webResult;
+    }
+
+    /**
+     * 物料出站新增方法
+     * @return
+     */
+    public static WebResult AddOut(Context context, String description, String url) {
+
+        SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+        soapEnvelope.implicitTypes = true;
+        soapEnvelope.dotNet = true;
+        SoapObject soapReq = new SoapObject(NAMESPACE, "mptmobileserviceAddOut");
+        soapReq.addProperty("DESCRIPTION", description);//描述
+        soapEnvelope.setOutputSoapObject(soapReq);
+        HttpTransportSE httpTransport = new HttpTransportSE(AccountUtils.getIpAddress(context) + url, timeOut);
+        try {
+            httpTransport.call("urn:action", soapEnvelope);
+        } catch (IOException | XmlPullParserException e) {
+//            e.printStackTrace();
+            return null;
+        }
+        String obj = null;
+        WebResult webResult = null;
+        try {
+            obj = soapEnvelope.getResponse().toString();
+
+            Log.i(TAG, "obj=" + obj);
+            webResult = JsonUtils.parsingWebResult(obj);
+        } catch (SoapFault soapFault) {
+            soapFault.printStackTrace();
+        }
+        return webResult;
+    }
+
+    /**
+     * 物料出站计划新增方法
+     * @return
+     */
+    public static WebResult AddOutPlanLine(Context context, String wonum,String itemnum,
+                                           String description,String location,String issueto,String linetype,
+                                           String restype,String quantity,String storelocsite,String unitcost,
+                                           String orderunit,String createby,String url) {
+
+        SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+        soapEnvelope.implicitTypes = true;
+        soapEnvelope.dotNet = true;
+        SoapObject soapReq = new SoapObject(NAMESPACE, "mptmobileserviceAddOutPlanLine");
+        soapReq.addProperty("WONUM", wonum);//物料出站主表单号
+        soapReq.addProperty("ITEMNUM", itemnum);//项目编号
+        soapReq.addProperty("DESCRIPTION", description);//描述
+        soapReq.addProperty("LOCATION", location);//位置
+        soapReq.addProperty("ISSUETO", issueto);//到哪个位置
+        soapReq.addProperty("LINETYPE", linetype);//行类型
+        soapReq.addProperty("RESTYPE", restype);//预定类型
+        soapReq.addProperty("Quantity", quantity);//数量
+        soapReq.addProperty("STORELOCSITE", storelocsite);//库房位置
+        soapReq.addProperty("UNITCOST", unitcost);//单位成本
+        soapReq.addProperty("ORDERUNIT", orderunit);//单位
+        soapReq.addProperty("CREATEBY", createby);//
+        soapEnvelope.setOutputSoapObject(soapReq);
+        HttpTransportSE httpTransport = new HttpTransportSE(AccountUtils.getIpAddress(context) + url, timeOut);
+        try {
+            httpTransport.call("urn:action", soapEnvelope);
+        } catch (IOException | XmlPullParserException e) {
+//            e.printStackTrace();
+            return null;
+        }
+        String obj = null;
+        WebResult webResult = null;
+        try {
+            obj = soapEnvelope.getResponse().toString();
+
+            Log.i(TAG, "obj=" + obj);
+            webResult = JsonUtils.parsingWebResult(obj);
+        } catch (SoapFault soapFault) {
+            soapFault.printStackTrace();
+        }
+        return webResult;
+    }
+
+    /**
+     * 物料出站实际新增方法
+     * @return
+     */
+    public static WebResult AddOutActuralLine(Context context, String wonum,String itemnum,
+                                           String description,String linetype,String siteid,String quantity,
+                                           String unitcost,String location,String trantype,String createby,String url) {
+
+        SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+        soapEnvelope.implicitTypes = true;
+        soapEnvelope.dotNet = true;
+        SoapObject soapReq = new SoapObject(NAMESPACE, "mptmobileserviceAddOutActuralLine");
+        soapReq.addProperty("WONUM", wonum);//物料出站主表单号
+        soapReq.addProperty("ITEMNUM", itemnum);//项目编号
+        soapReq.addProperty("DESCRIPTION", description);//描述
+        soapReq.addProperty("LINETYPE", linetype);//行类型
+        soapReq.addProperty("SITEID", siteid);//地点
+        soapReq.addProperty("Quantity", quantity);//数量
+        soapReq.addProperty("UnitCost", unitcost);//单位成本
+        soapReq.addProperty("Location", location);//位置
+        soapReq.addProperty("TranType", trantype);//交易类型
+        soapReq.addProperty("CREATEBY", createby);//创建人
+        soapEnvelope.setOutputSoapObject(soapReq);
+        HttpTransportSE httpTransport = new HttpTransportSE(AccountUtils.getIpAddress(context) + url, timeOut);
+        try {
+            httpTransport.call("urn:action", soapEnvelope);
+        } catch (IOException | XmlPullParserException e) {
+//            e.printStackTrace();
+            return null;
+        }
+        String obj = null;
+        WebResult webResult = null;
+        try {
+            obj = soapEnvelope.getResponse().toString();
+
+            Log.i(TAG, "obj=" + obj);
+            webResult = JsonUtils.parsingWebResult(obj);
+        } catch (SoapFault soapFault) {
+            soapFault.printStackTrace();
+        }
+        return webResult;
+    }
+
+    /**
      * 通用修改
      */
     public static WebResult UpdateWO(Context context, String json, String mboObjectName, String mboKey, String mboKeyValue, String url) {

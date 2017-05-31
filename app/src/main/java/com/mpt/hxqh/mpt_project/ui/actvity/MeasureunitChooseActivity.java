@@ -10,54 +10,49 @@ import android.support.v7.widget.RecyclerView;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ImageSpan;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.flyco.animation.BaseAnimatorSet;
-import com.flyco.animation.BounceEnter.BounceTopEnter;
-import com.flyco.animation.SlideExit.SlideBottomExit;
-import com.flyco.dialog.listener.OnBtnClickL;
-import com.flyco.dialog.widget.NormalDialog;
 import com.mpt.hxqh.mpt_project.R;
+import com.mpt.hxqh.mpt_project.adpter.AssetChooseAdapter;
 import com.mpt.hxqh.mpt_project.adpter.BaseQuickAdapter;
-import com.mpt.hxqh.mpt_project.adpter.UdassettransfAdapter;
+import com.mpt.hxqh.mpt_project.adpter.MeasureunitChooseAdapter;
 import com.mpt.hxqh.mpt_project.api.HttpManager;
 import com.mpt.hxqh.mpt_project.api.HttpRequestHandler;
 import com.mpt.hxqh.mpt_project.api.JsonUtils;
 import com.mpt.hxqh.mpt_project.bean.Results;
-import com.mpt.hxqh.mpt_project.manager.AppManager;
-import com.mpt.hxqh.mpt_project.model.UDASSETTRANSF;
+import com.mpt.hxqh.mpt_project.model.MEASUREUNIT;
 import com.mpt.hxqh.mpt_project.ui.widget.SwipeRefreshLayout;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 资产移动
+ * 选择项
  **/
-public class Asset_Udassettransf_Activity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener, SwipeRefreshLayout.OnLoadListener {
 
-    private static String TAG = "Asset_Udassettransf_Activity";
+public class MeasureunitChooseActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener, SwipeRefreshLayout.OnLoadListener {
 
+    private static final String TAG = "MeasureunitChooseActivity";
+
+
+    public static final int MEASUREUNIT_CODE=1006;
+
+    /**
+     * 标题*
+     */
+    private TextView titleTextView;
     /**
      * 返回按钮
      */
     private ImageView backImageView;
-    /**
-     * 标题
-     */
-    private TextView titleTextView;
-    /**
-     * 新增按钮
-     **/
-    private ImageView addBtn;
 
     LinearLayoutManager layoutManager;
 
@@ -77,7 +72,7 @@ public class Asset_Udassettransf_Activity extends BaseActivity implements SwipeR
     /**
      * 适配器*
      */
-    private UdassettransfAdapter udassettransfAdapter;
+    private MeasureunitChooseAdapter locationAdapter;
     /**
      * 编辑框*
      */
@@ -88,25 +83,16 @@ public class Asset_Udassettransf_Activity extends BaseActivity implements SwipeR
     private String searchText = "";
     private int page = 1;
 
-    private LinearLayout buttonLayout;
-    private Button quit;
-    private Button option;
+    ArrayList<MEASUREUNIT> items = new ArrayList<MEASUREUNIT>();
 
-
-    ArrayList<UDASSETTRANSF> items = new ArrayList<UDASSETTRANSF>();
-
-    private BaseAnimatorSet mBasIn;
-    private BaseAnimatorSet mBasOut;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_list);
+        setContentView(R.layout.activity_choose_list);
         findViewById();
         initView();
 
-        mBasIn = new BounceTopEnter();
-        mBasOut = new SlideBottomExit();
     }
 
 
@@ -114,29 +100,21 @@ public class Asset_Udassettransf_Activity extends BaseActivity implements SwipeR
     protected void findViewById() {
         backImageView = (ImageView) findViewById(R.id.title_back_id);
         titleTextView = (TextView) findViewById(R.id.title_name);
-        addBtn = (ImageView) findViewById(R.id.title_add);
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView_id);
         refresh_layout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
         nodatalayout = (LinearLayout) findViewById(R.id.have_not_data_id);
         search = (EditText) findViewById(R.id.search_edit);
-        buttonLayout = (LinearLayout) findViewById(R.id.button_layout);
-        quit = (Button) findViewById(R.id.quit);
-        option = (Button) findViewById(R.id.option);
+
+
     }
 
     @Override
     protected void initView() {
+        backImageView.setOnClickListener(backImageViewOnClickListener);
+        titleTextView.setText("Measureunit");
         setSearchEdit();
-        backImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-        titleTextView.setText(R.string.asset_management_text);
-        addBtn.setVisibility(View.VISIBLE);
-        buttonLayout.setVisibility(View.VISIBLE);
-        layoutManager = new LinearLayoutManager(Asset_Udassettransf_Activity.this);
+
+        layoutManager = new LinearLayoutManager(MeasureunitChooseActivity.this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         layoutManager.scrollToPosition(0);
         recyclerView.setLayoutManager(layoutManager);
@@ -150,50 +128,43 @@ public class Asset_Udassettransf_Activity extends BaseActivity implements SwipeR
         refresh_layout.setOnRefreshListener(this);
         refresh_layout.setOnLoadListener(this);
 
-        refresh_layout.setRefreshing(true);
-        initAdapter(new ArrayList<UDASSETTRANSF>());
+        initAdapter(new ArrayList<MEASUREUNIT>());
+        items = new ArrayList<>();
         getData(searchText);
-
-        addBtn.setOnClickListener(addOnClickListener);
-        quit.setOnClickListener(quitOnClickListener);
     }
 
-    private View.OnClickListener addOnClickListener = new View.OnClickListener() {
+
+    private View.OnClickListener backImageViewOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            Intent intent = new Intent(Asset_Udassettransf_Activity.this,Udassettransf_AddNew_Activity.class);
-            startActivity(intent);
+            finish();
         }
     };
 
-    private View.OnClickListener quitOnClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            final NormalDialog dialog = new NormalDialog(Asset_Udassettransf_Activity.this);
-            dialog.content("Sure to exit?")//
-                    .showAnim(mBasIn)//
-                    .dismissAnim(mBasOut)//
-                    .show();
-            dialog.setOnBtnClickL(
-                    new OnBtnClickL() {
-                        @Override
-                        public void onBtnClick() {
-                            dialog.dismiss();
-                        }
-                    },
-                    new OnBtnClickL() {
-                        @Override
-                        public void onBtnClick() {
-                            AppManager.AppExit(Asset_Udassettransf_Activity.this);
-                        }
-                    });
 
-        }
-    };
+    @Override
+    public void onStart() {
+        super.onStart();
+
+    }
+
+    @Override
+    public void onLoad() {
+        page++;
+
+        getData(searchText);
+    }
+
+    @Override
+    public void onRefresh() {
+        page = 1;
+        getData(searchText);
+
+    }
 
 
     private void setSearchEdit() {
-        SpannableString msp = new SpannableString(getString(R.string.search_text));
+        SpannableString msp = new SpannableString("XXSearch");
         Drawable drawable = getResources().getDrawable(R.drawable.ic_search);
         msp.setSpan(new ImageSpan(drawable), 0, 2, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
@@ -206,12 +177,12 @@ public class Asset_Udassettransf_Activity extends BaseActivity implements SwipeR
                     // 先隐藏键盘
                     ((InputMethodManager) search.getContext().getSystemService(Context.INPUT_METHOD_SERVICE))
                             .hideSoftInputFromWindow(
-                                    Asset_Udassettransf_Activity.this.getCurrentFocus()
+                                    getCurrentFocus()
                                             .getWindowToken(),
                                     InputMethodManager.HIDE_NOT_ALWAYS);
                     searchText = search.getText().toString();
-                    udassettransfAdapter.removeAll(items);
-                    items = new ArrayList<UDASSETTRANSF>();
+                    locationAdapter.removeAll(items);
+                    items = new ArrayList<MEASUREUNIT>();
                     nodatalayout.setVisibility(View.GONE);
                     refresh_layout.setRefreshing(true);
                     page = 1;
@@ -223,18 +194,20 @@ public class Asset_Udassettransf_Activity extends BaseActivity implements SwipeR
         });
     }
 
+
     /**
      * 获取数据*
      */
     private void getData(String search) {
-        HttpManager.getDataPagingInfo(Asset_Udassettransf_Activity.this, HttpManager.getUDASSETTRANSFURL(search, page, 20), new HttpRequestHandler<Results>() {
+        HttpManager.getDataPagingInfo(MeasureunitChooseActivity.this, HttpManager.getMEasureunitUrl(search, page, 20), new HttpRequestHandler<Results>() {
             @Override
             public void onSuccess(Results results) {
+//                Log.i(TAG, "data=" + results);
             }
 
             @Override
             public void onSuccess(Results results, int totalPages, int currentPage) {
-                ArrayList<UDASSETTRANSF> item = JsonUtils.parsingUDASSETTRANSF(results.getResultlist());
+                ArrayList<MEASUREUNIT> item = JsonUtils.parsingMEASUREUNIT(results.getResultlist());
                 refresh_layout.setRefreshing(false);
                 refresh_layout.setLoading(false);
                 if (item == null || item.isEmpty()) {
@@ -243,8 +216,8 @@ public class Asset_Udassettransf_Activity extends BaseActivity implements SwipeR
 
                     if (item != null || item.size() != 0) {
                         if (page == 1) {
-                            items = new ArrayList<UDASSETTRANSF>();
-                            initAdapter(items);
+                            items = new ArrayList<MEASUREUNIT>();
+                            initAdapter(new ArrayList<MEASUREUNIT>());
                         }
                         for (int i = 0; i < item.size(); i++) {
                             items.add(item.get(i));
@@ -266,21 +239,23 @@ public class Asset_Udassettransf_Activity extends BaseActivity implements SwipeR
 
     }
 
+
+
     /**
      * 获取数据*
      */
-    private void initAdapter(final List<UDASSETTRANSF> list) {
-        nodatalayout.setVisibility(View.GONE);
-        udassettransfAdapter = new UdassettransfAdapter(Asset_Udassettransf_Activity.this, R.layout.list_asset_transfer, list);
-        recyclerView.setAdapter(udassettransfAdapter);
-        udassettransfAdapter.setOnRecyclerViewItemClickListener(new BaseQuickAdapter.OnRecyclerViewItemClickListener() {
+    private void initAdapter(final List<MEASUREUNIT> list) {
+        locationAdapter = new MeasureunitChooseAdapter(MeasureunitChooseActivity.this, R.layout.list_item_measureunit, list);
+        recyclerView.setAdapter(locationAdapter);
+        locationAdapter.setOnRecyclerViewItemClickListener(new BaseQuickAdapter.OnRecyclerViewItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                Intent intent = new Intent(Asset_Udassettransf_Activity.this, Udassettransf_Details_Activity.class);
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("udassettransf", items.get(position));
-                intent.putExtras(bundle);
-                startActivityForResult(intent, 0);
+
+                Intent intent = getIntent();
+                intent.putExtra("measureunitid", list.get(position).getMEASUREUNITID());
+                setResult(MEASUREUNIT_CODE, intent);
+                finish();
+
             }
         });
     }
@@ -288,27 +263,7 @@ public class Asset_Udassettransf_Activity extends BaseActivity implements SwipeR
     /**
      * 添加数据*
      */
-    private void addData(final List<UDASSETTRANSF> list) {
-        udassettransfAdapter.addData(list);
+    private void addData(final List<MEASUREUNIT> list) {
+        locationAdapter.addData(list);
     }
-
-
-    @Override
-    public void onLoad() {
-        page++;
-        getData(searchText);
-    }
-
-    @Override
-    public void onRefresh() {
-        page = 1;
-        getData(searchText);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-    }
-
 }

@@ -5,8 +5,8 @@
     <string name="help">帮助</string>
     <string name="string_help_text">当前应用缺少必要权限。\n\n请点击\"设置\"-\"权限\"-打开所需权限。\n\n最后点击两次后退按钮，即可返回。</string>
     <string name="quit">退出</string>
-    <string name="user_name_text">User Name</string>
-    <string name="pass_word_text">Pass Word</string>
+    <string name="user_name_text">Username</string>
+    <string name="pass_word_text">Password</string>
     <string name="remenber_pass_text">Remember the password</string>
     <string name="login_text">Login</string>
     <string name="ip_config">Configure</string>
@@ -108,7 +108,7 @@
     <string name="from_department_text">From Dep:</string>
     <string name="fromloc_text">Fromloc:</string>
     <string name="tosite_text">Target Location:</string>
-    <string name="assetnum_text">Assetnum</string>
+    <string name="assetnum_text">Assetnum:</string>
     <string name="desc_text">Desc</string>
     <string name="Material_outbound_text">Material Outbound</string>
     <string name="material_refund_text">Material Refund</string>
@@ -149,5 +149,14 @@
     <string name="udasstnum_text">Asset/Spare:</string>
     <string name="retireloc_text">Retire to Location:</string>
     <string name="retiredate_text">Retire Date:</string>
+    <string name="fromsite_text">From Site:</string>
+    <string name="tosite_text2">To Site:</string>
+    <string name="location_text2">Storeroom:</string>
+    <string name="restype_text">Reservation Type:</string>
+    <string name="storelocsite_text">Storeroom Site:</string>
+    <string name="unitcost_text">Unit Cost:</string>
+    <string name="orderunit_text">Order Unit:</string>
+    <string name="siteid_text">Site:</string>
+    <string name="trantype_text">Transaction Type:</string>
 
 </resources>

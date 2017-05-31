@@ -82,6 +82,9 @@ public class Constants {
     //资产的表名
     public static final String ASSET_NAME = "ASSET";
 
+    //MEASUREUNIT的表名
+    public static final String MEASUREUNIT_NAME = "MEASUREUNIT";
+
     //资产转移appid
     public static final String ASOUTB_NAME = "ASOUTB";
     //资产转移的表名

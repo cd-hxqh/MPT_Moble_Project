@@ -87,6 +87,17 @@ public class HttpManager {
     }
 
     /**
+     * 设置MEASUREUNIT查询*
+     */
+    public static String getMEasureunitUrl(String vlaue, int curpage, int showcount) {
+        if (vlaue.equals("")) {
+            return "{'appid':'" + Constants.MEASUREUNIT_NAME + "','objectname':'" + Constants.MEASUREUNIT_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read'}";
+        } else {
+            return "{'appid':'" + Constants.MEASUREUNIT_NAME + "','objectname':'" + Constants.MEASUREUNIT_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','sinorsearch':{'MEASUREUNITID':'" + vlaue + "','ABBREVIATION':'" + vlaue + "','DESCRIPTION':'" + vlaue + "'}}";
+        }
+    }
+
+    /**
      * 设置资产查询*
      */
     public static String getAssetUrl(String vlaue, int curpage, int showcount) {
@@ -175,9 +186,9 @@ public class HttpManager {
      */
     public static String getUDASSETTRANSFURL(String vlaue, int curpage, int showcount) {
         if (vlaue.equals("")) {
-            return "{'appid':'" + Constants.ASTRANSF_APPID + "','objectname':'" + Constants.UDASSETTRANSF_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read'}";
+            return "{'appid':'" + Constants.ASTRANSF_APPID + "','objectname':'" + Constants.UDASSETTRANSF_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','orderby':'ASSETTRANNUM DESC'}";
         } else {
-            return "{'appid':'" + Constants.ASTRANSF_APPID + "','objectname':'" + Constants.UDASSETTRANSF_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','sinorsearch':{'ASSETTRANNUM':'" + vlaue + "','DESCRIPTION':'" + vlaue + "'}}";
+            return "{'appid':'" + Constants.ASTRANSF_APPID + "','objectname':'" + Constants.UDASSETTRANSF_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','orderby':'ASSETTRANNUM DESC','sinorsearch':{'ASSETTRANNUM':'" + vlaue + "','DESCRIPTION':'" + vlaue + "'}}";
         }
     }
 
@@ -213,7 +224,7 @@ public class HttpManager {
      * 设置物料出库计划行表*
      */
     public static String getMATUSETRANSURL(String wonum, int curpage, int showcount) {
-        return "{'appid':'" + Constants.WOFMOUT_APPID + "','objectname':'" + Constants.WPMATERIAL_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','condition':{'WONUM':'=" + wonum + "'}}";
+        return "{'appid':'" + Constants.WOFMOUT_APPID + "','objectname':'" + Constants.MATUSETRANS_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','condition':{'REFWO':'=" + wonum + "'}}";
 
     }
 

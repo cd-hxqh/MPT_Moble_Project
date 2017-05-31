@@ -54,7 +54,10 @@ public class Material_Workorder_Activity extends BaseActivity implements SwipeRe
      * 标题
      */
     private TextView titleTextView;
-
+    /**
+     * 新增按钮
+     **/
+    private ImageView addBtn;
 
     LinearLayoutManager layoutManager;
 
@@ -109,6 +112,7 @@ public class Material_Workorder_Activity extends BaseActivity implements SwipeRe
     protected void findViewById() {
         backImageView = (ImageView) findViewById(R.id.title_back_id);
         titleTextView = (TextView) findViewById(R.id.title_name);
+        addBtn = (ImageView) findViewById(R.id.title_add);
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView_id);
         refresh_layout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
         nodatalayout = (LinearLayout) findViewById(R.id.have_not_data_id);
@@ -128,6 +132,7 @@ public class Material_Workorder_Activity extends BaseActivity implements SwipeRe
             }
         });
         titleTextView.setText(R.string.Material_outbound_text);
+        addBtn.setVisibility(View.VISIBLE);
         buttonLayout.setVisibility(View.VISIBLE);
         layoutManager = new LinearLayoutManager(Material_Workorder_Activity.this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -147,8 +152,17 @@ public class Material_Workorder_Activity extends BaseActivity implements SwipeRe
         initAdapter(new ArrayList<WORKORDER>());
         getData(searchText);
 
+        addBtn.setOnClickListener(addOnClickListener);
         quit.setOnClickListener(quitOnClickListener);
     }
+
+    private View.OnClickListener addOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent(Material_Workorder_Activity.this,Workorder_AddNew_Activity.class);
+            startActivity(intent);
+        }
+    };
 
     private View.OnClickListener quitOnClickListener = new View.OnClickListener() {
         @Override

@@ -129,11 +129,31 @@
             android:name=".ui.actvity.Udassettransf_Details_Activity"
             android:screenOrientation="portrait"></activity>
         <activity
+            android:name=".ui.actvity.Udassettransf_AddNew_Activity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize"></activity>
+        <activity
+            android:name=".ui.actvity.UdassettransfLine_AddNew_Activity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize"></activity>
+        <activity
             android:name=".ui.actvity.Material_Workorder_Activity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize"></activity>
         <activity
             android:name=".ui.actvity.Workorder_Details_Activity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize"></activity>
+        <activity
+            android:name=".ui.actvity.Workorder_AddNew_Activity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize"></activity>
+        <activity
+            android:name=".ui.actvity.Wpmaterial_AddNew_Activity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize"></activity>
+        <activity
+            android:name=".ui.actvity.Matusetrans_AddNew_Activity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize"></activity>
         <activity
@@ -186,6 +206,9 @@
             android:screenOrientation="portrait"></activity>
         <activity
             android:name=".ui.actvity.MaainvuseLine_AddNew_Activity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".ui.actvity.MeasureunitChooseActivity"
             android:screenOrientation="portrait"></activity>
     </application>
 

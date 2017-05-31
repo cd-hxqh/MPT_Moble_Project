@@ -261,6 +261,7 @@ public class ItemChooseActivity extends BaseActivity implements SwipeRefreshLayo
 
                 Intent intent = getIntent();
                 intent.putExtra("Itemnum", list.get(position).getITEMNUM());
+                intent.putExtra("description", list.get(position).getDESCRIPTION());
                 setResult(ITEM_CODE, intent);
                 finish();
 
