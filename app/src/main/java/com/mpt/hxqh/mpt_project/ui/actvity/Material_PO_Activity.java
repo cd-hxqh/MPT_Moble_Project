@@ -14,6 +14,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -24,7 +25,9 @@ import com.flyco.animation.BaseAnimatorSet;
 import com.flyco.animation.BounceEnter.BounceTopEnter;
 import com.flyco.animation.SlideExit.SlideBottomExit;
 import com.flyco.dialog.listener.OnBtnClickL;
+import com.flyco.dialog.listener.OnOperItemClickL;
 import com.flyco.dialog.widget.NormalDialog;
+import com.flyco.dialog.widget.NormalListDialog;
 import com.mpt.hxqh.mpt_project.R;
 import com.mpt.hxqh.mpt_project.adpter.BaseQuickAdapter;
 import com.mpt.hxqh.mpt_project.adpter.PoAdapter;
@@ -95,7 +98,7 @@ public class Material_PO_Activity extends BaseActivity implements SwipeRefreshLa
     ArrayList<PO> items = new ArrayList<PO>();
     private BaseAnimatorSet mBasIn;
     private BaseAnimatorSet mBasOut;
-
+    private String[] optionList = new String[]{"Back","Add","Receive scanning"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,8 +136,9 @@ public class Material_PO_Activity extends BaseActivity implements SwipeRefreshLa
                 finish();
             }
         });
+        backImageView.setVisibility(View.GONE);
         titleTextView.setText(R.string.material_receive_text);
-        addBtn.setVisibility(View.VISIBLE);
+//        addBtn.setVisibility(View.VISIBLE);
         buttonLayout.setVisibility(View.VISIBLE);
         layoutManager = new LinearLayoutManager(Material_PO_Activity.this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -156,6 +160,7 @@ public class Material_PO_Activity extends BaseActivity implements SwipeRefreshLa
 
         addBtn.setOnClickListener(addOnClickListener);
         quit.setOnClickListener(quitOnClickListener);
+        option.setOnClickListener(optionOnClickListener);
     }
 
     private View.OnClickListener addOnClickListener = new View.OnClickListener() {
@@ -188,6 +193,41 @@ public class Material_PO_Activity extends BaseActivity implements SwipeRefreshLa
                         }
                     });
 
+        }
+    };
+
+    private View.OnClickListener optionOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            final NormalListDialog normalListDialog = new NormalListDialog(Material_PO_Activity.this, optionList);
+            normalListDialog.title("Option")
+                    .showAnim(mBasIn)//
+                    .dismissAnim(mBasOut)//
+                    .show();
+            normalListDialog.setOnOperItemClickL(new OnOperItemClickL() {
+                @Override
+                public void onOperItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                    linetypeTextView.setText(linetypeList[position]);
+                    switch (position){
+                        case 0://Back
+                            normalListDialog.superDismiss();
+                            finish();
+                            break;
+                        case 1://Add
+                            normalListDialog.superDismiss();
+                            Intent intent = new Intent(Material_PO_Activity.this,PO_AddNew_Activity.class);
+                            startActivity(intent);
+
+                            break;
+                        case 2:
+                            normalListDialog.superDismiss();
+                            Intent intent2 = new Intent(Material_PO_Activity.this,PO_AddNew_Activity.class);
+                            startActivity(intent2);
+                            break;
+                    }
+//                    normalListDialog.dismiss();
+                }
+            });
         }
     };
 

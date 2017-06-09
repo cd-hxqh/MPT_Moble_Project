@@ -1,20 +1,31 @@
 package com.mpt.hxqh.mpt_project.ui.actvity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.flyco.animation.BaseAnimatorSet;
 import com.flyco.animation.BounceEnter.BounceTopEnter;
 import com.flyco.animation.SlideExit.SlideBottomExit;
+import com.flyco.dialog.listener.OnBtnClickL;
+import com.flyco.dialog.listener.OnBtnEditClickL;
+import com.flyco.dialog.listener.OnOperItemClickL;
+import com.flyco.dialog.widget.MaterialDialog2;
+import com.flyco.dialog.widget.NormalDialog;
+import com.flyco.dialog.widget.NormalEditTextDialog;
+import com.flyco.dialog.widget.NormalListDialog;
 import com.mpt.hxqh.mpt_project.R;
 import com.mpt.hxqh.mpt_project.adpter.BaseQuickAdapter;
 import com.mpt.hxqh.mpt_project.adpter.InvuseLineAdapter;
@@ -23,11 +34,16 @@ import com.mpt.hxqh.mpt_project.api.HttpManager;
 import com.mpt.hxqh.mpt_project.api.HttpRequestHandler;
 import com.mpt.hxqh.mpt_project.api.JsonUtils;
 import com.mpt.hxqh.mpt_project.bean.Results;
+import com.mpt.hxqh.mpt_project.config.Constants;
+import com.mpt.hxqh.mpt_project.manager.AppManager;
 import com.mpt.hxqh.mpt_project.model.INVUSE;
 import com.mpt.hxqh.mpt_project.model.INVUSELINE;
 import com.mpt.hxqh.mpt_project.model.MAINVUSE;
 import com.mpt.hxqh.mpt_project.model.MAINVUSELINE;
+import com.mpt.hxqh.mpt_project.model.WorkFlowResult;
 import com.mpt.hxqh.mpt_project.ui.widget.SwipeRefreshLayout;
+import com.mpt.hxqh.mpt_project.unit.AccountUtils;
+import com.mpt.hxqh.mpt_project.webserviceclient.AndroidClientService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,15 +89,17 @@ public class Maainvuse_Details_Activity extends BaseActivity {
     private InvuseLineAdapter maInvuseLineAdapter;
 
     private int page = 1;
-    private LinearLayout buttonLayout;
-    private Button quit;
-    private Button option;
 
     ArrayList<INVUSELINE> items = new ArrayList<INVUSELINE>();
 
-    private FloatingActionButton addButton;
+    private LinearLayout buttonLayout;
+    private Button quit;
+    private Button option;
+    private String[] optionList = new String[]{"Back", "Route","AddLine"};
     private BaseAnimatorSet mBasIn;
     private BaseAnimatorSet mBasOut;
+
+    private ProgressDialog mProgressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,15 +133,19 @@ public class Maainvuse_Details_Activity extends BaseActivity {
         refresh_layout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
         nodatalayout = (LinearLayout) findViewById(R.id.have_not_data_id);
 
-        addButton = (FloatingActionButton) findViewById(R.id.add_flaButton);
+        buttonLayout = (LinearLayout) findViewById(R.id.button_layout);
+        quit = (Button) findViewById(R.id.quit);
+        option = (Button) findViewById(R.id.option);
 
     }
 
     @Override
     protected void initView() {
         backImageView.setOnClickListener(backImageViewOnClickListener);
+        backImageView.setVisibility(View.GONE);
         titleTextView.setText(R.string.material_transfer_text);
 
+        buttonLayout.setVisibility(View.VISIBLE);
         if (mainvuse != null) {
             orderTextView.setText(mainvuse.getINVUSENUM());
             descriptionTextView.setText(mainvuse.getDESCRIPTION());
@@ -151,7 +173,8 @@ public class Maainvuse_Details_Activity extends BaseActivity {
         initAdapter(new ArrayList<INVUSELINE>());
         getData();
 
-        addButton.setOnClickListener(addOnClickListener);
+        quit.setOnClickListener(quitOnClickListener);
+        option.setOnClickListener(optionOnClickListener);
 
     }
 
@@ -165,6 +188,202 @@ public class Maainvuse_Details_Activity extends BaseActivity {
         }
     };
 
+    private View.OnClickListener quitOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            final NormalDialog dialog = new NormalDialog(Maainvuse_Details_Activity.this);
+            dialog.content("Sure to exit?")//
+                    .showAnim(mBasIn)//
+                    .dismissAnim(mBasOut)//
+                    .show();
+            dialog.setOnBtnClickL(
+                    new OnBtnClickL() {
+                        @Override
+                        public void onBtnClick() {
+                            dialog.dismiss();
+                        }
+                    },
+                    new OnBtnClickL() {
+                        @Override
+                        public void onBtnClick() {
+                            AppManager.AppExit(Maainvuse_Details_Activity.this);
+                        }
+                    });
+
+        }
+    };
+
+    private View.OnClickListener optionOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            final NormalListDialog normalListDialog = new NormalListDialog(Maainvuse_Details_Activity.this, optionList);
+            normalListDialog.title("Option")
+                    .showAnim(mBasIn)//
+                    .dismissAnim(mBasOut)//
+                    .show();
+            normalListDialog.setOnOperItemClickL(new OnOperItemClickL() {
+                @Override
+                public void onOperItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                    linetypeTextView.setText(linetypeList[position]);
+                    switch (position){
+                        case 0://Back
+                            normalListDialog.superDismiss();
+                            finish();
+                            break;
+                        case 1://Route
+                            normalListDialog.superDismiss();
+                            if (mainvuse.getSTATUS().equals(Constants.MPT_MATTF_START)) {//启动工作流
+                                MaterialDialogOneBtn();
+                            } else if (!mainvuse.getSTATUS().equals(Constants.MPT_MATTF_END)){//审批工作流
+                                EditDialog();
+                            }else {
+                                Toast.makeText(Maainvuse_Details_Activity.this, "This state cannot be modified", Toast.LENGTH_SHORT).show();
+                            }
+                            break;
+                        case 2://AddLine
+                            normalListDialog.superDismiss();
+                            Intent intent = new Intent(Maainvuse_Details_Activity.this,MaainvuseLine_AddNew_Activity.class);
+                            intent.putExtra("invusenum",mainvuse.getINVUSENUM());
+                            intent.putExtra("storeroom",mainvuse.getFROMSTORELOC());
+                            startActivity(intent);
+
+                            break;
+                    }
+//                    normalListDialog.dismiss();
+                }
+            });
+        }
+    };
+
+    private void MaterialDialogOneBtn() {//开始工作流
+        final MaterialDialog2 dialog = new MaterialDialog2(Maainvuse_Details_Activity.this);
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.isTitleShow(false)//
+                .btnNum(2)
+                .content("Route Workflow?")//
+                .btnText("No", "Yes")//
+                .showAnim(mBasIn)//
+                .dismissAnim(mBasOut)
+                .show();
+
+        dialog.setOnBtnClickL(
+                new OnBtnClickL() {
+                    @Override
+                    public void onBtnClick() {
+                        dialog.dismiss();
+                    }
+                },
+                new OnBtnClickL() {
+                    @Override
+                    public void onBtnClick() {
+                        startWF();
+                        dialog.dismiss();
+                    }
+                }
+        );
+    }
+
+    /**
+     * 开始工作流
+     */
+    private void startWF() {
+        mProgressDialog = ProgressDialog.show(Maainvuse_Details_Activity.this, null,
+                getString(R.string.start), true, true);
+        mProgressDialog.setCanceledOnTouchOutside(false);
+        mProgressDialog.setCancelable(false);
+        new AsyncTask<String, String, WorkFlowResult>() {
+            @Override
+            protected WorkFlowResult doInBackground(String... strings) {
+                WorkFlowResult result = AndroidClientService.startwf(Maainvuse_Details_Activity.this,
+                        "MPT_MATTF", "INVUSE", mainvuse.getINVUSENUM(), "INVUSENUM", AccountUtils.getpersonId(Maainvuse_Details_Activity.this));
+                return result;
+            }
+
+            @Override
+            protected void onPostExecute(WorkFlowResult s) {
+                super.onPostExecute(s);
+                if (s != null && s.errorMsg != null && s.errorMsg.equals("工作流启动成功")) {
+                    Toast.makeText(Maainvuse_Details_Activity.this, "starting success!", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(Maainvuse_Details_Activity.this, "boot failure", Toast.LENGTH_SHORT).show();
+                }
+                mProgressDialog.dismiss();
+            }
+        }.execute();
+    }
+
+    private void EditDialog() {//输入审核意见
+        final NormalEditTextDialog dialog = new NormalEditTextDialog(Maainvuse_Details_Activity.this);
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.isTitleShow(false)//
+                .btnNum(3)
+                .content("pass")//
+                .btnText("cancel", "pass", "no pass")//
+                .showAnim(mBasIn)//
+                .dismissAnim(mBasOut)
+                .show();
+
+        dialog.setOnBtnClickL(
+                new OnBtnEditClickL() {
+                    @Override
+                    public void onBtnClick(String text) {
+                        dialog.dismiss();
+                    }
+                },
+                new OnBtnEditClickL() {
+                    @Override
+                    public void onBtnClick(String text) {
+                        wfgoon("1", text);
+                        dialog.dismiss();
+                    }
+                },
+                new OnBtnEditClickL() {
+                    @Override
+                    public void onBtnClick(String text) {
+                        wfgoon("0", text.equals("pass") ? "no pass" : text);
+                        dialog.dismiss();
+                    }
+                }
+        );
+    }
+
+    /**
+     * 审批工作流
+     *
+     * @param zx
+     */
+    private void wfgoon(final String zx, final String desc) {
+        mProgressDialog = ProgressDialog.show(Maainvuse_Details_Activity.this, null,
+                getString(R.string.approve), true, true);
+        mProgressDialog.setCanceledOnTouchOutside(false);
+        mProgressDialog.setCancelable(false);
+        new AsyncTask<String, String, WorkFlowResult>() {
+            @Override
+            protected WorkFlowResult doInBackground(String... strings) {
+                WorkFlowResult result = AndroidClientService.approve(Maainvuse_Details_Activity.this,
+                        "MPT_MATTF", "INVUSE", mainvuse.getINVUSEID()+"", "INVUSEID", zx, desc,
+                        AccountUtils.getpersonId(Maainvuse_Details_Activity.this));
+                return result;
+            }
+
+            @Override
+            protected void onPostExecute(WorkFlowResult s) {
+                super.onPostExecute(s);
+                if (s == null || s.wonum == null || s.errorMsg == null) {
+                    Toast.makeText(Maainvuse_Details_Activity.this, "Failure of approval!", Toast.LENGTH_SHORT).show();
+                } else if (s.wonum.equals(mainvuse.getINVUSEID()+"") && s.errorMsg != null) {
+                    statusTextView.setText(s.errorMsg);
+                    mainvuse.setSTATUS(s.errorMsg);
+                    Toast.makeText(Maainvuse_Details_Activity.this, "Approval success!", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(Maainvuse_Details_Activity.this, "Failure of approval!", Toast.LENGTH_SHORT).show();
+                }
+                mProgressDialog.dismiss();
+            }
+        }.execute();
+    }
 
     private SwipeRefreshLayout.OnRefreshListener refreshOnRefreshListener = new SwipeRefreshLayout.OnRefreshListener() {
         @Override

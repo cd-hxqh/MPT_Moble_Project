@@ -4,9 +4,11 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -14,9 +16,12 @@ import com.flyco.animation.BaseAnimatorSet;
 import com.flyco.animation.BounceEnter.BounceTopEnter;
 import com.flyco.animation.SlideExit.SlideBottomExit;
 import com.flyco.dialog.listener.OnBtnClickL;
+import com.flyco.dialog.listener.OnOperItemClickL;
 import com.flyco.dialog.widget.NormalDialog;
+import com.flyco.dialog.widget.NormalListDialog;
 import com.mpt.hxqh.mpt_project.R;
 import com.mpt.hxqh.mpt_project.config.Constants;
+import com.mpt.hxqh.mpt_project.manager.AppManager;
 import com.mpt.hxqh.mpt_project.model.MAINVUSE;
 import com.mpt.hxqh.mpt_project.model.WebResult;
 import com.mpt.hxqh.mpt_project.unit.AccountUtils;
@@ -42,6 +47,11 @@ public class Udasst_AddNew_Activity extends BaseActivity {
 
     private BaseAnimatorSet mBasIn;
     private BaseAnimatorSet mBasOut;
+
+    private LinearLayout buttonLayout;
+    private Button quit;
+    private Button option;
+    private String[] optionList = new String[]{"Back","Save"};
 
 
     @Override
@@ -70,18 +80,27 @@ public class Udasst_AddNew_Activity extends BaseActivity {
         locationTextView = (TextView) findViewById(R.id.location_text_id);
         installDateTextView = (TextView) findViewById(R.id.install_date_text_id);
 
+        buttonLayout = (LinearLayout) findViewById(R.id.button_layout);
+        quit = (Button) findViewById(R.id.quit);
+        option = (Button) findViewById(R.id.option);
+
     }
 
     @Override
     protected void initView() {
         backImageView.setOnClickListener(backImageViewOnClickListener);
-        titleTextView.setText(R.string.material_refund_text);
+        backImageView.setVisibility(View.GONE);
+        buttonLayout.setVisibility(View.VISIBLE);
+        titleTextView.setText(R.string.asset_repair_text);
         submit.setText("save");
-        submit.setVisibility(View.VISIBLE);
+//        submit.setVisibility(View.VISIBLE);
 
         locationTextView.setOnClickListener(locationTextViewOnClickListener);
         installDateTextView.setOnClickListener(DateOnClickListener);
         submit.setOnClickListener(submitOnClickListener);
+
+        quit.setOnClickListener(quitOnClickListener);
+        option.setOnClickListener(optionOnClickListener);
     }
 
     /**
@@ -98,6 +117,59 @@ public class Udasst_AddNew_Activity extends BaseActivity {
         @Override
         public void onClick(View v) {
             submitDataInfo();
+        }
+    };
+
+    private View.OnClickListener quitOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            final NormalDialog dialog = new NormalDialog(Udasst_AddNew_Activity.this);
+            dialog.content("Sure to exit?")//
+                    .showAnim(mBasIn)//
+                    .dismissAnim(mBasOut)//
+                    .show();
+            dialog.setOnBtnClickL(
+                    new OnBtnClickL() {
+                        @Override
+                        public void onBtnClick() {
+                            dialog.dismiss();
+                        }
+                    },
+                    new OnBtnClickL() {
+                        @Override
+                        public void onBtnClick() {
+                            AppManager.AppExit(Udasst_AddNew_Activity.this);
+                        }
+                    });
+
+        }
+    };
+
+    private View.OnClickListener optionOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            final NormalListDialog normalListDialog = new NormalListDialog(Udasst_AddNew_Activity.this, optionList);
+            normalListDialog.title("Option")
+                    .showAnim(mBasIn)//
+                    .dismissAnim(mBasOut)//
+                    .show();
+            normalListDialog.setOnOperItemClickL(new OnOperItemClickL() {
+                @Override
+                public void onOperItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                    linetypeTextView.setText(linetypeList[position]);
+                    switch (position){
+                        case 0://Back
+                            normalListDialog.superDismiss();
+                            finish();
+                            break;
+                        case 1://Save
+                            normalListDialog.superDismiss();
+                            submitDataInfo();
+                            break;
+                    }
+//                    normalListDialog.dismiss();
+                }
+            });
         }
     };
 

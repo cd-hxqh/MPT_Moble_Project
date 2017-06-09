@@ -97,7 +97,7 @@ public class Workorder_Details_Activity extends BaseActivity {
     private BaseAnimatorSet mBasIn;
     private BaseAnimatorSet mBasOut;
 
-    private String[] optionList = new String[]{"Back", "Route","Add Plan","Add Actural"};
+    private String[] optionList = new String[]{"Back","Add Plan","Add Actural"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -142,6 +142,7 @@ public class Workorder_Details_Activity extends BaseActivity {
     @Override
     protected void initView() {
         backImageView.setOnClickListener(backImageViewOnClickListener);
+        backImageView.setVisibility(View.GONE);
         titleTextView.setText(R.string.Material_outbound_text);
 
         buttonLayout.setVisibility(View.VISIBLE);
@@ -228,22 +229,22 @@ public class Workorder_Details_Activity extends BaseActivity {
 //                    linetypeTextView.setText(linetypeList[position]);
                     switch (position){
                         case 0://Back
+                            normalListDialog.superDismiss();
                             finish();
-                            normalListDialog.dismiss();
                             break;
-                        case 1://Route
-                            break;
-                        case 2://Add plan
+//                        case 1://Route
+//                            break;
+                        case 1://Add plan
+                            normalListDialog.superDismiss();
                             Intent intent1 = new Intent(Workorder_Details_Activity.this,Wpmaterial_AddNew_Activity.class);
                             intent1.putExtra("wonum",workorder.getWONUM());
                             startActivity(intent1);
-                            normalListDialog.dismiss();
                             break;
-                        case 3://Add actural
+                        case 2://Add actural
+                            normalListDialog.superDismiss();
                             Intent intent2 = new Intent(Workorder_Details_Activity.this,Matusetrans_AddNew_Activity.class);
                             intent2.putExtra("wonum",workorder.getWONUM());
                             startActivity(intent2);
-                            normalListDialog.dismiss();
                             break;
                     }
                     normalListDialog.dismiss();

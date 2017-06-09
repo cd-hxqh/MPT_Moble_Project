@@ -148,5 +148,5 @@
 
         </LinearLayout>
     </ScrollView>
-
+    <include layout="@layout/asset_buttom"></include>
 </RelativeLayout>

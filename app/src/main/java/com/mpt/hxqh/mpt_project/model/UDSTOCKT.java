@@ -8,11 +8,20 @@ import java.io.Serializable;
  */
 
 public class UDSTOCKT implements Serializable {
+    public String UDSTOCKTID;
     public String STOCKTNUM;//STOCKTNUM
     public String DESCRIPTION;//DESCRIPTION.
     public String STATUS;//STATUS.
     public String LOCATION;//LOCATION
     public String VENDOR;//VENDOR
+
+    public String getUDSTOCKTID() {
+        return UDSTOCKTID;
+    }
+
+    public void setUDSTOCKTID(String UDSTOCKTID) {
+        this.UDSTOCKTID = UDSTOCKTID;
+    }
 
     public String getSTOCKTNUM() {
         return STOCKTNUM;

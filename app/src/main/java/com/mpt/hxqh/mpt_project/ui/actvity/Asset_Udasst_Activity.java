@@ -14,6 +14,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -24,7 +25,9 @@ import com.flyco.animation.BaseAnimatorSet;
 import com.flyco.animation.BounceEnter.BounceTopEnter;
 import com.flyco.animation.SlideExit.SlideBottomExit;
 import com.flyco.dialog.listener.OnBtnClickL;
+import com.flyco.dialog.listener.OnOperItemClickL;
 import com.flyco.dialog.widget.NormalDialog;
+import com.flyco.dialog.widget.NormalListDialog;
 import com.mpt.hxqh.mpt_project.R;
 import com.mpt.hxqh.mpt_project.adpter.BaseQuickAdapter;
 import com.mpt.hxqh.mpt_project.adpter.UdasstAdapter;
@@ -96,7 +99,7 @@ public class Asset_Udasst_Activity extends BaseActivity implements SwipeRefreshL
     ArrayList<UDASST> items = new ArrayList<UDASST>();
 
 
-    protected FlippingLoadingDialog mLoadingDialog;
+    private String[] optionList = new String[]{"Back","Add"};
     private BaseAnimatorSet mBasIn;
     private BaseAnimatorSet mBasOut;
 
@@ -135,8 +138,9 @@ public class Asset_Udasst_Activity extends BaseActivity implements SwipeRefreshL
                 finish();
             }
         });
+        backImageView.setVisibility(View.GONE);
         titleTextView.setText(R.string.asset_repair_text);
-        addBtn.setVisibility(View.VISIBLE);
+//        addBtn.setVisibility(View.VISIBLE);
         buttonLayout.setVisibility(View.VISIBLE);
         layoutManager = new LinearLayoutManager(Asset_Udasst_Activity.this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -197,7 +201,29 @@ public class Asset_Udasst_Activity extends BaseActivity implements SwipeRefreshL
     private View.OnClickListener optionOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-
+            final NormalListDialog normalListDialog = new NormalListDialog(Asset_Udasst_Activity.this, optionList);
+            normalListDialog.title("Option")
+                    .showAnim(mBasIn)//
+                    .dismissAnim(mBasOut)//
+                    .show();
+            normalListDialog.setOnOperItemClickL(new OnOperItemClickL() {
+                @Override
+                public void onOperItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                    linetypeTextView.setText(linetypeList[position]);
+                    switch (position){
+                        case 0://Back
+                            finish();
+                            normalListDialog.superDismiss();
+                            break;
+                        case 1://Add
+                            Intent intent = new Intent(Asset_Udasst_Activity.this,Udasst_AddNew_Activity.class);
+                            startActivity(intent);
+                            normalListDialog.superDismiss();
+                            break;
+                    }
+                    normalListDialog.dismiss();
+                }
+            });
         }
     };
 

@@ -234,9 +234,9 @@ public class HttpManager {
      */
     public static String getMAINVUSE(String vlaue, int curpage, int showcount) {
         if (vlaue.equals("")) {
-            return "{'appid':'" + Constants.MATREF_APPID + "','objectname':'" + Constants.MAINVUSE_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read'}";
+            return "{'appid':'" + Constants.MATREF_APPID + "','objectname':'" + Constants.MAINVUSE_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','condition':{'APPTYPE':'=MR'}}";
         } else {
-            return "{'appid':'" + Constants.MATREF_APPID + "','objectname':'" + Constants.MAINVUSE_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','sinorsearch':{'INVUSENUM':'" + vlaue + "','DESCRIPTION':'" + vlaue + "'}}";
+            return "{'appid':'" + Constants.MATREF_APPID + "','objectname':'" + Constants.MAINVUSE_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','condition':{'APPTYPE':'=MR'},'sinorsearch':{'INVUSENUM':'" + vlaue + "','DESCRIPTION':'" + vlaue + "'}}";
         }
     }
 

@@ -8,11 +8,20 @@ import java.io.Serializable;
  */
 
 public class UDRETIRE implements Serializable {
+    public String UDRETIREID;//
     public String RETIRENUM;//RETIRENUM
     public String DESCRIPTION;//DESCRIPTION
     public String RETIREDATE;//RETIREDATE
     public String RETIRELOC;//RETIRELOC
     public String STATUS;//STATUS
+
+    public String getUDRETIREID() {
+        return UDRETIREID;
+    }
+
+    public void setUDRETIREID(String UDRETIREID) {
+        this.UDRETIREID = UDRETIREID;
+    }
 
     public String getRETIRENUM() {
         return RETIRENUM;

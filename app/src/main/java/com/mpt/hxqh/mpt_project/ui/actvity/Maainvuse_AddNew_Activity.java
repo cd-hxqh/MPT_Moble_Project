@@ -30,6 +30,7 @@ import com.mpt.hxqh.mpt_project.api.HttpRequestHandler;
 import com.mpt.hxqh.mpt_project.api.JsonUtils;
 import com.mpt.hxqh.mpt_project.bean.Results;
 import com.mpt.hxqh.mpt_project.config.Constants;
+import com.mpt.hxqh.mpt_project.manager.AppManager;
 import com.mpt.hxqh.mpt_project.model.MAINVUSE;
 import com.mpt.hxqh.mpt_project.model.MAINVUSELINE;
 import com.mpt.hxqh.mpt_project.model.WebResult;
@@ -63,6 +64,11 @@ public class Maainvuse_AddNew_Activity extends BaseActivity {
     private BaseAnimatorSet mBasIn;
     private BaseAnimatorSet mBasOut;
 
+    private LinearLayout buttonLayout;
+    private Button quit;
+    private Button option;
+    private String[] optionList = new String[]{"Back","Save"};
+
     private String[] usetypeList = new String[]{"ISSUE","MIXED","TRANSFER"};
 
     @Override
@@ -93,19 +99,27 @@ public class Maainvuse_AddNew_Activity extends BaseActivity {
         invownerTextView = (TextView) findViewById(R.id.inv_owner_text_id);
         usetypeTextView = (TextView) findViewById(R.id.usetype_text_id);
 
+        buttonLayout = (LinearLayout) findViewById(R.id.button_layout);
+        quit = (Button) findViewById(R.id.quit);
+        option = (Button) findViewById(R.id.option);
     }
 
     @Override
     protected void initView() {
         backImageView.setOnClickListener(backImageViewOnClickListener);
+        backImageView.setVisibility(View.GONE);
+        buttonLayout.setVisibility(View.VISIBLE);
         titleTextView.setText(R.string.material_transfer_text);
         submit.setText("save");
-        submit.setVisibility(View.VISIBLE);
+//        submit.setVisibility(View.VISIBLE);
 
         fromstoreroomTextView.setOnClickListener(locationTextViewOnClickListener);
         usetypeTextView.setOnClickListener(usetypeOnClickListener);
 //        invownerTextView.setOnClickListener(ownerOnClickListener);
         submit.setOnClickListener(submitOnClickListener);
+
+        quit.setOnClickListener(quitOnClickListener);
+        option.setOnClickListener(optionOnClickListener);
     }
 
     /**
@@ -122,6 +136,59 @@ public class Maainvuse_AddNew_Activity extends BaseActivity {
         @Override
         public void onClick(View v) {
             submitDataInfo();
+        }
+    };
+
+    private View.OnClickListener quitOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            final NormalDialog dialog = new NormalDialog(Maainvuse_AddNew_Activity.this);
+            dialog.content("Sure to exit?")//
+                    .showAnim(mBasIn)//
+                    .dismissAnim(mBasOut)//
+                    .show();
+            dialog.setOnBtnClickL(
+                    new OnBtnClickL() {
+                        @Override
+                        public void onBtnClick() {
+                            dialog.dismiss();
+                        }
+                    },
+                    new OnBtnClickL() {
+                        @Override
+                        public void onBtnClick() {
+                            AppManager.AppExit(Maainvuse_AddNew_Activity.this);
+                        }
+                    });
+
+        }
+    };
+
+    private View.OnClickListener optionOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            final NormalListDialog normalListDialog = new NormalListDialog(Maainvuse_AddNew_Activity.this, optionList);
+            normalListDialog.title("Option")
+                    .showAnim(mBasIn)//
+                    .dismissAnim(mBasOut)//
+                    .show();
+            normalListDialog.setOnOperItemClickL(new OnOperItemClickL() {
+                @Override
+                public void onOperItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                    linetypeTextView.setText(linetypeList[position]);
+                    switch (position){
+                        case 0://Back
+                            normalListDialog.superDismiss();
+                            finish();
+                            break;
+                        case 1://Save
+                            normalListDialog.superDismiss();
+                            submitDataInfo();
+                            break;
+                    }
+//                    normalListDialog.dismiss();
+                }
+            });
         }
     };
 

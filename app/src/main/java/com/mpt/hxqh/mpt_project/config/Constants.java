@@ -11,8 +11,8 @@ public class Constants {
     /**
      * 默认*
      */
-    public static final String HTTP_API_IP = "http://45.112.178.119:9080";
-//    public static final String HTTP_API_IP = "http://192.168.1.119:7001";
+    public static final String HTTP_API_IP = "http://45.112.178.173:9080";
+//    public static final String HTTP_API_IP = "http://101.201.79.54:7001";
 
 
     /**
@@ -165,6 +165,24 @@ public class Constants {
     public static final String USERNAMEERROR = "USER-E-100";//用户名密码错误
 
     public static final String GETDATASUCCESS = "GLOBAL-S-0";//获取数据成功
+
+    /**
+     * 工作流状态
+     */
+    public static final String ASSETREP_START = "WAPPR";//Asset Repair初始状态
+    public static final String ASSETREP_END = "WCLOSE";//Asset Repair结束状态
+    public static final String ASSTRETIRE_START = "WAPPR";//Asset Retirement初始状态
+    public static final String ASSTRETIRE_END = "CLOSE";//Asset Retirement结束状态
+    public static final String ASTTRANS_START = "ENTERED";//Asset Transfer初始状态
+    public static final String ASTTRANS_END = "CLOSE";//Asset Transfer结束状态
+    public static final String MPT_MATRE_START = "ENTERED";//material refund初始状态
+    public static final String MPT_MATRE_END = "RECEIVED";//material refund结束状态
+    public static final String MPT_MATTF_START = "ENTERED";//material Transfer初始状态
+    public static final String MPT_MATTF_END = "RECEIVED";//material Transfer结束状态
+    public static final String MPT_STOTAK_START = "WAPPR";//material stocktaking初始状态
+    public static final String MPT_STOTAK_END = "CLOSE";//material stocktaking结束状态
+    public static final String MPT_WHIN_START = "WAPPR";//
+    public static final String MPT_WHIN_END = "CLOSE";//
 
     /**
      * 工单跳转类型标识

@@ -13,6 +13,9 @@
     <string name="quit2">Quit</string>
     <string name="properties">Properties</string>
     <string name="option">Option</string>
+    <string name="back">Back</string>
+    <string name="start">be starting …</string>
+    <string name="approve">be approve …</string>
 
 
     <string name="login_error_empty_user">用户名不能为空</string>

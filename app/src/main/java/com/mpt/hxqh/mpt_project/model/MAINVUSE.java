@@ -8,6 +8,7 @@ import java.io.Serializable;
  */
 
 public class MAINVUSE implements Serializable {
+    public String INVUSEID;
     public String DESCRIPTION;//DESCRIPTION
     public String FROMSTORELOC;//FROMSTORELOC
     public String INVOWNER;//INVOWNER
@@ -15,6 +16,14 @@ public class MAINVUSE implements Serializable {
     public String SITEID;//SITEID
     public String STATUS;//STATUS
     public String USETYPE;//USETYPE
+
+    public String getINVUSEID() {
+        return INVUSEID;
+    }
+
+    public void setINVUSEID(String INVUSEID) {
+        this.INVUSEID = INVUSEID;
+    }
 
     public String getDESCRIPTION() {
         return DESCRIPTION;

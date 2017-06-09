@@ -6,6 +6,7 @@ import android.util.Log;
 import com.mpt.hxqh.mpt_project.api.JsonUtils;
 import com.mpt.hxqh.mpt_project.config.Constants;
 import com.mpt.hxqh.mpt_project.model.WebResult;
+import com.mpt.hxqh.mpt_project.model.WorkFlowResult;
 import com.mpt.hxqh.mpt_project.unit.AccountUtils;
 
 import org.ksoap2.SoapEnvelope;
@@ -49,7 +50,7 @@ public class AndroidClientService {
      *
      * @return
      */
-    public static WebResult startwf(Context context, String processname, String mbo, String keyValue, String key, String loginid) {
+    public static WorkFlowResult startwf(Context context, String processname, String mbo, String keyValue, String key, String loginid) {
 
         String url = AccountUtils.getIpAddress(context) + Constants.WORK_FLOW_URL;
         Log.e("发送工作流",url);
@@ -72,10 +73,10 @@ public class AndroidClientService {
             return null;
         }
         String obj = null;
-        WebResult result = null;
+        WorkFlowResult result = null;
         try {
             obj = soapEnvelope.getResponse().toString();
-//            result = JsonUtils.parsingStartWF(obj, key);
+            result = JsonUtils.parsingStartWF(obj, key);
         } catch (SoapFault soapFault) {
             soapFault.printStackTrace();
         }
@@ -87,7 +88,7 @@ public class AndroidClientService {
      *
      * @return
      */
-    public static WebResult approve(Context context, String processname, String mbo, String keyValue, String key, String zx, String desc,String loginid) {
+    public static WorkFlowResult approve(Context context, String processname, String mbo, String keyValue, String key, String zx, String desc,String loginid) {
         String url = AccountUtils.getIpAddress(context) + Constants.WORK_FLOW_URL;
         SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         soapEnvelope.implicitTypes = true;
@@ -95,8 +96,8 @@ public class AndroidClientService {
         SoapObject soapReq = new SoapObject(NAMESPACE, "wfservicewfGoOn");
         soapReq.addProperty("processname", processname);//流程名称
         soapReq.addProperty("mboName", mbo);//表名
-        soapReq.addProperty("keyValue", keyValue);//对应的表ID的值，如工单需要传送WONUM的值
-        soapReq.addProperty("key", key);//如工单：wonum
+        soapReq.addProperty("keyValue", keyValue);//表的唯一主键的值（整型数字），当前记录已带，如1232
+        soapReq.addProperty("key", key);//表的唯一主键（所有单据规则相同，唯一主键=表名+ID，如工单表ID：WORKORDERID）
         soapReq.addProperty("zx", zx);//审批的结果，1为审批通过，0为审批不通过
         if (!desc.equals("")) {
             soapReq.addProperty("desc", desc);//审批意见
@@ -112,10 +113,10 @@ public class AndroidClientService {
             return null;
         }
         String obj = null;
-        WebResult result = null;
+        WorkFlowResult result = null;
         try {
             obj = soapEnvelope.getResponse().toString();
-//            result = JsonUtils.parsingGoOn(obj, key);
+            result = JsonUtils.parsingGoOn(obj, key);
         } catch (SoapFault soapFault) {
             Log.i(TAG, "ssssss");
             return null;

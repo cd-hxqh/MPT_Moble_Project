@@ -8,11 +8,20 @@ import java.io.Serializable;
  */
 
 public class INVUSE implements Serializable {
+    public String INVUSEID;//INVUSEID
     public String INVUSENUM;//Order
     public String DESCRIPTION;//描述
     public String FROMSTORELOC;//From Storeroom
     public String INVOWNER;//Inventory Owner
     public String STATUS;//Status
+
+    public String getINVUSEID() {
+        return INVUSEID;
+    }
+
+    public void setINVUSEID(String INVUSEID) {
+        this.INVUSEID = INVUSEID;
+    }
 
     public String getINVUSENUM() {
         return INVUSENUM;

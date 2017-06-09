@@ -1,6 +1,8 @@
 package com.mpt.hxqh.mpt_project.ui.actvity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,13 +13,17 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.flyco.animation.BaseAnimatorSet;
 import com.flyco.animation.BounceEnter.BounceTopEnter;
 import com.flyco.animation.SlideExit.SlideBottomExit;
 import com.flyco.dialog.listener.OnBtnClickL;
+import com.flyco.dialog.listener.OnBtnEditClickL;
 import com.flyco.dialog.listener.OnOperItemClickL;
+import com.flyco.dialog.widget.MaterialDialog2;
 import com.flyco.dialog.widget.NormalDialog;
+import com.flyco.dialog.widget.NormalEditTextDialog;
 import com.flyco.dialog.widget.NormalListDialog;
 import com.mpt.hxqh.mpt_project.R;
 import com.mpt.hxqh.mpt_project.adpter.BaseQuickAdapter;
@@ -26,10 +32,14 @@ import com.mpt.hxqh.mpt_project.api.HttpManager;
 import com.mpt.hxqh.mpt_project.api.HttpRequestHandler;
 import com.mpt.hxqh.mpt_project.api.JsonUtils;
 import com.mpt.hxqh.mpt_project.bean.Results;
+import com.mpt.hxqh.mpt_project.config.Constants;
 import com.mpt.hxqh.mpt_project.manager.AppManager;
 import com.mpt.hxqh.mpt_project.model.UDRETIRE;
 import com.mpt.hxqh.mpt_project.model.UDRETIRELINE;
+import com.mpt.hxqh.mpt_project.model.WorkFlowResult;
 import com.mpt.hxqh.mpt_project.ui.widget.SwipeRefreshLayout;
+import com.mpt.hxqh.mpt_project.unit.AccountUtils;
+import com.mpt.hxqh.mpt_project.webserviceclient.AndroidClientService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -87,6 +97,8 @@ public class Udretire_Details_Activity extends BaseActivity {
 
     private String[] optionList = new String[]{"Back", "Route","AddLine"};
 
+    private ProgressDialog mProgressDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -126,6 +138,7 @@ public class Udretire_Details_Activity extends BaseActivity {
     @Override
     protected void initView() {
         backImageView.setOnClickListener(backImageViewOnClickListener);
+        backImageView.setVisibility(View.GONE);
         titleTextView.setText(R.string.asset_retirement_text);
 
         buttonLayout.setVisibility(View.VISIBLE);
@@ -215,23 +228,162 @@ public class Udretire_Details_Activity extends BaseActivity {
 //                    linetypeTextView.setText(linetypeList[position]);
                     switch (position){
                         case 0://Back
+                            normalListDialog.superDismiss();
                             finish();
-                            normalListDialog.dismiss();
                             break;
                         case 1://Route
+                            normalListDialog.superDismiss();
+                            if (udretire.getSTATUS().equals(Constants.ASSTRETIRE_START)) {//启动工作流
+                                MaterialDialogOneBtn();
+                            } else if (!udretire.getSTATUS().equals(Constants.ASSTRETIRE_END)){//审批工作流
+                                EditDialog();
+                            }else {
+                                Toast.makeText(Udretire_Details_Activity.this, "This state cannot be modified", Toast.LENGTH_SHORT).show();
+                            }
                             break;
                         case 2://AddLine
+                            normalListDialog.superDismiss();
                             Intent intent = new Intent(Udretire_Details_Activity.this,UdretireLine_AddNew_Activity.class);
                             intent.putExtra("repairnum",udretire.getRETIRENUM());
                             startActivity(intent);
-                            normalListDialog.dismiss();
+
                             break;
                     }
-                    normalListDialog.dismiss();
+//                    normalListDialog.dismiss();
                 }
             });
         }
     };
+
+    private void MaterialDialogOneBtn() {//开始工作流
+        final MaterialDialog2 dialog = new MaterialDialog2(Udretire_Details_Activity.this);
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.isTitleShow(false)//
+                .btnNum(2)
+                .content("Route Workflow?")//
+                .btnText("No", "Yes")//
+                .showAnim(mBasIn)//
+                .dismissAnim(mBasOut)
+                .show();
+
+        dialog.setOnBtnClickL(
+                new OnBtnClickL() {
+                    @Override
+                    public void onBtnClick() {
+                        dialog.dismiss();
+                    }
+                },
+                new OnBtnClickL() {
+                    @Override
+                    public void onBtnClick() {
+                        startWF();
+                        dialog.dismiss();
+                    }
+                }
+        );
+    }
+
+    /**
+     * 开始工作流
+     */
+    private void startWF() {
+        mProgressDialog = ProgressDialog.show(Udretire_Details_Activity.this, null,
+                getString(R.string.start), true, true);
+        mProgressDialog.setCanceledOnTouchOutside(false);
+        mProgressDialog.setCancelable(false);
+        new AsyncTask<String, String, WorkFlowResult>() {
+            @Override
+            protected WorkFlowResult doInBackground(String... strings) {
+                WorkFlowResult result = AndroidClientService.startwf(Udretire_Details_Activity.this,
+                        "ASSTRETIRE", "UDRETIRE", udretire.getRETIRENUM(), "RETIRENUM", AccountUtils.getpersonId(Udretire_Details_Activity.this));
+                return result;
+            }
+
+            @Override
+            protected void onPostExecute(WorkFlowResult s) {
+                super.onPostExecute(s);
+                if (s != null && s.errorMsg != null && s.errorMsg.equals("工作流启动成功")) {
+                    Toast.makeText(Udretire_Details_Activity.this, "starting success!", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(Udretire_Details_Activity.this, "boot failure", Toast.LENGTH_SHORT).show();
+                }
+                mProgressDialog.dismiss();
+            }
+        }.execute();
+    }
+
+    private void EditDialog() {//输入审核意见
+        final NormalEditTextDialog dialog = new NormalEditTextDialog(Udretire_Details_Activity.this);
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.isTitleShow(false)//
+                .btnNum(3)
+                .content("pass")//
+                .btnText("cancel", "pass", "no pass")//
+                .showAnim(mBasIn)//
+                .dismissAnim(mBasOut)
+                .show();
+
+        dialog.setOnBtnClickL(
+                new OnBtnEditClickL() {
+                    @Override
+                    public void onBtnClick(String text) {
+                        dialog.dismiss();
+                    }
+                },
+                new OnBtnEditClickL() {
+                    @Override
+                    public void onBtnClick(String text) {
+                        wfgoon("1", text);
+                        dialog.dismiss();
+                    }
+                },
+                new OnBtnEditClickL() {
+                    @Override
+                    public void onBtnClick(String text) {
+                        wfgoon("0", text.equals("pass") ? "no pass" : text);
+                        dialog.dismiss();
+                    }
+                }
+        );
+    }
+
+    /**
+     * 审批工作流
+     *
+     * @param zx
+     */
+    private void wfgoon(final String zx, final String desc) {
+        mProgressDialog = ProgressDialog.show(Udretire_Details_Activity.this, null,
+                getString(R.string.approve), true, true);
+        mProgressDialog.setCanceledOnTouchOutside(false);
+        mProgressDialog.setCancelable(false);
+        new AsyncTask<String, String, WorkFlowResult>() {
+            @Override
+            protected WorkFlowResult doInBackground(String... strings) {
+                WorkFlowResult result = AndroidClientService.approve(Udretire_Details_Activity.this,
+                        "ASSTRETIRE", "UDRETIRE", udretire.getUDRETIREID()+"", "UDRETIREID", zx, desc,
+                        AccountUtils.getpersonId(Udretire_Details_Activity.this));
+                return result;
+            }
+
+            @Override
+            protected void onPostExecute(WorkFlowResult s) {
+                super.onPostExecute(s);
+                if (s == null || s.wonum == null || s.errorMsg == null) {
+                    Toast.makeText(Udretire_Details_Activity.this, "Failure of approval!", Toast.LENGTH_SHORT).show();
+                } else if (s.wonum.equals(udretire.getUDRETIREID()+"") && s.errorMsg != null) {
+                    statusTextView.setText(s.errorMsg);
+                    udretire.setSTATUS(s.errorMsg);
+                    Toast.makeText(Udretire_Details_Activity.this, "Approval success!", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(Udretire_Details_Activity.this, "Failure of approval!", Toast.LENGTH_SHORT).show();
+                }
+                mProgressDialog.dismiss();
+            }
+        }.execute();
+    }
 
     private SwipeRefreshLayout.OnRefreshListener refreshOnRefreshListener = new SwipeRefreshLayout.OnRefreshListener() {
         @Override

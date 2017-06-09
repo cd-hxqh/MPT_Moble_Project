@@ -8,6 +8,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,6 +21,7 @@ import com.flyco.dialog.widget.NormalDialog;
 import com.flyco.dialog.widget.NormalListDialog;
 import com.mpt.hxqh.mpt_project.R;
 import com.mpt.hxqh.mpt_project.config.Constants;
+import com.mpt.hxqh.mpt_project.manager.AppManager;
 import com.mpt.hxqh.mpt_project.model.INVUSE;
 import com.mpt.hxqh.mpt_project.model.WebResult;
 import com.mpt.hxqh.mpt_project.unit.AccountUtils;
@@ -52,6 +54,11 @@ public class TransferLine_AddNew_Activity extends BaseActivity {
 
     private BaseAnimatorSet mBasIn;
     private BaseAnimatorSet mBasOut;
+
+    private LinearLayout buttonLayout;
+    private Button quit;
+    private Button option;
+    private String[] optionList = new String[]{"Back","Save"};
 
     private String[] usetypeList = new String[]{"Issue","Return","Transfer"};
 
@@ -90,9 +97,9 @@ public class TransferLine_AddNew_Activity extends BaseActivity {
         quantityTextView = (EditText) findViewById(R.id.quantity_text_id);
 //        statusTextView = (TextView) findViewById(R.id.status_text_id);
 
-//        recyclerView = (RecyclerView) findViewById(R.id.dqgz10_recyclerView_id);
-//        refresh_layout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
-//        nodatalayout = (LinearLayout) findViewById(R.id.have_not_data_id);
+        buttonLayout = (LinearLayout) findViewById(R.id.button_layout);
+        quit = (Button) findViewById(R.id.quit);
+        option = (Button) findViewById(R.id.option);
 
     }
 
@@ -100,8 +107,10 @@ public class TransferLine_AddNew_Activity extends BaseActivity {
     protected void initView() {
         backImageView.setOnClickListener(backImageViewOnClickListener);
         titleTextView.setText(R.string.asset_transferline);
+        backImageView.setVisibility(View.GONE);
+        buttonLayout.setVisibility(View.VISIBLE);
         submit.setText("save");
-        submit.setVisibility(View.VISIBLE);
+//        submit.setVisibility(View.VISIBLE);
 
         usetypeTextView.setOnClickListener(usetypeOnClickListener);
         linetypeTextView.setOnClickListener(linetypeOnClickListener);
@@ -110,6 +119,9 @@ public class TransferLine_AddNew_Activity extends BaseActivity {
         rotassetnumTextView.setOnClickListener(rotassetnumOnClickListener);
         issuetoTextView.setOnClickListener(issuetoOnClickListener);
         submit.setOnClickListener(submitOnClickListener);
+
+        quit.setOnClickListener(quitOnClickListener);
+        option.setOnClickListener(optionOnClickListener);
     }
 
     /**
@@ -126,6 +138,59 @@ public class TransferLine_AddNew_Activity extends BaseActivity {
         @Override
         public void onClick(View v) {
             submitDataInfo();
+        }
+    };
+
+    private View.OnClickListener quitOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            final NormalDialog dialog = new NormalDialog(TransferLine_AddNew_Activity.this);
+            dialog.content("Sure to exit?")//
+                    .showAnim(mBasIn)//
+                    .dismissAnim(mBasOut)//
+                    .show();
+            dialog.setOnBtnClickL(
+                    new OnBtnClickL() {
+                        @Override
+                        public void onBtnClick() {
+                            dialog.dismiss();
+                        }
+                    },
+                    new OnBtnClickL() {
+                        @Override
+                        public void onBtnClick() {
+                            AppManager.AppExit(TransferLine_AddNew_Activity.this);
+                        }
+                    });
+
+        }
+    };
+
+    private View.OnClickListener optionOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            final NormalListDialog normalListDialog = new NormalListDialog(TransferLine_AddNew_Activity.this, optionList);
+            normalListDialog.title("Option")
+                    .showAnim(mBasIn)//
+                    .dismissAnim(mBasOut)//
+                    .show();
+            normalListDialog.setOnOperItemClickL(new OnOperItemClickL() {
+                @Override
+                public void onOperItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                    linetypeTextView.setText(linetypeList[position]);
+                    switch (position){
+                        case 0://Back
+                            normalListDialog.superDismiss();
+                            finish();
+                            break;
+                        case 1://Save
+                            normalListDialog.superDismiss();
+                            submitDataInfo();
+                            break;
+                    }
+//                    normalListDialog.dismiss();
+                }
+            });
         }
     };
 

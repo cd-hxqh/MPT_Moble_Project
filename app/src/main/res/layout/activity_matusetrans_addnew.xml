@@ -17,6 +17,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/title_id"
+        android:layout_above="@+id/button_layout"
+        android:layout_marginBottom="@dimen/dimens_40dp"
         android:background="@color/white"
         android:scrollbars="vertical">
 
@@ -247,5 +249,5 @@
 
         </LinearLayout>
     </ScrollView>
-
+    <include layout="@layout/asset_buttom"></include>
 </RelativeLayout>

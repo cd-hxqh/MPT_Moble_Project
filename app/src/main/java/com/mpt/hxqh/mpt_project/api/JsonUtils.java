@@ -31,6 +31,7 @@ import com.mpt.hxqh.mpt_project.model.UDTRANSFLINE;
 import com.mpt.hxqh.mpt_project.model.WORKORDER;
 import com.mpt.hxqh.mpt_project.model.WPMATERIAL;
 import com.mpt.hxqh.mpt_project.model.WebResult;
+import com.mpt.hxqh.mpt_project.model.WorkFlowResult;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -147,6 +148,57 @@ public class JsonUtils<E> {
         return webResult;
     }
 
+    /**
+     * 解析开始工作流返回信息
+     *
+     * @param data
+     * @return
+     */
+    public static WorkFlowResult parsingStartWF(String data, String num) {
+        Log.i(TAG, "data=" + data);
+        String woNum = null;
+        WorkFlowResult webResult = new WorkFlowResult();
+        try {
+            JSONObject object = new JSONObject(data);
+            if (object.has("msg") && !object.getString("msg").equals("")) {
+                webResult.errorMsg = object.getString("msg");
+            }
+            if (object.has(num) && !object.getString(num).equals("")) {
+                webResult.wonum = object.getString(num);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return webResult;
+    }
+
+    /**
+     * 解析审批工作流返回数据
+     *
+     * @param data
+     * @return
+     */
+    public static WorkFlowResult parsingGoOn(String data, String num) {
+        Log.i(TAG, "data=" + data);
+        String woNum = null;
+        WorkFlowResult webResult = new WorkFlowResult();
+        try {
+            JSONObject object = new JSONObject(data);
+            if (object.has("status") && !object.getString("status").equals("")) {
+                webResult.errorMsg = object.getString("status");
+            } else if (object.has("massage") && !object.getString("massage").equals("")) {
+                webResult.errorMsg = object.getString("massage");
+            } else if (object.has("errorMsg") && !object.getString("errorMsg").equals("")) {
+                webResult.errorMsg = object.getString("errorMsg");
+            }
+            if (object.has(num) && !object.getString(num).equals("")) {
+                webResult.wonum = object.getString(num);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return webResult;
+    }
 
     /**
      * 位置选择

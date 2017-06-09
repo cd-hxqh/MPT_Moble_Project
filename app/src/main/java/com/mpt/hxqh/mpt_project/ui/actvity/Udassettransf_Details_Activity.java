@@ -86,7 +86,7 @@ public class Udassettransf_Details_Activity extends BaseActivity {
     private BaseAnimatorSet mBasIn;
     private BaseAnimatorSet mBasOut;
 
-    private String[] optionList = new String[]{"Back", "Route","AddLine"};
+    private String[] optionList = new String[]{"Back","AddLine"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,6 +128,7 @@ public class Udassettransf_Details_Activity extends BaseActivity {
     @Override
     protected void initView() {
         backImageView.setOnClickListener(backImageViewOnClickListener);
+        backImageView.setVisibility(View.GONE);
         titleTextView.setText(R.string.asset_management_text);
 
         buttonLayout.setVisibility(View.VISIBLE);
@@ -218,16 +219,16 @@ public class Udassettransf_Details_Activity extends BaseActivity {
 //                    linetypeTextView.setText(linetypeList[position]);
                     switch (position){
                         case 0://Back
+                            normalListDialog.superDismiss();
                             finish();
-                            normalListDialog.dismiss();
                             break;
-                        case 1://Route
-                            break;
-                        case 2://AddLine
+//                        case 1://Route
+//                            break;
+                        case 1://AddLine
+                            normalListDialog.superDismiss();
                             Intent intent = new Intent(Udassettransf_Details_Activity.this,UdassettransfLine_AddNew_Activity.class);
                             intent.putExtra("assettrannum",udassettransf.getASSETTRANNUM());
                             startActivity(intent);
-                            normalListDialog.dismiss();
                             break;
                     }
                     normalListDialog.dismiss();

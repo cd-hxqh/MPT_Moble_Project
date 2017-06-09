@@ -33,9 +33,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 资产查询接口
+ * 采购接收扫描接口
  **/
-public class Asset_Search_Activity extends BaseActivity {
+public class Material_PO_SCAN_Activity extends BaseActivity {
 
     public static final int MIPCA_CODE = 1003;
 
@@ -126,7 +126,7 @@ public class Asset_Search_Activity extends BaseActivity {
         itemnumTextView.setOnClickListener(itemnumOnClickListener);
         searchBtn.setOnClickListener(searchBtnOnClickListener);
 
-        layoutManager = new LinearLayoutManager(Asset_Search_Activity.this);
+        layoutManager = new LinearLayoutManager(Material_PO_SCAN_Activity.this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         layoutManager.scrollToPosition(0);
         recyclerView.setLayoutManager(layoutManager);
@@ -157,7 +157,7 @@ public class Asset_Search_Activity extends BaseActivity {
     private View.OnClickListener quitOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            final NormalDialog dialog = new NormalDialog(Asset_Search_Activity.this);
+            final NormalDialog dialog = new NormalDialog(Material_PO_SCAN_Activity.this);
             dialog.content("Sure to exit?")//
                     .showAnim(mBasIn)//
                     .dismissAnim(mBasOut)//
@@ -172,7 +172,7 @@ public class Asset_Search_Activity extends BaseActivity {
                     new OnBtnClickL() {
                         @Override
                         public void onBtnClick() {
-                            AppManager.AppExit(Asset_Search_Activity.this);
+                            AppManager.AppExit(Material_PO_SCAN_Activity.this);
                         }
                     });
 
@@ -185,7 +185,7 @@ public class Asset_Search_Activity extends BaseActivity {
     private View.OnClickListener locationTextViewOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            Intent intent = new Intent(Asset_Search_Activity.this, LocationChooseActivity.class);
+            Intent intent = new Intent(Material_PO_SCAN_Activity.this, LocationChooseActivity.class);
             startActivityForResult(intent, 0);
 
         }
@@ -197,7 +197,7 @@ public class Asset_Search_Activity extends BaseActivity {
     private View.OnClickListener itemnumOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            Intent intent = new Intent(Asset_Search_Activity.this, ItemChooseActivity.class);
+            Intent intent = new Intent(Material_PO_SCAN_Activity.this, ItemChooseActivity.class);
             startActivityForResult(intent, 0);
         }
     };
@@ -208,7 +208,7 @@ public class Asset_Search_Activity extends BaseActivity {
     private View.OnClickListener snEditTextOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            Intent intent = new Intent(Asset_Search_Activity.this, MipcaActivityCapture.class);
+            Intent intent = new Intent(Material_PO_SCAN_Activity.this, MipcaActivityCapture.class);
             startActivityForResult(intent, 0);
 
         }
@@ -280,7 +280,7 @@ public class Asset_Search_Activity extends BaseActivity {
      * 获取数据*
      */
     private void getData() {
-        HttpManager.getDataPagingInfo(Asset_Search_Activity.this, HttpManager.getAssetUrl(locationTextView.getText().toString(),
+        HttpManager.getDataPagingInfo(Material_PO_SCAN_Activity.this, HttpManager.getAssetUrl(locationTextView.getText().toString(),
                 snTextView.getText().toString(), itemnumTextView.getText().toString(), page, 20), new HttpRequestHandler<Results>() {
             @Override
             public void onSuccess(Results results) {
@@ -328,12 +328,12 @@ public class Asset_Search_Activity extends BaseActivity {
      * 获取数据*
      */
     private void initAdapter(final List<ASSET> list) {
-        assetAdapter = new AssetAdapter(Asset_Search_Activity.this, R.layout.list_item_asset, list);
+        assetAdapter = new AssetAdapter(Material_PO_SCAN_Activity.this, R.layout.list_item_asset, list);
         recyclerView.setAdapter(assetAdapter);
         assetAdapter.setOnRecyclerViewItemClickListener(new BaseQuickAdapter.OnRecyclerViewItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                Intent intent = new Intent(Asset_Search_Activity.this, Asset_Details_Activity.class);
+                Intent intent = new Intent(Material_PO_SCAN_Activity.this, Asset_Details_Activity.class);
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("asset", items.get(position));
                 intent.putExtras(bundle);

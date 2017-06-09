@@ -8,12 +8,21 @@ import java.io.Serializable;
  */
 
 public class UDASST implements Serializable {
+    public String UDASSTID;//UDASSTID
     public String DESCRIPTION;//DESCRIPTION
     public String LOCATION;//LOCATION
     public String REPAIRNUM;//REPAIRNUM
     public String UDASSTNUM;//UDASSTNUM
     public String UDINSTALLDATE;//UDINSTALLDATE
     public String UDSTATUS;//UDSTATUS
+
+    public String getUDASSTID() {
+        return UDASSTID;
+    }
+
+    public void setUDASSTID(String UDASSTID) {
+        this.UDASSTID = UDASSTID;
+    }
 
     public String getDESCRIPTION() {
         return DESCRIPTION;

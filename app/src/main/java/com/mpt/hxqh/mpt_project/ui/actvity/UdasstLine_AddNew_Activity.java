@@ -4,10 +4,12 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -15,9 +17,12 @@ import com.flyco.animation.BaseAnimatorSet;
 import com.flyco.animation.BounceEnter.BounceTopEnter;
 import com.flyco.animation.SlideExit.SlideBottomExit;
 import com.flyco.dialog.listener.OnBtnClickL;
+import com.flyco.dialog.listener.OnOperItemClickL;
 import com.flyco.dialog.widget.NormalDialog;
+import com.flyco.dialog.widget.NormalListDialog;
 import com.mpt.hxqh.mpt_project.R;
 import com.mpt.hxqh.mpt_project.config.Constants;
+import com.mpt.hxqh.mpt_project.manager.AppManager;
 import com.mpt.hxqh.mpt_project.model.WebResult;
 import com.mpt.hxqh.mpt_project.unit.DateTimeSelect;
 import com.mpt.hxqh.mpt_project.unit.DateTimeSelect2;
@@ -44,6 +49,11 @@ public class UdasstLine_AddNew_Activity extends BaseActivity {
 
     private BaseAnimatorSet mBasIn;
     private BaseAnimatorSet mBasOut;
+
+    private LinearLayout buttonLayout;
+    private Button quit;
+    private Button option;
+    private String[] optionList = new String[]{"Back","Save"};
 
 
     @Override
@@ -72,9 +82,9 @@ public class UdasstLine_AddNew_Activity extends BaseActivity {
         udasstnumTextView = (TextView) findViewById(R.id.assetnum_text_id);
         udrepdateTextView = (TextView) findViewById(R.id.udrepdate_text_id);
 
-//        recyclerView = (RecyclerView) findViewById(R.id.dqgz10_recyclerView_id);
-//        refresh_layout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
-//        nodatalayout = (LinearLayout) findViewById(R.id.have_not_data_id);
+        buttonLayout = (LinearLayout) findViewById(R.id.button_layout);
+        quit = (Button) findViewById(R.id.quit);
+        option = (Button) findViewById(R.id.option);
 
     }
 
@@ -82,12 +92,17 @@ public class UdasstLine_AddNew_Activity extends BaseActivity {
     protected void initView() {
         backImageView.setOnClickListener(backImageViewOnClickListener);
         titleTextView.setText(R.string.asset_transferline);
+        backImageView.setVisibility(View.GONE);
+        buttonLayout.setVisibility(View.VISIBLE);
         submit.setText("save");
-        submit.setVisibility(View.VISIBLE);
+//        submit.setVisibility(View.VISIBLE);
 
         udasstnumTextView.setOnClickListener(assetnumOnClickListener);
         udrepdateTextView.setOnClickListener(DateOnClickListener);
         submit.setOnClickListener(submitOnClickListener);
+
+        quit.setOnClickListener(quitOnClickListener);
+        option.setOnClickListener(optionOnClickListener);
     }
 
     /**
@@ -104,6 +119,59 @@ public class UdasstLine_AddNew_Activity extends BaseActivity {
         @Override
         public void onClick(View v) {
             submitDataInfo();
+        }
+    };
+
+    private View.OnClickListener quitOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            final NormalDialog dialog = new NormalDialog(UdasstLine_AddNew_Activity.this);
+            dialog.content("Sure to exit?")//
+                    .showAnim(mBasIn)//
+                    .dismissAnim(mBasOut)//
+                    .show();
+            dialog.setOnBtnClickL(
+                    new OnBtnClickL() {
+                        @Override
+                        public void onBtnClick() {
+                            dialog.dismiss();
+                        }
+                    },
+                    new OnBtnClickL() {
+                        @Override
+                        public void onBtnClick() {
+                            AppManager.AppExit(UdasstLine_AddNew_Activity.this);
+                        }
+                    });
+
+        }
+    };
+
+    private View.OnClickListener optionOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            final NormalListDialog normalListDialog = new NormalListDialog(UdasstLine_AddNew_Activity.this, optionList);
+            normalListDialog.title("Option")
+                    .showAnim(mBasIn)//
+                    .dismissAnim(mBasOut)//
+                    .show();
+            normalListDialog.setOnOperItemClickL(new OnOperItemClickL() {
+                @Override
+                public void onOperItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                    linetypeTextView.setText(linetypeList[position]);
+                    switch (position){
+                        case 0://Back
+                            normalListDialog.superDismiss();
+                            finish();
+                            break;
+                        case 1://Save
+                            normalListDialog.superDismiss();
+                            submitDataInfo();
+                            break;
+                    }
+//                    normalListDialog.dismiss();
+                }
+            });
         }
     };
 
