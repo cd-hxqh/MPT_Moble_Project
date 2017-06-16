@@ -141,6 +141,8 @@ public class Constants {
     //物料盘点行的表名
     public static final String UDSTOCKTLINE_NAME = "UDSTOCKTLINE";
 
+    //COMPANIES的表名
+    public static final String COMPANIES_NAME = "COMPANIES";
 
     //采购接收appid
     public static final String WHIN_APPID = "WHIN";

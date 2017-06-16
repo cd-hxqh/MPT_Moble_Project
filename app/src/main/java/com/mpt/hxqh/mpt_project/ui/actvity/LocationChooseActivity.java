@@ -39,10 +39,10 @@ import java.util.List;
 
 public class LocationChooseActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener, SwipeRefreshLayout.OnLoadListener {
 
-    private static final String TAG = "ChooseActivity";
+    private static final String TAG = "LocationChooseActivity";
 
 
-    public static final int LOCATION_CODE=1000;
+    public static final int LOCATION_CODE = 1000;
 
     /**
      * 标题*
@@ -84,14 +84,23 @@ public class LocationChooseActivity extends BaseActivity implements SwipeRefresh
 
     ArrayList<LOCATIONS> items = new ArrayList<LOCATIONS>();
 
+    private String type; //类型
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_list);
+        initData();
         findViewById();
         initView();
 
+    }
+
+    private void initData() {
+        if (getIntent().hasExtra("type")) {
+            type = getIntent().getStringExtra("type");
+        }
     }
 
 
@@ -198,7 +207,9 @@ public class LocationChooseActivity extends BaseActivity implements SwipeRefresh
      * 获取数据*
      */
     private void getData(String search) {
-        HttpManager.getDataPagingInfo(LocationChooseActivity.this, HttpManager.getLocationUrl(search, page, 20), new HttpRequestHandler<Results>() {
+        String url = null;
+        url = HttpManager.getLocation1Url(search, type, page, 20);
+        HttpManager.getDataPagingInfo(LocationChooseActivity.this, url, new HttpRequestHandler<Results>() {
             @Override
             public void onSuccess(Results results) {
                 Log.i(TAG, "data=" + results);
@@ -239,7 +250,6 @@ public class LocationChooseActivity extends BaseActivity implements SwipeRefresh
     }
 
 
-
     /**
      * 获取数据*
      */
@@ -253,6 +263,7 @@ public class LocationChooseActivity extends BaseActivity implements SwipeRefresh
                 Intent intent = getIntent();
                 intent.putExtra("Location", list.get(position).getLOCATION());
                 intent.putExtra("Invowner", list.get(position).getINVOWNER());
+                intent.putExtra("siteid", list.get(position).getSITEID());
                 setResult(LOCATION_CODE, intent);
                 finish();
 

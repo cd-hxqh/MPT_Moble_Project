@@ -35,11 +35,11 @@ import com.mpt.hxqh.mpt_project.api.HttpManager;
 import com.mpt.hxqh.mpt_project.api.HttpRequestHandler;
 import com.mpt.hxqh.mpt_project.api.JsonUtils;
 import com.mpt.hxqh.mpt_project.bean.Results;
-import com.mpt.hxqh.mpt_project.dialog.FlippingLoadingDialog;
 import com.mpt.hxqh.mpt_project.manager.AppManager;
 import com.mpt.hxqh.mpt_project.model.UDRETIRE;
 import com.mpt.hxqh.mpt_project.ui.widget.SwipeRefreshLayout;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -314,7 +314,7 @@ public class Asset_Udretire_Activity extends BaseActivity implements SwipeRefres
             public void onItemClick(View view, int position) {
                 Intent intent = new Intent(Asset_Udretire_Activity.this, Udretire_Details_Activity.class);
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("udretire", items.get(position));
+                bundle.putSerializable("udretire", (Serializable) udretireAdapter.getData().get(position));
                 intent.putExtras(bundle);
                 startActivityForResult(intent, 0);
             }

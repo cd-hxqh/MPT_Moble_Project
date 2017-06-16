@@ -22,6 +22,7 @@ import com.flyco.dialog.widget.NormalListDialog;
 import com.mpt.hxqh.mpt_project.R;
 import com.mpt.hxqh.mpt_project.config.Constants;
 import com.mpt.hxqh.mpt_project.manager.AppManager;
+import com.mpt.hxqh.mpt_project.model.INVENTORY;
 import com.mpt.hxqh.mpt_project.model.WebResult;
 import com.mpt.hxqh.mpt_project.unit.AccountUtils;
 import com.mpt.hxqh.mpt_project.webserviceclient.AndroidClientService;
@@ -32,6 +33,7 @@ import com.mpt.hxqh.mpt_project.webserviceclient.AndroidClientService;
 public class MaainvuseLine_AddNew_Activity extends BaseActivity {
 
     private static final String TAG = "TransferLine_AddNew_Activity";
+    public static final int TRANSFERLINE_CODE=2000;
 
     private ImageView backImageView; //返回按钮
 
@@ -219,8 +221,8 @@ public class MaainvuseLine_AddNew_Activity extends BaseActivity {
     private View.OnClickListener itemnumOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            Intent intent = new Intent(MaainvuseLine_AddNew_Activity.this, ItemChooseActivity.class);
-            intent.putExtra("storeroom", storeroom);
+            Intent intent = new Intent(MaainvuseLine_AddNew_Activity.this, InventoryChooseActivity.class);
+            intent.putExtra("LOCATION", storeroom);
             startActivityForResult(intent, 0);
         }
     };
@@ -267,6 +269,9 @@ public class MaainvuseLine_AddNew_Activity extends BaseActivity {
         @Override
         public void onClick(View view) {
             Intent intent = new Intent(MaainvuseLine_AddNew_Activity.this, AssetChooseActivity.class);
+            intent.putExtra("CODE", TRANSFERLINE_CODE);
+            intent.putExtra("LOCATION", storeroom);
+            intent.putExtra("ITEMNUM", itemnumTextView.getText().toString());
             startActivityForResult(intent, 0);
         }
     };
@@ -370,9 +375,9 @@ public class MaainvuseLine_AddNew_Activity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (resultCode) {
-            case ItemChooseActivity.ITEM_CODE:
-                String item = data.getExtras().getString("Itemnum");
-                itemnumTextView.setText(item);
+            case InventoryChooseActivity.INVENTORY_CODE: //ITEM选择
+                INVENTORY inventory = (INVENTORY) data.getSerializableExtra("Inventory");
+                itemnumTextView.setText(inventory.getITEMNUM());
                 break;
             case InvbalancesChooseActivity.INVBALANCES_CODE:
                 String binnum = data.getExtras().getString("binnum");

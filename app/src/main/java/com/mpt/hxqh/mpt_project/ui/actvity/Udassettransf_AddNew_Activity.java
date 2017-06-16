@@ -177,6 +177,7 @@ public class Udassettransf_AddNew_Activity extends BaseActivity {
         @Override
         public void onClick(View view) {
             Intent intent = new Intent(Udassettransf_AddNew_Activity.this, LocationChooseActivity.class);
+            intent.putExtra("type","!=STOREROOM,!=HOLDING");
             startActivityForResult(intent, 0);
         }
     };
@@ -189,6 +190,7 @@ public class Udassettransf_AddNew_Activity extends BaseActivity {
         @Override
         public void onClick(View v) {
             Intent intent = new Intent(Udassettransf_AddNew_Activity.this, LocationChooseActivity.class);
+            intent.putExtra("type","=COURIER,=LABOR,=OPERATING,=REPAIR,=SALVAGE,=VENDOR");
             if (textView == fromlocTextView){
                 startActivityForResult(intent, 0);
             }else {

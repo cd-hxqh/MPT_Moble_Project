@@ -54,7 +54,7 @@ public class Transfer_AddNew_Activity extends BaseActivity {
 
     private Button submit;
 
-//    private TextView orderTextView; //Order
+    //    private TextView orderTextView; //Order
     private EditText descriptionTextView; //description
     private TextView from_storeroomTextView; //from_storeroom
     private TextView inventory_ownerTextView; //inventory_owner
@@ -68,7 +68,7 @@ public class Transfer_AddNew_Activity extends BaseActivity {
     private LinearLayout buttonLayout;
     private Button quit;
     private Button option;
-    private String[] optionList = new String[]{"Back","Save"};
+    private String[] optionList = new String[]{"Back", "Save"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -175,7 +175,7 @@ public class Transfer_AddNew_Activity extends BaseActivity {
                 @Override
                 public void onOperItemClick(AdapterView<?> parent, View view, int position, long id) {
 //                    linetypeTextView.setText(linetypeList[position]);
-                    switch (position){
+                    switch (position) {
                         case 0://Back
                             normalListDialog.superDismiss();
                             finish();
@@ -198,6 +198,7 @@ public class Transfer_AddNew_Activity extends BaseActivity {
         @Override
         public void onClick(View view) {
             Intent intent = new Intent(Transfer_AddNew_Activity.this, LocationChooseActivity.class);
+            intent.putExtra("type", "=STOREROOM");
             startActivityForResult(intent, 0);
         }
     };

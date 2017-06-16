@@ -14,6 +14,15 @@ public class UDRETIRE implements Serializable {
     public String RETIREDATE;//RETIREDATE
     public String RETIRELOC;//RETIRELOC
     public String STATUS;//STATUS
+    public String LOCATION;//LOCATION
+
+    public String getLOCATION() {
+        return LOCATION;
+    }
+
+    public void setLOCATION(String LOCATION) {
+        this.LOCATION = LOCATION;
+    }
 
     public String getUDRETIREID() {
         return UDRETIREID;

@@ -222,7 +222,7 @@
                         android:layout_weight="1"
                         android:background="@color/light_bule"
                         android:gravity="center"
-                        android:text="@string/assetnum_text"
+                        android:text="@string/assetnum_text1"
                         android:textColor="@color/black"
                         android:textSize="@dimen/dimens_16sp" />
 

@@ -179,6 +179,7 @@ public class Udasst_AddNew_Activity extends BaseActivity {
         @Override
         public void onClick(View view) {
             Intent intent = new Intent(Udasst_AddNew_Activity.this, LocationChooseActivity.class);
+            intent.putExtra("type","=REPAIR");
             startActivityForResult(intent, 0);
         }
     };

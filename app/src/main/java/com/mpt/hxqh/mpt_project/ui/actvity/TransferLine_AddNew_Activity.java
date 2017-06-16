@@ -33,6 +33,7 @@ import com.mpt.hxqh.mpt_project.webserviceclient.AndroidClientService;
  * 转移新增行
  **/
 public class TransferLine_AddNew_Activity extends BaseActivity {
+    public static final int TRANSFERLINE_CODE=2000;
 
     private static final String TAG = "TransferLine_AddNew_Activity";
 
@@ -223,6 +224,7 @@ public class TransferLine_AddNew_Activity extends BaseActivity {
         @Override
         public void onClick(View view) {
             Intent intent = new Intent(TransferLine_AddNew_Activity.this, LocationChooseActivity.class);
+            intent.putExtra("type","=STOREROOM");
             startActivityForResult(intent, 0);
         }
     };
@@ -234,7 +236,9 @@ public class TransferLine_AddNew_Activity extends BaseActivity {
         @Override
         public void onClick(View view) {
             Intent intent = new Intent(TransferLine_AddNew_Activity.this, AssetChooseActivity.class);
+            intent.putExtra("CODE", TRANSFERLINE_CODE);
             intent.putExtra("LOCATION", storeroom);
+            intent.putExtra("ITEMNUM", itemnumTextView.getText().toString());
             startActivityForResult(intent, 0);
         }
     };

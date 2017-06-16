@@ -209,6 +209,7 @@ public class Maainvuse_AddNew_Activity extends BaseActivity {
         @Override
         public void onClick(View view) {
             Intent intent = new Intent(Maainvuse_AddNew_Activity.this, LocationChooseActivity.class);
+            intent.putExtra("type","=STOREROOM");
             startActivityForResult(intent, 0);
         }
     };

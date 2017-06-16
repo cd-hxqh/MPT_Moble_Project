@@ -4,7 +4,6 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,7 +13,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.flyco.animation.BaseAnimatorSet;
 import com.flyco.animation.BounceEnter.BounceTopEnter;
@@ -40,6 +38,7 @@ import com.mpt.hxqh.mpt_project.model.MAINVUSELINE;
 import com.mpt.hxqh.mpt_project.model.WorkFlowResult;
 import com.mpt.hxqh.mpt_project.ui.widget.SwipeRefreshLayout;
 import com.mpt.hxqh.mpt_project.unit.AccountUtils;
+import com.mpt.hxqh.mpt_project.unit.MessageUtils;
 import com.mpt.hxqh.mpt_project.webserviceclient.AndroidClientService;
 
 import java.util.ArrayList;
@@ -232,7 +231,7 @@ public class Mainvuse_Details_Activity extends BaseActivity {
                             } else if (!mainvuse.getSTATUS().equals(Constants.MPT_MATRE_END)){//审批工作流
                                 EditDialog();
                             }else {
-                                Toast.makeText(Mainvuse_Details_Activity.this, "This state cannot be modified", Toast.LENGTH_SHORT).show();
+                                MessageUtils.showMiddleToast(Mainvuse_Details_Activity.this, "Workflow is finished; cannot start again");
                             }
                             break;
                         case 2://AddLine
@@ -298,12 +297,13 @@ public class Mainvuse_Details_Activity extends BaseActivity {
             @Override
             protected void onPostExecute(WorkFlowResult s) {
                 super.onPostExecute(s);
-                if (s != null && s.errorMsg != null && s.errorMsg.equals("工作流启动成功")) {
-                    Toast.makeText(Mainvuse_Details_Activity.this, "starting success!", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(Mainvuse_Details_Activity.this, "boot failure", Toast.LENGTH_SHORT).show();
-                }
                 mProgressDialog.dismiss();
+                if (s != null && s.errorMsg != null && s.errorMsg.equals("工作流启动成功")) {
+                  MessageUtils.showMiddleToast(Mainvuse_Details_Activity.this,"starting success!");
+                } else {
+                    MessageUtils.showMiddleToast(Mainvuse_Details_Activity.this,s.errorMsg);
+                }
+
             }
         }.execute();
     }
@@ -366,16 +366,16 @@ public class Mainvuse_Details_Activity extends BaseActivity {
             @Override
             protected void onPostExecute(WorkFlowResult s) {
                 super.onPostExecute(s);
+                mProgressDialog.dismiss();
                 if (s == null || s.wonum == null || s.errorMsg == null) {
-                    Toast.makeText(Mainvuse_Details_Activity.this, "Failure of approval!", Toast.LENGTH_SHORT).show();
-                } else if (s.wonum.equals(mainvuse.getINVUSEID()+"") && s.errorMsg != null) {
+                    MessageUtils.showMiddleToast(Mainvuse_Details_Activity.this, s.errorMsg);
+                } else if (s.wonum.equals(mainvuse.getINVUSEID() + "") && s.errorMsg != null) {
                     statusTextView.setText(s.errorMsg);
                     mainvuse.setSTATUS(s.errorMsg);
-                    Toast.makeText(Mainvuse_Details_Activity.this, "Approval success!", Toast.LENGTH_SHORT).show();
+                    MessageUtils.showMiddleToast(Mainvuse_Details_Activity.this,"Approval success!");
                 } else {
-                    Toast.makeText(Mainvuse_Details_Activity.this, "Failure of approval!", Toast.LENGTH_SHORT).show();
+                    MessageUtils.showMiddleToast(Mainvuse_Details_Activity.this, s.errorMsg);
                 }
-                mProgressDialog.dismiss();
             }
         }.execute();
     }

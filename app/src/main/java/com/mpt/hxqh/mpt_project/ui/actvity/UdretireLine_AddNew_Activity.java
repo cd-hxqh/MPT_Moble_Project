@@ -23,7 +23,6 @@ import com.mpt.hxqh.mpt_project.config.Constants;
 import com.mpt.hxqh.mpt_project.manager.AppManager;
 import com.mpt.hxqh.mpt_project.model.WebResult;
 import com.mpt.hxqh.mpt_project.unit.DateTimeSelect;
-import com.mpt.hxqh.mpt_project.unit.DateTimeSelect2;
 import com.mpt.hxqh.mpt_project.webserviceclient.AndroidClientService;
 
 /**
@@ -178,7 +177,8 @@ public class UdretireLine_AddNew_Activity extends BaseActivity {
     private View.OnClickListener assetnumOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            Intent intent = new Intent(UdretireLine_AddNew_Activity.this, AssetChooseActivity.class);
+            Intent intent=getIntent();
+            intent.setClass(UdretireLine_AddNew_Activity.this, AssetChooseActivity.class);
             startActivityForResult(intent, 0);
         }
     };
@@ -239,7 +239,6 @@ public class UdretireLine_AddNew_Activity extends BaseActivity {
                     Toast.makeText(UdretireLine_AddNew_Activity.this, "false", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(UdretireLine_AddNew_Activity.this, workResult.returnStr, Toast.LENGTH_SHORT).show();
-//                    setResult(100);
                     finish();
                 }
                 closeProgressDialog();

@@ -22,27 +22,29 @@ import android.widget.TextView;
 
 import com.mpt.hxqh.mpt_project.R;
 import com.mpt.hxqh.mpt_project.adpter.BaseQuickAdapter;
-import com.mpt.hxqh.mpt_project.adpter.PersonAdapter;
+import com.mpt.hxqh.mpt_project.adpter.CompaniesAdapter;
 import com.mpt.hxqh.mpt_project.api.HttpManager;
 import com.mpt.hxqh.mpt_project.api.HttpRequestHandler;
 import com.mpt.hxqh.mpt_project.api.JsonUtils;
 import com.mpt.hxqh.mpt_project.bean.Results;
-import com.mpt.hxqh.mpt_project.model.PERSON;
+import com.mpt.hxqh.mpt_project.model.COMPANIES;
 import com.mpt.hxqh.mpt_project.ui.widget.SwipeRefreshLayout;
+import com.mpt.hxqh.mpt_project.unit.MessageUtils;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 选择项
+ * Vendor选择项
  **/
 
-public class PersonChooseActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener, SwipeRefreshLayout.OnLoadListener {
+public class CompaniesChooseActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener, SwipeRefreshLayout.OnLoadListener {
 
-    private static final String TAG = "PersonChooseActivity";
+    private static final String TAG = "CompaniesChooseActivity";
 
 
-    public static final int PERSON_CODE=1003;
+    public static final int COMPANIES_CODE=1009;
 
     /**
      * 标题*
@@ -71,7 +73,7 @@ public class PersonChooseActivity extends BaseActivity implements SwipeRefreshLa
     /**
      * 适配器*
      */
-    private PersonAdapter locationAdapter;
+    private CompaniesAdapter companiesAdapter;
     /**
      * 编辑框*
      */
@@ -82,7 +84,7 @@ public class PersonChooseActivity extends BaseActivity implements SwipeRefreshLa
     private String searchText = "";
     private int page = 1;
 
-    ArrayList<PERSON> items = new ArrayList<PERSON>();
+    ArrayList<COMPANIES> items = new ArrayList<COMPANIES>();
 
 
     @Override
@@ -110,10 +112,10 @@ public class PersonChooseActivity extends BaseActivity implements SwipeRefreshLa
     @Override
     protected void initView() {
         backImageView.setOnClickListener(backImageViewOnClickListener);
-        titleTextView.setText("Person");
+        titleTextView.setText("Vendor");
         setSearchEdit();
 
-        layoutManager = new LinearLayoutManager(PersonChooseActivity.this);
+        layoutManager = new LinearLayoutManager(CompaniesChooseActivity.this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         layoutManager.scrollToPosition(0);
         recyclerView.setLayoutManager(layoutManager);
@@ -127,7 +129,7 @@ public class PersonChooseActivity extends BaseActivity implements SwipeRefreshLa
         refresh_layout.setOnRefreshListener(this);
         refresh_layout.setOnLoadListener(this);
 
-        initAdapter(new ArrayList<PERSON>());
+        initAdapter(new ArrayList<COMPANIES>());
         items = new ArrayList<>();
         getData(searchText);
     }
@@ -180,8 +182,8 @@ public class PersonChooseActivity extends BaseActivity implements SwipeRefreshLa
                                             .getWindowToken(),
                                     InputMethodManager.HIDE_NOT_ALWAYS);
                     searchText = search.getText().toString();
-                    locationAdapter.removeAll(items);
-                    items = new ArrayList<PERSON>();
+                    companiesAdapter.removeAll(items);
+                    items = new ArrayList<COMPANIES>();
                     nodatalayout.setVisibility(View.GONE);
                     refresh_layout.setRefreshing(true);
                     page = 1;
@@ -198,7 +200,7 @@ public class PersonChooseActivity extends BaseActivity implements SwipeRefreshLa
      * 获取数据*
      */
     private void getData(String search) {
-        HttpManager.getDataPagingInfo(PersonChooseActivity.this, HttpManager.getPersonUrl(search, page, 20), new HttpRequestHandler<Results>() {
+        HttpManager.getDataPagingInfo(CompaniesChooseActivity.this, HttpManager.getVendorUrl(search, page, 20), new HttpRequestHandler<Results>() {
             @Override
             public void onSuccess(Results results) {
                 Log.i(TAG, "data=" + results);
@@ -206,7 +208,7 @@ public class PersonChooseActivity extends BaseActivity implements SwipeRefreshLa
 
             @Override
             public void onSuccess(Results results, int totalPages, int currentPage) {
-                ArrayList<PERSON> item = JsonUtils.parsingPERSON(PersonChooseActivity.this, results.getResultlist());
+                ArrayList<COMPANIES> item = JsonUtils.parsingCOMPANIES(results.getResultlist());
                 refresh_layout.setRefreshing(false);
                 refresh_layout.setLoading(false);
                 if (item == null || item.isEmpty()) {
@@ -215,17 +217,15 @@ public class PersonChooseActivity extends BaseActivity implements SwipeRefreshLa
 
                     if (item != null || item.size() != 0) {
                         if (page == 1) {
-                            items = new ArrayList<PERSON>();
-                            initAdapter(new ArrayList<PERSON>());
+                            initAdapter(new ArrayList<COMPANIES>());
                         }
-                        for (int i = 0; i < item.size(); i++) {
-                            items.add(item.get(i));
+                        if (page > totalPages) {
+                            MessageUtils.showMiddleToast(CompaniesChooseActivity.this, getString(R.string.have_load_out_all_the_data));
+                        } else {
+                            addData(item);
                         }
-                        addData(item);
                     }
                     nodatalayout.setVisibility(View.GONE);
-
-                    initAdapter(items);
                 }
             }
 
@@ -243,16 +243,18 @@ public class PersonChooseActivity extends BaseActivity implements SwipeRefreshLa
     /**
      * 获取数据*
      */
-    private void initAdapter(final List<PERSON> list) {
-        locationAdapter = new PersonAdapter(PersonChooseActivity.this, R.layout.list_item, list);
-        recyclerView.setAdapter(locationAdapter);
-        locationAdapter.setOnRecyclerViewItemClickListener(new BaseQuickAdapter.OnRecyclerViewItemClickListener() {
+    private void initAdapter(final List<COMPANIES> list) {
+        companiesAdapter = new CompaniesAdapter(CompaniesChooseActivity.this, R.layout.list_item, list);
+        recyclerView.setAdapter(companiesAdapter);
+        companiesAdapter.setOnRecyclerViewItemClickListener(new BaseQuickAdapter.OnRecyclerViewItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
 
                 Intent intent = getIntent();
-                intent.putExtra("personid", list.get(position).getPERSONID());
-                setResult(PERSON_CODE, intent);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("companies", (Serializable) companiesAdapter.getData().get(position));
+                intent.putExtras(bundle);
+                setResult(COMPANIES_CODE, intent);
                 finish();
 
             }
@@ -262,7 +264,7 @@ public class PersonChooseActivity extends BaseActivity implements SwipeRefreshLa
     /**
      * 添加数据*
      */
-    private void addData(final List<PERSON> list) {
-        locationAdapter.addData(list);
+    private void addData(final List<COMPANIES> list) {
+        companiesAdapter.addData(list);
     }
 }

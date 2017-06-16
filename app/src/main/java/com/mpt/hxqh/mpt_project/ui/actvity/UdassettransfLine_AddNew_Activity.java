@@ -32,6 +32,7 @@ import com.mpt.hxqh.mpt_project.webserviceclient.AndroidClientService;
 public class UdassettransfLine_AddNew_Activity extends BaseActivity {
 
     private static final String TAG = "UdassettransfLine_AddNew_Activity";
+    public static final int UDASSETTRANS_CODE = 2004;
 
     private ImageView backImageView; //返回按钮
 
@@ -39,7 +40,7 @@ public class UdassettransfLine_AddNew_Activity extends BaseActivity {
 
     private Button submit;
 
-//    private TextView orderTextView; //Order
+    //    private TextView orderTextView; //Order
     private TextView assetnumTextView; //assetnum
     private TextView fromsiteTextView; //fromsite
     private TextView tositeTextView; //tosite
@@ -52,7 +53,7 @@ public class UdassettransfLine_AddNew_Activity extends BaseActivity {
     private LinearLayout buttonLayout;
     private Button quit;
     private Button option;
-    private String[] optionList = new String[]{"Back","Save"};
+    private String[] optionList = new String[]{"Back", "Save"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -159,7 +160,7 @@ public class UdassettransfLine_AddNew_Activity extends BaseActivity {
                 @Override
                 public void onOperItemClick(AdapterView<?> parent, View view, int position, long id) {
 //                    linetypeTextView.setText(linetypeList[position]);
-                    switch (position){
+                    switch (position) {
                         case 0://Back
                             normalListDialog.superDismiss();
                             finish();
@@ -181,22 +182,28 @@ public class UdassettransfLine_AddNew_Activity extends BaseActivity {
     private View.OnClickListener assetnumOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            Intent intent = new Intent(UdassettransfLine_AddNew_Activity.this, AssetChooseActivity.class);
+            Intent intent = getIntent();
+            intent.setClass(UdassettransfLine_AddNew_Activity.this, AssetChooseActivity.class);
+            intent.putExtra("CODE", UDASSETTRANS_CODE);
+            intent.putExtra("STATUS", "ACTIVE");
             startActivityForResult(intent, 0);
         }
     };
 
-    private class locationTextViewOnClickListener implements View.OnClickListener{
+    private class locationTextViewOnClickListener implements View.OnClickListener {
         private TextView textView;
-        private locationTextViewOnClickListener(TextView textView){
+
+        private locationTextViewOnClickListener(TextView textView) {
             this.textView = textView;
         }
+
         @Override
         public void onClick(View v) {
             Intent intent = new Intent(UdassettransfLine_AddNew_Activity.this, LocationChooseActivity.class);
-            if (textView == fromsiteTextView){
+            intent.putExtra("type", "=COURIER,=LABOR,=OPERATING,=REPAIR,=SALVAGE,=VENDOR");
+            if (textView == fromsiteTextView) {
                 startActivityForResult(intent, 0);
-            }else {
+            } else {
                 startActivityForResult(intent, 1);
             }
         }
@@ -236,8 +243,8 @@ public class UdassettransfLine_AddNew_Activity extends BaseActivity {
             @Override
             protected WebResult doInBackground(String... strings) {
                 WebResult reviseresult = AndroidClientService.AddMoveLine(UdassettransfLine_AddNew_Activity.this, assettrannum,
-                        assetnumTextView.getText().toString(), fromsiteTextView.getText().toString(),tositeTextView.getText().toString()
-                        , AccountUtils.getpersonId(UdassettransfLine_AddNew_Activity.this),Constants.TRANSFER_URL);
+                        assetnumTextView.getText().toString(), fromsiteTextView.getText().toString(), tositeTextView.getText().toString()
+                        , AccountUtils.getpersonId(UdassettransfLine_AddNew_Activity.this), Constants.TRANSFER_URL);
                 return reviseresult;
             }
 
@@ -270,7 +277,7 @@ public class UdassettransfLine_AddNew_Activity extends BaseActivity {
                 String location = data.getExtras().getString("Location");
                 if (requestCode == 0) {
                     fromsiteTextView.setText(location);
-                }else {
+                } else {
                     tositeTextView.setText(location);
                 }
                 break;

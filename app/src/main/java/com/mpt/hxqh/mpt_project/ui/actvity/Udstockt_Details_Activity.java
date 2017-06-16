@@ -237,6 +237,7 @@ public class Udstockt_Details_Activity extends BaseActivity {
                             normalListDialog.superDismiss();
                             Intent intent = new Intent(Udstockt_Details_Activity.this, UdstocktLine_AddNew_Activity.class);
                             intent.putExtra("stocktnum", udstockt.getSTOCKTNUM());
+                            intent.putExtra("LOCATION", udstockt.getLOCATION());
                             startActivity(intent);
 
                             break;

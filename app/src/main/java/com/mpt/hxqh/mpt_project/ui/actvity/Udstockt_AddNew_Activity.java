@@ -31,11 +31,13 @@ import com.mpt.hxqh.mpt_project.api.JsonUtils;
 import com.mpt.hxqh.mpt_project.bean.Results;
 import com.mpt.hxqh.mpt_project.config.Constants;
 import com.mpt.hxqh.mpt_project.manager.AppManager;
+import com.mpt.hxqh.mpt_project.model.COMPANIES;
 import com.mpt.hxqh.mpt_project.model.UDRETIRELINE;
 import com.mpt.hxqh.mpt_project.model.UDSTOCKT;
 import com.mpt.hxqh.mpt_project.model.WebResult;
 import com.mpt.hxqh.mpt_project.ui.widget.SwipeRefreshLayout;
 import com.mpt.hxqh.mpt_project.unit.AccountUtils;
+import com.mpt.hxqh.mpt_project.unit.MessageUtils;
 import com.mpt.hxqh.mpt_project.webserviceclient.AndroidClientService;
 
 import java.text.SimpleDateFormat;
@@ -57,7 +59,7 @@ public class Udstockt_AddNew_Activity extends BaseActivity {
     private Button submit;
 
     private EditText descriptionTextView; //description
-    private EditText vendorView; //Vendor
+    private TextView vendorView; //Vendor
     private TextView locationTextView; //location
 
     private UDSTOCKT udstockt;
@@ -68,7 +70,7 @@ public class Udstockt_AddNew_Activity extends BaseActivity {
     private LinearLayout buttonLayout;
     private Button quit;
     private Button option;
-    private String[] optionList = new String[]{"Back","Save"};
+    private String[] optionList = new String[]{"Back", "Save"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,7 +96,7 @@ public class Udstockt_AddNew_Activity extends BaseActivity {
         submit = (Button) findViewById(R.id.sbmit_id);
 
         descriptionTextView = (EditText) findViewById(R.id.description_text_id);
-        vendorView = (EditText) findViewById(R.id.vendor_text_id);
+        vendorView = (TextView) findViewById(R.id.vendor_text_id);
         locationTextView = (TextView) findViewById(R.id.location_text_id);
 
         buttonLayout = (LinearLayout) findViewById(R.id.button_layout);
@@ -112,6 +114,7 @@ public class Udstockt_AddNew_Activity extends BaseActivity {
 //        submit.setVisibility(View.VISIBLE);
 
         locationTextView.setOnClickListener(locationTextViewOnClickListener);
+        vendorView.setOnClickListener(vendortextviewonclicklistener);
         submit.setOnClickListener(submitOnClickListener);
 
         quit.setOnClickListener(quitOnClickListener);
@@ -173,7 +176,7 @@ public class Udstockt_AddNew_Activity extends BaseActivity {
                 @Override
                 public void onOperItemClick(AdapterView<?> parent, View view, int position, long id) {
 //                    linetypeTextView.setText(linetypeList[position]);
-                    switch (position){
+                    switch (position) {
                         case 0://Back
                             normalListDialog.superDismiss();
                             finish();
@@ -190,12 +193,24 @@ public class Udstockt_AddNew_Activity extends BaseActivity {
     };
 
     /**
+     * Vendor
+     **/
+    private View.OnClickListener vendortextviewonclicklistener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Intent intent = new Intent(Udstockt_AddNew_Activity.this, CompaniesChooseActivity.class);
+            startActivityForResult(intent, 0);
+        }
+    };
+
+    /**
      * 位置
      **/
     private View.OnClickListener locationTextViewOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
             Intent intent = new Intent(Udstockt_AddNew_Activity.this, LocationChooseActivity.class);
+            intent.putExtra("type", "!=HOLDING");
             startActivityForResult(intent, 0);
         }
     };
@@ -235,25 +250,25 @@ public class Udstockt_AddNew_Activity extends BaseActivity {
             protected WebResult doInBackground(String... strings) {
                 WebResult reviseresult = AndroidClientService.AddMatSto(Udstockt_AddNew_Activity.this, descriptionTextView.getText().toString(),
                         locationTextView.getText().toString(), vendorView.getText().toString(), AccountUtils.getpersonId(Udstockt_AddNew_Activity.this),
-                        new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()),Constants.TRANSFER_URL);
+                        new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()), Constants.TRANSFER_URL);
                 return reviseresult;
             }
 
             @Override
             protected void onPostExecute(WebResult workResult) {
                 super.onPostExecute(workResult);
+                closeProgressDialog();
                 if (workResult == null) {
-                    Toast.makeText(Udstockt_AddNew_Activity.this, "false", Toast.LENGTH_SHORT).show();
+                    MessageUtils.showMiddleToast(Udstockt_AddNew_Activity.this, "false");
                 } else {
-                    Toast.makeText(Udstockt_AddNew_Activity.this, workResult.returnStr, Toast.LENGTH_SHORT).show();
-//                    setResult(100);
+                    MessageUtils.showMiddleToast(Udstockt_AddNew_Activity.this, workResult.returnStr);
                     finish();
                 }
+
                 closeProgressDialog();
             }
         }.execute();
-        //}else {
-        closeProgressDialog();
+
     }
 
     @Override
@@ -264,10 +279,10 @@ public class Udstockt_AddNew_Activity extends BaseActivity {
                 String location = data.getExtras().getString("Location");
                 locationTextView.setText(location);
                 break;
-//            case RESULT_OK:
-//                String result = data.getExtras().getString("result");
-//                snTextView.setText(result);
-//                break;
+            case CompaniesChooseActivity.COMPANIES_CODE:
+                COMPANIES companies = (COMPANIES) data.getSerializableExtra("companies");
+                vendorView.setText(companies.getCOMPANY());
+                break;
         }
     }
 }

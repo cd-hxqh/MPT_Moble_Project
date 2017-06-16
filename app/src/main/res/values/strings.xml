@@ -112,6 +112,7 @@
     <string name="fromloc_text">Fromloc:</string>
     <string name="tosite_text">Target Location:</string>
     <string name="assetnum_text">Assetnum:</string>
+    <string name="assetnum_text1">Assetnum</string>
     <string name="desc_text">Desc</string>
     <string name="Material_outbound_text">Material Outbound</string>
     <string name="material_refund_text">Material Refund</string>

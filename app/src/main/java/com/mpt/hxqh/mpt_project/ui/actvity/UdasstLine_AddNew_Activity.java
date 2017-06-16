@@ -35,6 +35,8 @@ import com.mpt.hxqh.mpt_project.webserviceclient.AndroidClientService;
  **/
 public class UdasstLine_AddNew_Activity extends BaseActivity {
 
+    public static final int UDASSLINE_CODE=2001; //资产维修新增行
+
     private static final String TAG = "UdasstLine_AddNew_Activity";
 
     private ImageView backImageView; //返回按钮
@@ -191,6 +193,7 @@ public class UdasstLine_AddNew_Activity extends BaseActivity {
         public void onClick(View view) {
 
             Intent intent = new Intent(UdasstLine_AddNew_Activity.this, AssetChooseActivity.class);
+            intent.putExtra("CODE", UDASSLINE_CODE);
             intent.putExtra("LOCATION",location);
             startActivityForResult(intent, 0);
         }

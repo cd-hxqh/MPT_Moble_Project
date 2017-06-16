@@ -229,6 +229,7 @@ public class Udassettransf_Details_Activity extends BaseActivity {
                             normalListDialog.superDismiss();
                             Intent intent = new Intent(Udassettransf_Details_Activity.this,UdassettransfLine_AddNew_Activity.class);
                             intent.putExtra("assettrannum",udassettransf.getASSETTRANNUM());
+                            intent.putExtra("LOCATION",udassettransf.getFROMLOC());
                             startActivity(intent);
                             break;
                     }

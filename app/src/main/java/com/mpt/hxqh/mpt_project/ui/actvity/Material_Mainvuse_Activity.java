@@ -39,6 +39,7 @@ import com.mpt.hxqh.mpt_project.manager.AppManager;
 import com.mpt.hxqh.mpt_project.model.MAINVUSE;
 import com.mpt.hxqh.mpt_project.ui.widget.SwipeRefreshLayout;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -314,7 +315,7 @@ public class Material_Mainvuse_Activity extends BaseActivity implements SwipeRef
             public void onItemClick(View view, int position) {
                 Intent intent = new Intent(Material_Mainvuse_Activity.this, Mainvuse_Details_Activity.class);
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("mainvuse", items.get(position));
+                bundle.putSerializable("mainvuse", (Serializable) mainvuseAdapter.getData().get(position));
                 intent.putExtras(bundle);
                 startActivityForResult(intent, 0);
             }

@@ -85,6 +85,10 @@ public class AssetChooseActivity extends BaseActivity implements SwipeRefreshLay
     ArrayList<ASSET> items = new ArrayList<ASSET>();
 
     private String location; //位置
+    private String itemnum; //itemnum
+    private String status;
+
+    private int code=0; //跳转标识
 
 
     @Override
@@ -101,7 +105,18 @@ public class AssetChooseActivity extends BaseActivity implements SwipeRefreshLay
      * 初始化DAO
      **/
     private void initData() {
-        location = getIntent().getExtras().getString("LOCATION");
+        if(getIntent().hasExtra("CODE")) {
+            code = getIntent().getExtras().getInt("CODE");
+        }
+        Log.i(TAG, "code=" + code);
+        if (code == TransferLine_AddNew_Activity.TRANSFERLINE_CODE) { //资产转移子表
+            itemnum = getIntent().getExtras().getString("ITEMNUM");
+        } else if (code == UdassettransfLine_AddNew_Activity.UDASSETTRANS_CODE) {//资产移动子表
+            status = getIntent().getExtras().getString("STATUS");
+        }
+        if(getIntent().hasExtra("LOCATION")) {
+            location = getIntent().getExtras().getString("LOCATION");
+        }
         Log.i(TAG, "location=" + location);
     }
 
@@ -210,7 +225,24 @@ public class AssetChooseActivity extends BaseActivity implements SwipeRefreshLay
      */
     private void getData(String search) {
         String url = null;
-        url = HttpManager.getLocationAssetUrl(search, location, page, 20);
+        if (code == TransferLine_AddNew_Activity.TRANSFERLINE_CODE) { //资产转移行Asset选择
+            if (null == itemnum) {
+                url = HttpManager.getLocationAssetUrl(search, location, page, 20);
+            } else {
+                url = HttpManager.getLocationAndItemnumAssetUrl(search, location, itemnum, page, 20);
+
+            }
+        } else if (code == UdassettransfLine_AddNew_Activity.UDASSETTRANS_CODE) { //资产移动行Asset选择
+            url = HttpManager.getLocationAndStatusAssetUrl(search, location, status, page, 20);
+        } else {
+
+            if (!location.equals("")) {
+                url = HttpManager.getLocationAssetUrl(search, location, page, 20);
+            } else {
+                url = HttpManager.getAssetUrl(search, page, 20);
+
+            }
+        }
         HttpManager.getDataPagingInfo(AssetChooseActivity.this, url, new HttpRequestHandler<Results>() {
             @Override
             public void onSuccess(Results results) {

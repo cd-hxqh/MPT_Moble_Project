@@ -214,7 +214,7 @@
                         android:layout_marginLeft="@dimen/dimen_10"
                         android:background="@drawable/editsharp"
                         android:gravity="right"
-                        android:hint="@string/have_not_data"
+                        android:text="1"
                         android:inputType="number"
                         android:textColor="@color/light_black"
                         android:textSize="@dimen/dimens_16sp" />

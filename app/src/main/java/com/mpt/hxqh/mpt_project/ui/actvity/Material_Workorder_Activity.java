@@ -39,6 +39,7 @@ import com.mpt.hxqh.mpt_project.manager.AppManager;
 import com.mpt.hxqh.mpt_project.model.WORKORDER;
 import com.mpt.hxqh.mpt_project.ui.widget.SwipeRefreshLayout;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -311,7 +312,7 @@ public class Material_Workorder_Activity extends BaseActivity implements SwipeRe
             public void onItemClick(View view, int position) {
                 Intent intent = new Intent(Material_Workorder_Activity.this, Workorder_Details_Activity.class);
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("workorder", items.get(position));
+                bundle.putSerializable("workorder", (Serializable) workOrderAdapter.getData().get(position));
                 intent.putExtras(bundle);
                 startActivityForResult(intent, 0);
             }

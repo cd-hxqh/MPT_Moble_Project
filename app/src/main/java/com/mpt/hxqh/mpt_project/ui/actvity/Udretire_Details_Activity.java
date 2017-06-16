@@ -146,7 +146,7 @@ public class Udretire_Details_Activity extends BaseActivity {
         if (udretire != null) {
             retireNotView.setText(udretire.getRETIRENUM());
             descriptionTextView.setText(udretire.getDESCRIPTION());
-            locationTextView.setText(udretire.getRETIRELOC());
+            locationTextView.setText(udretire.getLOCATION());
             statusTextView.setText(udretire.getSTATUS());
             retireDateTextView.setText(udretire.getRETIREDATE());
         }
@@ -245,6 +245,7 @@ public class Udretire_Details_Activity extends BaseActivity {
                             normalListDialog.superDismiss();
                             Intent intent = new Intent(Udretire_Details_Activity.this, UdretireLine_AddNew_Activity.class);
                             intent.putExtra("repairnum", udretire.getRETIRENUM());
+                            intent.putExtra("LOCATION", udretire.getLOCATION());
                             startActivity(intent);
 
                             break;
@@ -378,11 +379,10 @@ public class Udretire_Details_Activity extends BaseActivity {
                 } else if (s.wonum.equals(udretire.getUDRETIREID() + "") && s.errorMsg != null) {
                     statusTextView.setText(s.errorMsg);
                     udretire.setSTATUS(s.errorMsg);
-                    MessageUtils.showMiddleToast(Udretire_Details_Activity.this,"Approval success!");
+                    MessageUtils.showMiddleToast(Udretire_Details_Activity.this, "Approval success!");
                 } else {
                     MessageUtils.showMiddleToast(Udretire_Details_Activity.this, s.errorMsg);
                 }
-
             }
         }.execute();
     }
@@ -424,7 +424,7 @@ public class Udretire_Details_Activity extends BaseActivity {
      * 获取数据*
      */
     private void getData() {
-        Log.i(TAG,"num="+udretire.getRETIRENUM());
+        Log.i(TAG, "num=" + udretire.getRETIRENUM());
         HttpManager.getDataPagingInfo(Udretire_Details_Activity.this, HttpManager.getUDRETIRELINEURL(udretire.getRETIRENUM(), page, 20), new HttpRequestHandler<Results>() {
             @Override
             public void onSuccess(Results results) {

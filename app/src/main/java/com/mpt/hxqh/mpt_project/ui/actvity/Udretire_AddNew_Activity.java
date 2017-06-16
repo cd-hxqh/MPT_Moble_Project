@@ -34,6 +34,9 @@ public class Udretire_AddNew_Activity extends BaseActivity {
 
     private static final String TAG = "Udretire_AddNew_Activity";
 
+    private static final int LOCATION_CODE = 3000;
+    private static final int RETIRE_CODE = 3001;
+
     private ImageView backImageView; //返回按钮
 
     private TextView titleTextView; //标题
@@ -42,7 +45,7 @@ public class Udretire_AddNew_Activity extends BaseActivity {
 
     private EditText descriptionTextView; //description
     private TextView locationTextView; //location
-    private EditText retirelocTextView; //retireloc
+    private TextView retirelocTextView; //retireloc
     private TextView retiredateTextView;//retiredate
 
     private BaseAnimatorSet mBasIn;
@@ -51,7 +54,7 @@ public class Udretire_AddNew_Activity extends BaseActivity {
     private LinearLayout buttonLayout;
     private Button quit;
     private Button option;
-    private String[] optionList = new String[]{"Back","Save"};
+    private String[] optionList = new String[]{"Back", "Save"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +80,7 @@ public class Udretire_AddNew_Activity extends BaseActivity {
 
         descriptionTextView = (EditText) findViewById(R.id.description_text_id);
         locationTextView = (TextView) findViewById(R.id.location_text_id);
-        retirelocTextView = (EditText) findViewById(R.id.retireloc_text_id);
+        retirelocTextView = (TextView) findViewById(R.id.retireloc_text_id);
         retiredateTextView = (TextView) findViewById(R.id.retiredate_text_id);
 
         buttonLayout = (LinearLayout) findViewById(R.id.button_layout);
@@ -95,6 +98,7 @@ public class Udretire_AddNew_Activity extends BaseActivity {
 //        submit.setVisibility(View.VISIBLE);
 
         locationTextView.setOnClickListener(locationTextViewOnClickListener);
+        retirelocTextView.setOnClickListener(retirelocTextViewOnClickListener);
         retiredateTextView.setOnClickListener(DateOnClickListener);
         submit.setOnClickListener(submitOnClickListener);
 
@@ -156,7 +160,7 @@ public class Udretire_AddNew_Activity extends BaseActivity {
                 @Override
                 public void onOperItemClick(AdapterView<?> parent, View view, int position, long id) {
 //                    linetypeTextView.setText(linetypeList[position]);
-                    switch (position){
+                    switch (position) {
                         case 0://Back
                             normalListDialog.superDismiss();
                             finish();
@@ -179,7 +183,20 @@ public class Udretire_AddNew_Activity extends BaseActivity {
         @Override
         public void onClick(View view) {
             Intent intent = new Intent(Udretire_AddNew_Activity.this, LocationChooseActivity.class);
-            startActivityForResult(intent, 0);
+            intent.putExtra("type", "!=HOLDING");
+            startActivityForResult(intent, LOCATION_CODE);
+        }
+    };
+
+    /**
+     * retireloc
+     **/
+    private View.OnClickListener retirelocTextViewOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Intent intent = new Intent(Udretire_AddNew_Activity.this, LocationChooseActivity.class);
+            intent.putExtra("type", "!=HOLDING");
+            startActivityForResult(intent, RETIRE_CODE);
         }
     };
 
@@ -254,7 +271,13 @@ public class Udretire_AddNew_Activity extends BaseActivity {
         switch (resultCode) {
             case LocationChooseActivity.LOCATION_CODE:
                 String location = data.getExtras().getString("Location");
-                locationTextView.setText(location);
+                if (requestCode == LOCATION_CODE) {
+                    locationTextView.setText(location);
+                } else if (requestCode == RETIRE_CODE) {
+                    retirelocTextView.setText(location);
+                }
+
+
                 break;
 //            case RESULT_OK:
 //                String result = data.getExtras().getString("result");

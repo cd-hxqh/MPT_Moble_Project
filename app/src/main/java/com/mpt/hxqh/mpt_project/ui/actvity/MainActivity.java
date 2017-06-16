@@ -114,7 +114,7 @@ public class MainActivity extends BaseActivity {
         }
     };
     /**
-     * 资产转移
+     * 资产报废
      **/
     private View.OnClickListener udretireImagViewOnClickListener = new View.OnClickListener() {
         @Override
@@ -147,7 +147,7 @@ public class MainActivity extends BaseActivity {
         }
     };
     /**
-     * 物料出库
+     * 物料回退
      **/
     private View.OnClickListener mainvuseImagViewOnClickListener = new View.OnClickListener() {
         @Override
@@ -159,7 +159,7 @@ public class MainActivity extends BaseActivity {
     };
 
     /**
-     * 物料出库
+     * 物料盘点
      **/
     private View.OnClickListener udstocktImagViewOnClickListener = new View.OnClickListener() {
         @Override

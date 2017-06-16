@@ -34,6 +34,8 @@ public class UdstocktLine_AddNew_Activity extends BaseActivity {
 
     private static final String TAG = "MainvuseLine_AddNew_Activity";
 
+    public static final int UDSTOCKTLINE_CODE=2003;
+
     private ImageView backImageView; //返回按钮
 
     private TextView titleTextView; //标题
@@ -182,7 +184,9 @@ public class UdstocktLine_AddNew_Activity extends BaseActivity {
     private View.OnClickListener assetnumOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            Intent intent = new Intent(UdstocktLine_AddNew_Activity.this, AssetChooseActivity.class);
+            Intent intent=getIntent();
+            intent.setClass(UdstocktLine_AddNew_Activity.this, AssetChooseActivity.class);
+            intent.putExtra("CODE", UDSTOCKTLINE_CODE);
             startActivityForResult(intent, 0);
         }
     };

@@ -52,7 +52,7 @@ public class Mainvuse_AddNew_Activity extends BaseActivity {
     private LinearLayout buttonLayout;
     private Button quit;
     private Button option;
-    private String[] optionList = new String[]{"Back","Save"};
+    private String[] optionList = new String[]{"Back", "Save"};
 
 
     @Override
@@ -158,7 +158,7 @@ public class Mainvuse_AddNew_Activity extends BaseActivity {
                 @Override
                 public void onOperItemClick(AdapterView<?> parent, View view, int position, long id) {
 //                    linetypeTextView.setText(linetypeList[position]);
-                    switch (position){
+                    switch (position) {
                         case 0://Back
                             normalListDialog.superDismiss();
                             finish();
@@ -181,6 +181,7 @@ public class Mainvuse_AddNew_Activity extends BaseActivity {
         @Override
         public void onClick(View view) {
             Intent intent = new Intent(Mainvuse_AddNew_Activity.this, LocationChooseActivity.class);
+            intent.putExtra("type", "=STOREROOM");
             startActivityForResult(intent, 0);
         }
     };

@@ -24,6 +24,7 @@ import com.mpt.hxqh.mpt_project.config.Constants;
 import com.mpt.hxqh.mpt_project.manager.AppManager;
 import com.mpt.hxqh.mpt_project.model.WebResult;
 import com.mpt.hxqh.mpt_project.unit.AccountUtils;
+import com.mpt.hxqh.mpt_project.unit.MessageUtils;
 import com.mpt.hxqh.mpt_project.webserviceclient.AndroidClientService;
 
 /**
@@ -33,13 +34,16 @@ public class Wpmaterial_AddNew_Activity extends BaseActivity {
 
     private static final String TAG = "Wpmaterial_AddNew_Activity";
 
+    public static final int LOCATIONS_CODE=3000;
+    public static final int SITE_CODE=3001;
+
     private ImageView backImageView; //返回按钮
 
     private TextView titleTextView; //标题
 
     private Button submit;
 
-//    private TextView orderTextView; //Order
+    //    private TextView orderTextView; //Order
     private TextView itemTextView; //item
     private EditText descriptionTextView; //description
     private TextView locationTextView; //location
@@ -59,10 +63,10 @@ public class Wpmaterial_AddNew_Activity extends BaseActivity {
     private LinearLayout buttonLayout;
     private Button quit;
     private Button option;
-    private String[] optionList = new String[]{"Back","Save"};
+    private String[] optionList = new String[]{"Back", "Save"};
 
     private String[] linetypeList = new String[]{"Item", "Material"};
-    private String[] restypeList = new String[]{"AUTOMATIC", "HARD","SOFT"};
+    private String[] restypeList = new String[]{"AUTOMATIC", "HARD", "SOFT"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -180,7 +184,7 @@ public class Wpmaterial_AddNew_Activity extends BaseActivity {
                 @Override
                 public void onOperItemClick(AdapterView<?> parent, View view, int position, long id) {
 //                    linetypeTextView.setText(linetypeList[position]);
-                    switch (position){
+                    switch (position) {
                         case 0://Back
                             normalListDialog.superDismiss();
                             finish();
@@ -219,7 +223,7 @@ public class Wpmaterial_AddNew_Activity extends BaseActivity {
                 @Override
                 public void onOperItemClick(AdapterView<?> parent, View view, int position, long id) {
                     linetypeTextView.setText(linetypeList[position]);
-                    switch (position){
+                    switch (position) {
                         case 0://Item
                             orderunitTextView.setText("");
                             orderunitTextView.setClickable(false);
@@ -279,19 +283,23 @@ public class Wpmaterial_AddNew_Activity extends BaseActivity {
         }
     };
 
-    private class locationOnClickListener implements View.OnClickListener{
+    private class locationOnClickListener implements View.OnClickListener {
         private TextView textView;
-        private locationOnClickListener(TextView textView){
+
+        private locationOnClickListener(TextView textView) {
             this.textView = textView;
         }
+
         @Override
         public void onClick(View v) {
-            if (textView == locationTextView){
+            if (textView == locationTextView) {
                 Intent intent = new Intent(Wpmaterial_AddNew_Activity.this, LocationChooseActivity.class);
-                startActivityForResult(intent, 0);
-            }else {
+                intent.putExtra("type", "=STOREROOM");
+                startActivityForResult(intent, LOCATIONS_CODE);
+            } else {
                 Intent intent = new Intent(Wpmaterial_AddNew_Activity.this, LocationChooseActivity.class);
-                startActivityForResult(intent, 1);
+                intent.putExtra("type", "=STOREROOM");
+                startActivityForResult(intent, SITE_CODE);
             }
         }
     }
@@ -338,22 +346,22 @@ public class Wpmaterial_AddNew_Activity extends BaseActivity {
             @Override
             protected WebResult doInBackground(String... strings) {
                 WebResult reviseresult = AndroidClientService.AddOutPlanLine(Wpmaterial_AddNew_Activity.this, wonum,
-                        itemTextView.getText().toString(), descriptionTextView.getText().toString(),locationTextView.getText().toString()
-                        ,issuetoTextView.getText().toString(),linetypeTextView.getText().toString(),
-                        restypeTextView.getText().toString(),quantityTextView.getText().toString(),
-                        storelocsiteTextView.getText().toString(),unitcostTextView.getText().toString(),
-                        orderunitTextView.getText().toString(),AccountUtils.getpersonId(Wpmaterial_AddNew_Activity.this),Constants.TRANSFER_URL);
+                        itemTextView.getText().toString(), descriptionTextView.getText().toString(), locationTextView.getText().toString()
+                        , issuetoTextView.getText().toString(), linetypeTextView.getText().toString(),
+                        restypeTextView.getText().toString(), quantityTextView.getText().toString(),
+                        storelocsiteTextView.getText().toString(), unitcostTextView.getText().toString(),
+                        orderunitTextView.getText().toString(), AccountUtils.getpersonId(Wpmaterial_AddNew_Activity.this), Constants.TRANSFER_URL);
                 return reviseresult;
             }
 
             @Override
             protected void onPostExecute(WebResult workResult) {
                 super.onPostExecute(workResult);
+
                 if (workResult == null) {
-                    Toast.makeText(Wpmaterial_AddNew_Activity.this, "false", Toast.LENGTH_SHORT).show();
+                    MessageUtils.showMiddleToast(Wpmaterial_AddNew_Activity.this, "failed");
                 } else {
-                    Toast.makeText(Wpmaterial_AddNew_Activity.this, workResult.returnStr, Toast.LENGTH_SHORT).show();
-//                    setResult(100);
+                    MessageUtils.showMiddleToast(Wpmaterial_AddNew_Activity.this, workResult.returnStr);
                     finish();
                 }
                 closeProgressDialog();
@@ -373,10 +381,12 @@ public class Wpmaterial_AddNew_Activity extends BaseActivity {
                 break;
             case LocationChooseActivity.LOCATION_CODE:
                 String location = data.getExtras().getString("Location");
-                if (requestCode == 0) {
+                String siteid = data.getExtras().getString("siteid");
+                if (requestCode == LOCATIONS_CODE) {
                     locationTextView.setText(location);
-                }else {
-                    storelocsiteTextView.setText(location);
+                    storelocsiteTextView.setText(siteid);
+                } else {
+                    storelocsiteTextView.setText(siteid);
                 }
                 break;
             case MeasureunitChooseActivity.MEASUREUNIT_CODE:

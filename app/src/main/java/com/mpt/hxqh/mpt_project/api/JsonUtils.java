@@ -7,6 +7,7 @@ import com.mpt.hxqh.mpt_project.bean.LoginResults;
 import com.mpt.hxqh.mpt_project.bean.Results;
 import com.mpt.hxqh.mpt_project.config.Constants;
 import com.mpt.hxqh.mpt_project.model.ASSET;
+import com.mpt.hxqh.mpt_project.model.COMPANIES;
 import com.mpt.hxqh.mpt_project.model.INVBALANCES;
 import com.mpt.hxqh.mpt_project.model.INVENTORY;
 import com.mpt.hxqh.mpt_project.model.INVUSE;
@@ -1383,5 +1384,52 @@ public class JsonUtils<E> {
         }
     }
 
+
+
+
+    /**
+     * Vendor
+     */
+    public static ArrayList<COMPANIES> parsingCOMPANIES(String data) {
+        ArrayList<COMPANIES> list = null;
+        COMPANIES locations = null;
+        try {
+            JSONArray jsonArray = new JSONArray(data);
+            JSONObject jsonObject;
+            list = new ArrayList<COMPANIES>();
+            for (int i = 0; i < jsonArray.length(); i++) {
+                locations = new COMPANIES();
+                jsonObject = jsonArray.getJSONObject(i);
+                Field[] field = locations.getClass().getDeclaredFields();        //获取实体类的所有属性，返回Field数组
+                for (int j = 0; j < field.length; j++) {     //遍历所有属性
+                    field[j].setAccessible(true);
+                    String name = field[j].getName();    //获取属性的名字
+                    if (jsonObject.has(name) && jsonObject.getString(name) != null && !jsonObject.getString(name).equals("")) {
+                        try {
+                            // 调用getter方法获取属性值
+                            Method getOrSet = locations.getClass().getMethod("get" + name);
+                            Object value = getOrSet.invoke(locations);
+                            if (value == null) {
+                                //调用setter方法设属性值
+                                Class[] parameterTypes = new Class[1];
+                                parameterTypes[0] = field[j].getType();
+                                getOrSet = locations.getClass().getDeclaredMethod("set" + name, parameterTypes);
+                                getOrSet.invoke(locations, jsonObject.getString(name));
+                            }
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                }
+                list.add(locations);
+            }
+            return list;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
 }
