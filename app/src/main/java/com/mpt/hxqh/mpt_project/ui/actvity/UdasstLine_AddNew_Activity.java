@@ -23,9 +23,11 @@ import com.flyco.dialog.widget.NormalListDialog;
 import com.mpt.hxqh.mpt_project.R;
 import com.mpt.hxqh.mpt_project.config.Constants;
 import com.mpt.hxqh.mpt_project.manager.AppManager;
+import com.mpt.hxqh.mpt_project.model.UDASST;
 import com.mpt.hxqh.mpt_project.model.WebResult;
 import com.mpt.hxqh.mpt_project.unit.DateTimeSelect;
 import com.mpt.hxqh.mpt_project.unit.DateTimeSelect2;
+import com.mpt.hxqh.mpt_project.unit.MessageUtils;
 import com.mpt.hxqh.mpt_project.webserviceclient.AndroidClientService;
 
 /**
@@ -55,6 +57,10 @@ public class UdasstLine_AddNew_Activity extends BaseActivity {
     private Button option;
     private String[] optionList = new String[]{"Back","Save"};
 
+    private String location; //位置
+
+    private UDASST udasst;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +76,8 @@ public class UdasstLine_AddNew_Activity extends BaseActivity {
 
     private void initData() {
         repairnum = getIntent().getStringExtra("repairnum");
+        udasst = (UDASST) getIntent().getSerializableExtra("udasst");
+        location=udasst.getLOCATION();
     }
 
     @Override
@@ -181,7 +189,9 @@ public class UdasstLine_AddNew_Activity extends BaseActivity {
     private View.OnClickListener assetnumOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
+
             Intent intent = new Intent(UdasstLine_AddNew_Activity.this, AssetChooseActivity.class);
+            intent.putExtra("LOCATION",location);
             startActivityForResult(intent, 0);
         }
     };
@@ -239,17 +249,14 @@ public class UdasstLine_AddNew_Activity extends BaseActivity {
             protected void onPostExecute(WebResult workResult) {
                 super.onPostExecute(workResult);
                 if (workResult == null) {
-                    Toast.makeText(UdasstLine_AddNew_Activity.this, "false", Toast.LENGTH_SHORT).show();
+                    MessageUtils.showMiddleToast(UdasstLine_AddNew_Activity.this, "false");
                 } else {
-                    Toast.makeText(UdasstLine_AddNew_Activity.this, workResult.returnStr, Toast.LENGTH_SHORT).show();
-//                    setResult(100);
+                    MessageUtils.showMiddleToast(UdasstLine_AddNew_Activity.this, workResult.returnStr);
                     finish();
                 }
                 closeProgressDialog();
             }
         }.execute();
-        //}else {
-        closeProgressDialog();
     }
 
     @Override

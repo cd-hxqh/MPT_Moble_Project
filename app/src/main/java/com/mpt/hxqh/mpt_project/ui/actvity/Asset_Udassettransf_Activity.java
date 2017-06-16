@@ -39,6 +39,7 @@ import com.mpt.hxqh.mpt_project.manager.AppManager;
 import com.mpt.hxqh.mpt_project.model.UDASSETTRANSF;
 import com.mpt.hxqh.mpt_project.ui.widget.SwipeRefreshLayout;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -313,7 +314,7 @@ public class Asset_Udassettransf_Activity extends BaseActivity implements SwipeR
             public void onItemClick(View view, int position) {
                 Intent intent = new Intent(Asset_Udassettransf_Activity.this, Udassettransf_Details_Activity.class);
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("udassettransf", items.get(position));
+                bundle.putSerializable("udassettransf", (Serializable) udassettransfAdapter.getData().get(position));
                 intent.putExtras(bundle);
                 startActivityForResult(intent, 0);
             }

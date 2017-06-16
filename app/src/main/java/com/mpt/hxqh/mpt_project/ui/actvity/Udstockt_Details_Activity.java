@@ -4,7 +4,6 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,7 +13,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.flyco.animation.BaseAnimatorSet;
 import com.flyco.animation.BounceEnter.BounceTopEnter;
@@ -28,7 +26,6 @@ import com.flyco.dialog.widget.NormalEditTextDialog;
 import com.flyco.dialog.widget.NormalListDialog;
 import com.mpt.hxqh.mpt_project.R;
 import com.mpt.hxqh.mpt_project.adpter.BaseQuickAdapter;
-import com.mpt.hxqh.mpt_project.adpter.UdretirelineAdapter;
 import com.mpt.hxqh.mpt_project.adpter.UdstockineAdapter;
 import com.mpt.hxqh.mpt_project.api.HttpManager;
 import com.mpt.hxqh.mpt_project.api.HttpRequestHandler;
@@ -36,12 +33,12 @@ import com.mpt.hxqh.mpt_project.api.JsonUtils;
 import com.mpt.hxqh.mpt_project.bean.Results;
 import com.mpt.hxqh.mpt_project.config.Constants;
 import com.mpt.hxqh.mpt_project.manager.AppManager;
-import com.mpt.hxqh.mpt_project.model.UDRETIRELINE;
 import com.mpt.hxqh.mpt_project.model.UDSTOCKT;
 import com.mpt.hxqh.mpt_project.model.UDSTOCKTLINE;
 import com.mpt.hxqh.mpt_project.model.WorkFlowResult;
 import com.mpt.hxqh.mpt_project.ui.widget.SwipeRefreshLayout;
 import com.mpt.hxqh.mpt_project.unit.AccountUtils;
+import com.mpt.hxqh.mpt_project.unit.MessageUtils;
 import com.mpt.hxqh.mpt_project.webserviceclient.AndroidClientService;
 
 import java.util.ArrayList;
@@ -94,7 +91,7 @@ public class Udstockt_Details_Activity extends BaseActivity {
     private LinearLayout buttonLayout;
     private Button quit;
     private Button option;
-    private String[] optionList = new String[]{"Back", "Route","AddLine"};
+    private String[] optionList = new String[]{"Back", "Route", "AddLine"};
     private BaseAnimatorSet mBasIn;
     private BaseAnimatorSet mBasOut;
 
@@ -221,7 +218,7 @@ public class Udstockt_Details_Activity extends BaseActivity {
                 @Override
                 public void onOperItemClick(AdapterView<?> parent, View view, int position, long id) {
 //                    linetypeTextView.setText(linetypeList[position]);
-                    switch (position){
+                    switch (position) {
                         case 0://Back
                             normalListDialog.superDismiss();
                             finish();
@@ -230,16 +227,16 @@ public class Udstockt_Details_Activity extends BaseActivity {
                             normalListDialog.superDismiss();
                             if (udstockt.getSTATUS().equals(Constants.MPT_STOTAK_START)) {//启动工作流
                                 MaterialDialogOneBtn();
-                            } else if (!udstockt.getSTATUS().equals(Constants.MPT_STOTAK_END)){//审批工作流
+                            } else if (!udstockt.getSTATUS().equals(Constants.MPT_STOTAK_END)) {//审批工作流
                                 EditDialog();
-                            }else {
-                                Toast.makeText(Udstockt_Details_Activity.this, "This state cannot be modified", Toast.LENGTH_SHORT).show();
+                            } else {
+                                MessageUtils.showMiddleToast(Udstockt_Details_Activity.this, "Workflow is finished; cannot start again");
                             }
                             break;
                         case 2://AddLine
                             normalListDialog.superDismiss();
-                            Intent intent = new Intent(Udstockt_Details_Activity.this,UdstocktLine_AddNew_Activity.class);
-                            intent.putExtra("stocktnum",udstockt.getSTOCKTNUM());
+                            Intent intent = new Intent(Udstockt_Details_Activity.this, UdstocktLine_AddNew_Activity.class);
+                            intent.putExtra("stocktnum", udstockt.getSTOCKTNUM());
                             startActivity(intent);
 
                             break;
@@ -298,12 +295,12 @@ public class Udstockt_Details_Activity extends BaseActivity {
             @Override
             protected void onPostExecute(WorkFlowResult s) {
                 super.onPostExecute(s);
-                if (s != null && s.errorMsg != null && s.errorMsg.equals("工作流启动成功")) {
-                    Toast.makeText(Udstockt_Details_Activity.this, "starting success!", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(Udstockt_Details_Activity.this, "boot failure", Toast.LENGTH_SHORT).show();
-                }
                 mProgressDialog.dismiss();
+                if (s != null && s.errorMsg != null && s.errorMsg.equals("工作流启动成功")) {
+                    MessageUtils.showMiddleToast(Udstockt_Details_Activity.this, "starting success!");
+                } else {
+                    MessageUtils.showMiddleToast(Udstockt_Details_Activity.this, s.errorMsg);
+                }
             }
         }.execute();
     }
@@ -358,7 +355,7 @@ public class Udstockt_Details_Activity extends BaseActivity {
             @Override
             protected WorkFlowResult doInBackground(String... strings) {
                 WorkFlowResult result = AndroidClientService.approve(Udstockt_Details_Activity.this,
-                        "MPT_STOTAK", "UDSTOCKT", udstockt.getUDSTOCKTID()+"", "UDSTOCKTID", zx, desc,
+                        "MPT_STOTAK", "UDSTOCKT", udstockt.getUDSTOCKTID() + "", "UDSTOCKTID", zx, desc,
                         AccountUtils.getpersonId(Udstockt_Details_Activity.this));
                 return result;
             }
@@ -366,16 +363,16 @@ public class Udstockt_Details_Activity extends BaseActivity {
             @Override
             protected void onPostExecute(WorkFlowResult s) {
                 super.onPostExecute(s);
+                mProgressDialog.dismiss();
                 if (s == null || s.wonum == null || s.errorMsg == null) {
-                    Toast.makeText(Udstockt_Details_Activity.this, "Failure of approval!", Toast.LENGTH_SHORT).show();
-                } else if (s.wonum.equals(udstockt.getUDSTOCKTID()+"") && s.errorMsg != null) {
+                    MessageUtils.showMiddleToast(Udstockt_Details_Activity.this, s.errorMsg);
+                } else if (s.wonum.equals(udstockt.getUDSTOCKTID() + "") && s.errorMsg != null) {
                     statusTextView.setText(s.errorMsg);
                     udstockt.setSTATUS(s.errorMsg);
-                    Toast.makeText(Udstockt_Details_Activity.this, "Approval success!", Toast.LENGTH_SHORT).show();
+                    MessageUtils.showMiddleToast(Udstockt_Details_Activity.this, "Approval success!");
                 } else {
-                    Toast.makeText(Udstockt_Details_Activity.this, "Failure of approval!", Toast.LENGTH_SHORT).show();
+                    MessageUtils.showMiddleToast(Udstockt_Details_Activity.this, s.errorMsg);
                 }
-                mProgressDialog.dismiss();
             }
         }.execute();
     }
@@ -467,8 +464,8 @@ public class Udstockt_Details_Activity extends BaseActivity {
     private View.OnClickListener addOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            Intent intent = new Intent(Udstockt_Details_Activity.this,UdstocktLine_AddNew_Activity.class);
-            intent.putExtra("stocktnum",udstockt.getSTOCKTNUM());
+            Intent intent = new Intent(Udstockt_Details_Activity.this, UdstocktLine_AddNew_Activity.class);
+            intent.putExtra("stocktnum", udstockt.getSTOCKTNUM());
             startActivity(intent);
         }
     };

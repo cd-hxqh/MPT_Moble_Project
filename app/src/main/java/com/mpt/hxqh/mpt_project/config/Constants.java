@@ -91,6 +91,9 @@ public class Constants {
     public static final String INVUSE_NAME = "INVUSE";
     //资产转移行的表名
     public static final String INVUSELINE_NAME = "INVUSELINE";
+    //INVENTORY的表名
+    public static final String INVENTORY_NAME = "INVENTORY";
+
 
     //资产维修appid
     public static final String UDASREP_NAME = "UDASREP";

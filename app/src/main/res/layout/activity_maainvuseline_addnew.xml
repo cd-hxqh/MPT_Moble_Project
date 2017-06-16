@@ -13,13 +13,13 @@
 
     <ScrollView
         android:id="@+id/scrollview_id"
-        android:fillViewport="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/title_id"
         android:layout_above="@+id/button_layout"
+        android:layout_below="@+id/title_id"
         android:layout_marginBottom="@dimen/dimens_40dp"
         android:background="@color/white"
+        android:fillViewport="true"
         android:scrollbars="vertical">
 
         <LinearLayout
@@ -39,31 +39,31 @@
 
 
                 <!--<LinearLayout-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:gravity="center_vertical"-->
-                    <!--android:orientation="horizontal"-->
-                    <!--android:padding="@dimen/size_5dp">-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:gravity="center_vertical"-->
+                <!--android:orientation="horizontal"-->
+                <!--android:padding="@dimen/size_5dp">-->
 
-                    <!--<TextView-->
-                        <!--android:id="@+id/sb_title_id"-->
-                        <!--android:layout_width="@dimen/dimens_80dp"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:text="@string/po_ponum"-->
-                        <!--android:textColor="@color/light_black"-->
-                        <!--android:textSize="@dimen/dimens_16sp" />-->
+                <!--<TextView-->
+                <!--android:id="@+id/sb_title_id"-->
+                <!--android:layout_width="@dimen/dimens_80dp"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="@string/po_ponum"-->
+                <!--android:textColor="@color/light_black"-->
+                <!--android:textSize="@dimen/dimens_16sp" />-->
 
-                    <!--<TextView-->
-                        <!--android:id="@+id/order_text_id"-->
-                        <!--android:layout_width="match_parent"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_marginLeft="@dimen/dimen_10"-->
-                        <!--android:background="@drawable/editsharp"-->
-                        <!--android:drawablePadding="@dimen/size_5dp"-->
-                        <!--android:gravity="right"-->
-                        <!--android:hint="@string/have_not_data"-->
-                        <!--android:textColor="@color/light_black"-->
-                        <!--android:textSize="@dimen/dimens_16sp" />-->
+                <!--<TextView-->
+                <!--android:id="@+id/order_text_id"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginLeft="@dimen/dimen_10"-->
+                <!--android:background="@drawable/editsharp"-->
+                <!--android:drawablePadding="@dimen/size_5dp"-->
+                <!--android:gravity="right"-->
+                <!--android:hint="@string/have_not_data"-->
+                <!--android:textColor="@color/light_black"-->
+                <!--android:textSize="@dimen/dimens_16sp" />-->
 
                 <!--</LinearLayout>-->
 
@@ -86,9 +86,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
-                        android:drawableRight="@mipmap/ic_more"
                         android:background="@drawable/editsharp"
-                        android:gravity="center_vertical"/>
+                        android:drawableRight="@mipmap/ic_more"
+                        android:gravity="center_vertical" />
 
                 </LinearLayout>
 
@@ -113,9 +113,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
-                        android:drawableRight="@mipmap/ic_more"
                         android:background="@drawable/editsharp"
-                        android:gravity="center_vertical"/>
+                        android:drawableRight="@mipmap/ic_more"
+                        android:gravity="center_vertical" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -138,9 +138,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
-                        android:drawableRight="@mipmap/ic_more"
                         android:background="@drawable/editsharp"
-                        android:gravity="center_vertical"/>
+                        android:drawableRight="@mipmap/ic_more"
+                        android:gravity="center_vertical" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -163,9 +163,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
-                        android:drawableRight="@mipmap/ic_more"
                         android:background="@drawable/editsharp"
-                        android:gravity="center_vertical"/>
+                        android:drawableRight="@mipmap/ic_more"
+                        android:gravity="center_vertical" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -188,9 +188,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
-                        android:drawableRight="@mipmap/ic_more"
                         android:background="@drawable/editsharp"
-                        android:gravity="center_vertical"/>
+                        android:drawableRight="@mipmap/ic_more"
+                        android:gravity="center_vertical" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -213,9 +213,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
-                        android:drawableRight="@mipmap/ic_more"
                         android:background="@drawable/editsharp"
-                        android:gravity="center_vertical"/>
+                        android:drawableRight="@mipmap/ic_more"
+                        android:gravity="center_vertical" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -241,6 +241,8 @@
                         android:background="@drawable/editsharp"
                         android:gravity="right"
                         android:hint="@string/have_not_data"
+                        android:inputType="numberDecimal"
+                        android:text="1"
                         android:textColor="@color/light_black"
                         android:textSize="@dimen/dimens_16sp" />
                 </LinearLayout>
@@ -265,9 +267,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
-                        android:drawableRight="@mipmap/ic_more"
                         android:background="@drawable/editsharp"
-                        android:gravity="center_vertical"/>
+                        android:drawableRight="@mipmap/ic_more"
+                        android:gravity="center_vertical" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -290,9 +292,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
-                        android:drawableRight="@mipmap/ic_more"
                         android:background="@drawable/editsharp"
-                        android:gravity="center_vertical"/>
+                        android:drawableRight="@mipmap/ic_more"
+                        android:gravity="center_vertical" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -315,9 +317,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
-                        android:drawableRight="@mipmap/ic_more"
                         android:background="@drawable/editsharp"
-                        android:gravity="center_vertical"/>
+                        android:drawableRight="@mipmap/ic_more"
+                        android:gravity="center_vertical" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -340,10 +342,11 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/dimen_10"
-                        android:inputType="number"
                         android:background="@drawable/editsharp"
                         android:gravity="right"
                         android:hint="@string/have_not_data"
+                        android:inputType="number"
+                        android:text="1"
                         android:textColor="@color/light_black"
                         android:textSize="@dimen/dimens_16sp" />
                 </LinearLayout>
@@ -351,100 +354,99 @@
             </LinearLayout>
 
 
-
+            <!--<LinearLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:background="@color/white"-->
+            <!--android:orientation="vertical">-->
 
             <!--<LinearLayout-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="match_parent"-->
-                <!--android:background="@color/white"-->
-                <!--android:orientation="vertical">-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:orientation="horizontal">-->
 
-                <!--<LinearLayout-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:orientation="horizontal">-->
+            <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="@dimen/dimens_40dp"-->
+            <!--android:layout_weight="1"-->
+            <!--android:background="@color/light_bule"-->
+            <!--android:gravity="center"-->
+            <!--android:text="@string/type_text"-->
+            <!--android:textColor="@color/black"-->
+            <!--android:textSize="@dimen/dimens_16sp" />-->
 
-                    <!--<TextView-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="@dimen/dimens_40dp"-->
-                        <!--android:layout_weight="1"-->
-                        <!--android:background="@color/light_bule"-->
-                        <!--android:gravity="center"-->
-                        <!--android:text="@string/type_text"-->
-                        <!--android:textColor="@color/black"-->
-                        <!--android:textSize="@dimen/dimens_16sp" />-->
+            <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="@dimen/dimens_40dp"-->
+            <!--android:layout_marginLeft="1dp"-->
+            <!--android:layout_weight="1"-->
+            <!--android:background="@color/light_bule"-->
+            <!--android:gravity="center"-->
+            <!--android:text="@string/item1_text"-->
+            <!--android:textColor="@color/black"-->
+            <!--android:textSize="@dimen/dimens_16sp" />-->
 
-                    <!--<TextView-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="@dimen/dimens_40dp"-->
-                        <!--android:layout_marginLeft="1dp"-->
-                        <!--android:layout_weight="1"-->
-                        <!--android:background="@color/light_bule"-->
-                        <!--android:gravity="center"-->
-                        <!--android:text="@string/item1_text"-->
-                        <!--android:textColor="@color/black"-->
-                        <!--android:textSize="@dimen/dimens_16sp" />-->
+            <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="@dimen/dimens_40dp"-->
+            <!--android:layout_marginLeft="1dp"-->
+            <!--android:layout_weight="1"-->
+            <!--android:background="@color/light_bule"-->
+            <!--android:gravity="center"-->
+            <!--android:text="@string/descrition_text"-->
+            <!--android:textColor="@color/black"-->
+            <!--android:textSize="@dimen/dimens_16sp" />-->
 
-                    <!--<TextView-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="@dimen/dimens_40dp"-->
-                        <!--android:layout_marginLeft="1dp"-->
-                        <!--android:layout_weight="1"-->
-                        <!--android:background="@color/light_bule"-->
-                        <!--android:gravity="center"-->
-                        <!--android:text="@string/descrition_text"-->
-                        <!--android:textColor="@color/black"-->
-                        <!--android:textSize="@dimen/dimens_16sp" />-->
-
-                    <!--<TextView-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="@dimen/dimens_40dp"-->
-                        <!--android:layout_marginLeft="1dp"-->
-                        <!--android:layout_weight="1"-->
-                        <!--android:background="@color/light_bule"-->
-                        <!--android:gravity="center"-->
-                        <!--android:text="@string/to_storeroom_text"-->
-                        <!--android:textColor="@color/black"-->
-                        <!--android:textSize="@dimen/dimens_16sp" />-->
+            <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="@dimen/dimens_40dp"-->
+            <!--android:layout_marginLeft="1dp"-->
+            <!--android:layout_weight="1"-->
+            <!--android:background="@color/light_bule"-->
+            <!--android:gravity="center"-->
+            <!--android:text="@string/to_storeroom_text"-->
+            <!--android:textColor="@color/black"-->
+            <!--android:textSize="@dimen/dimens_16sp" />-->
 
 
-                <!--</LinearLayout>-->
+            <!--</LinearLayout>-->
 
-                <!--<FrameLayout-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="match_parent">-->
+            <!--<FrameLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent">-->
 
-                    <!--<com.mpt.hxqh.mpt_project.ui.widget.SwipeRefreshLayout-->
-                        <!--android:id="@+id/swipe_container"-->
-                        <!--android:layout_width="match_parent"-->
-                        <!--android:layout_height="wrap_content">-->
+            <!--<com.mpt.hxqh.mpt_project.ui.widget.SwipeRefreshLayout-->
+            <!--android:id="@+id/swipe_container"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content">-->
 
-                        <!--<android.support.v7.widget.RecyclerView-->
-                            <!--android:id="@+id/dqgz10_recyclerView_id"-->
-                            <!--android:layout_width="match_parent"-->
-                            <!--android:layout_height="wrap_content"-->
-                            <!--android:background="@color/white"></android.support.v7.widget.RecyclerView>-->
-                    <!--</com.mpt.hxqh.mpt_project.ui.widget.SwipeRefreshLayout>-->
+            <!--<android.support.v7.widget.RecyclerView-->
+            <!--android:id="@+id/dqgz10_recyclerView_id"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:background="@color/white"></android.support.v7.widget.RecyclerView>-->
+            <!--</com.mpt.hxqh.mpt_project.ui.widget.SwipeRefreshLayout>-->
 
-                    <!--<LinearLayout-->
-                        <!--android:id="@+id/have_not_data_id"-->
-                        <!--android:layout_width="match_parent"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:gravity="center"-->
-                        <!--android:visibility="gone">-->
+            <!--<LinearLayout-->
+            <!--android:id="@+id/have_not_data_id"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:gravity="center"-->
+            <!--android:visibility="gone">-->
 
-                        <!--<TextView-->
-                            <!--android:layout_width="wrap_content"-->
-                            <!--android:layout_height="wrap_content"-->
-                            <!--android:layout_gravity="center"-->
-                            <!--android:text="@string/have_not_data_txt"-->
-                            <!--android:textSize="@dimen/abc_action_bar_content_inset_material" />-->
-                    <!--</LinearLayout>-->
-                <!--</FrameLayout>-->
+            <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_gravity="center"-->
+            <!--android:text="@string/have_not_data_txt"-->
+            <!--android:textSize="@dimen/abc_action_bar_content_inset_material" />-->
+            <!--</LinearLayout>-->
+            <!--</FrameLayout>-->
             <!--</LinearLayout>-->
 
 
         </LinearLayout>
     </ScrollView>
+
     <include layout="@layout/asset_buttom"></include>
 </RelativeLayout>

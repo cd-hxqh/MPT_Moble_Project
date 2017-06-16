@@ -161,5 +161,8 @@
     <string name="orderunit_text">Order Unit:</string>
     <string name="siteid_text">Site:</string>
     <string name="trantype_text">Transaction Type:</string>
+    <string name="add_plan_text">Add Plan</string>
+    <string name="add_actural_text">Add Actural</string>
+    <string name="have_load_out_all_the_data">have load out all the data</string>
 
 </resources>

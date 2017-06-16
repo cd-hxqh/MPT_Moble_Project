@@ -50,8 +50,8 @@ public abstract class BaseAlertDialog<T extends BaseAlertDialog<T>> extends Base
     protected TextView mTvBtnMiddle;
     /** btn text(按钮内容) */
     protected String mBtnLeftText = "cancel";
-    protected String mBtnRightText = "ok";
-    protected String mBtnMiddleText = "continue";
+    protected String mBtnRightText = "confirm";
+    protected String mBtnMiddleText = "go on";
     /** btn textcolor(按钮字体颜色) */
     protected int mLeftBtnTextColor;
     protected int mRightBtnTextColor;
@@ -113,7 +113,7 @@ public abstract class BaseAlertDialog<T extends BaseAlertDialog<T>> extends Base
         /** title */
         mTvTitle.setVisibility(mIsTitleShow ? View.VISIBLE : View.GONE);
 
-        mTvTitle.setText(TextUtils.isEmpty(mTitle) ? "Hint" : mTitle);
+        mTvTitle.setText(TextUtils.isEmpty(mTitle) ? "Warm prompt" : mTitle);
         mTvTitle.setTextColor(mTitleTextColor);
         mTvTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, mTitleTextSize);
 

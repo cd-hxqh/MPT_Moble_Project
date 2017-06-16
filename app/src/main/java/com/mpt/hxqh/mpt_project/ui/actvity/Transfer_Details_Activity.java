@@ -4,7 +4,6 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -37,10 +36,10 @@ import com.mpt.hxqh.mpt_project.config.Constants;
 import com.mpt.hxqh.mpt_project.manager.AppManager;
 import com.mpt.hxqh.mpt_project.model.INVUSE;
 import com.mpt.hxqh.mpt_project.model.INVUSELINE;
-import com.mpt.hxqh.mpt_project.model.WebResult;
 import com.mpt.hxqh.mpt_project.model.WorkFlowResult;
 import com.mpt.hxqh.mpt_project.ui.widget.SwipeRefreshLayout;
 import com.mpt.hxqh.mpt_project.unit.AccountUtils;
+import com.mpt.hxqh.mpt_project.unit.MessageUtils;
 import com.mpt.hxqh.mpt_project.webserviceclient.AndroidClientService;
 
 import java.util.ArrayList;
@@ -233,7 +232,7 @@ public class Transfer_Details_Activity extends BaseActivity {
                             } else if (!invuse.getSTATUS().equals(Constants.ASTTRANS_END)){//审批工作流
                                 EditDialog();
                             }else {
-                                Toast.makeText(Transfer_Details_Activity.this, "This state cannot be modified", Toast.LENGTH_SHORT).show();
+                                MessageUtils.showMiddleToast(Transfer_Details_Activity.this, "Workflow is finished; cannot start again");
                             }
                             break;
                         case 2://AddLine
@@ -367,16 +366,16 @@ public class Transfer_Details_Activity extends BaseActivity {
             @Override
             protected void onPostExecute(WorkFlowResult s) {
                 super.onPostExecute(s);
+                mProgressDialog.dismiss();
                 if (s == null || s.wonum == null || s.errorMsg == null) {
-                    Toast.makeText(Transfer_Details_Activity.this, "Failure of approval!", Toast.LENGTH_SHORT).show();
-                } else if (s.wonum.equals(invuse.getINVUSEID()+"") && s.errorMsg != null) {
+                    MessageUtils.showMiddleToast(Transfer_Details_Activity.this, s.errorMsg);
+                } else if (s.wonum.equals(invuse.getINVUSEID() + "") && s.errorMsg != null) {
                     statusTextView.setText(s.errorMsg);
                     invuse.setSTATUS(s.errorMsg);
-                    Toast.makeText(Transfer_Details_Activity.this, "Approval success!", Toast.LENGTH_SHORT).show();
+                    MessageUtils.showMiddleToast(Transfer_Details_Activity.this,"Approval success!");
                 } else {
-                    Toast.makeText(Transfer_Details_Activity.this, "Failure of approval!", Toast.LENGTH_SHORT).show();
+                    MessageUtils.showMiddleToast(Transfer_Details_Activity.this, s.errorMsg);
                 }
-                mProgressDialog.dismiss();
             }
         }.execute();
     }
@@ -419,7 +418,7 @@ public class Transfer_Details_Activity extends BaseActivity {
      * 获取数据*
      */
     private void getData() {
-        HttpManager.getDataPagingInfo(Transfer_Details_Activity.this, HttpManager.getINVUSELINEURL("1057", page, 20), new HttpRequestHandler<Results>() {
+        HttpManager.getDataPagingInfo(Transfer_Details_Activity.this, HttpManager.getINVUSELINEURL(invuse.getINVUSENUM(), page, 20), new HttpRequestHandler<Results>() {
             @Override
             public void onSuccess(Results results) {
             }

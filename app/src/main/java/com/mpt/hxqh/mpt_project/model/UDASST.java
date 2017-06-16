@@ -13,7 +13,7 @@ public class UDASST implements Serializable {
     public String LOCATION;//LOCATION
     public String REPAIRNUM;//REPAIRNUM
     public String UDASSTNUM;//UDASSTNUM
-    public String UDINSTALLDATE;//UDINSTALLDATE
+    public String UDREPDATE;//UDREPDATE
     public String UDSTATUS;//UDSTATUS
 
     public String getUDASSTID() {
@@ -48,12 +48,12 @@ public class UDASST implements Serializable {
         this.UDASSTNUM = UDASSTNUM;
     }
 
-    public String getUDINSTALLDATE() {
-        return UDINSTALLDATE;
+    public String getUDREPDATE() {
+        return UDREPDATE;
     }
 
-    public void setUDINSTALLDATE(String UDINSTALLDATE) {
-        this.UDINSTALLDATE = UDINSTALLDATE;
+    public void setUDREPDATE(String UDREPDATE) {
+        this.UDREPDATE = UDREPDATE;
     }
 
     public String getUDSTATUS() {

@@ -13,17 +13,17 @@
 
     <ScrollView
         android:id="@+id/scrollview_id"
-        android:fillViewport="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/title_id"
         android:layout_above="@+id/button_layout"
-        android:layout_marginBottom="@dimen/dimens_40dp"
-        android:background="@color/white"
-        android:scrollbars="vertical"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/title_id"
+        android:layout_marginBottom="@dimen/dimens_40dp"
+        android:background="@color/white"
+        android:fillViewport="true"
+        android:scrollbars="vertical">
 
         <LinearLayout
             android:id="@+id/container"
@@ -60,9 +60,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
-                        android:drawableRight="@mipmap/ic_more"
                         android:background="@drawable/editsharp"
-                        android:gravity="center_vertical"/>
+                        android:drawableRight="@mipmap/ic_more"
+                        android:gravity="center_vertical" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -89,7 +89,7 @@
                         android:gravity="right"
                         android:hint="@string/have_not_data"
                         android:textColor="@color/light_black"
-                        android:textSize="@dimen/dimens_16sp"/>
+                        android:textSize="@dimen/dimens_16sp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -112,9 +112,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
-                        android:drawableRight="@mipmap/ic_more"
                         android:background="@drawable/editsharp"
-                        android:gravity="center_vertical"/>
+                        android:drawableRight="@mipmap/ic_more"
+                        android:gravity="center_vertical" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -137,9 +137,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
-                        android:drawableRight="@mipmap/ic_more"
                         android:background="@drawable/editsharp"
-                        android:gravity="center_vertical"/>
+                        android:drawableRight="@mipmap/ic_more"
+                        android:gravity="center_vertical" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -162,9 +162,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
-                        android:drawableRight="@mipmap/ic_more"
                         android:background="@drawable/editsharp"
-                        android:gravity="center_vertical"/>
+                        android:drawableRight="@mipmap/ic_more"
+                        android:gravity="center_vertical" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -187,9 +187,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
-                        android:drawableRight="@mipmap/ic_more"
                         android:background="@drawable/editsharp"
-                        android:gravity="center_vertical"/>
+                        android:drawableRight="@mipmap/ic_more"
+                        android:gravity="center_vertical" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -212,12 +212,12 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/dimen_10"
-                        android:inputType="number"
                         android:background="@drawable/editsharp"
                         android:gravity="right"
                         android:hint="@string/have_not_data"
+                        android:inputType="number"
                         android:textColor="@color/light_black"
-                        android:textSize="@dimen/dimens_16sp"/>
+                        android:textSize="@dimen/dimens_16sp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -240,9 +240,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
-                        android:drawableRight="@mipmap/ic_more"
                         android:background="@drawable/editsharp"
-                        android:gravity="center_vertical"/>
+                        android:drawableRight="@mipmap/ic_more"
+                        android:gravity="center_vertical" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -265,12 +265,12 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/dimen_10"
-                        android:inputType="number"
                         android:background="@drawable/editsharp"
                         android:gravity="right"
                         android:hint="@string/have_not_data"
+                        android:inputType="number"
                         android:textColor="@color/light_black"
-                        android:textSize="@dimen/dimens_16sp"/>
+                        android:textSize="@dimen/dimens_16sp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -278,7 +278,8 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:padding="@dimen/size_5dp">
+                    android:padding="@dimen/size_5dp"
+                    android:visibility="gone">
 
                     <TextView
                         android:layout_width="@dimen/dimens_80dp"
@@ -293,14 +294,15 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
-                        android:drawableRight="@mipmap/ic_more"
                         android:background="@drawable/editsharp"
-                        android:gravity="center_vertical"/>
+                        android:drawableRight="@mipmap/ic_more"
+                        android:gravity="center_vertical" />
                 </LinearLayout>
 
             </LinearLayout>
 
         </LinearLayout>
     </ScrollView>
+
     <include layout="@layout/asset_buttom"></include>
 </RelativeLayout>

@@ -35,11 +35,11 @@ import com.mpt.hxqh.mpt_project.api.HttpManager;
 import com.mpt.hxqh.mpt_project.api.HttpRequestHandler;
 import com.mpt.hxqh.mpt_project.api.JsonUtils;
 import com.mpt.hxqh.mpt_project.bean.Results;
-import com.mpt.hxqh.mpt_project.dialog.FlippingLoadingDialog;
 import com.mpt.hxqh.mpt_project.manager.AppManager;
 import com.mpt.hxqh.mpt_project.model.INVUSE;
 import com.mpt.hxqh.mpt_project.ui.widget.SwipeRefreshLayout;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -315,7 +315,7 @@ public class Asset_Transfer_Activity extends BaseActivity implements SwipeRefres
             public void onItemClick(View view, int position) {
                 Intent intent = new Intent(Asset_Transfer_Activity.this, Transfer_Details_Activity.class);
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("invuse", items.get(position));
+                bundle.putSerializable("invuse", (Serializable) invuseAdapter.getData().get(position));
                 intent.putExtras(bundle);
                 startActivityForResult(intent, 0);
             }

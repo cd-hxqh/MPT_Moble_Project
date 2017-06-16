@@ -21,28 +21,30 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.mpt.hxqh.mpt_project.R;
-import com.mpt.hxqh.mpt_project.adpter.AssetChooseAdapter;
 import com.mpt.hxqh.mpt_project.adpter.BaseQuickAdapter;
+import com.mpt.hxqh.mpt_project.adpter.InvertoryAdapter;
 import com.mpt.hxqh.mpt_project.api.HttpManager;
 import com.mpt.hxqh.mpt_project.api.HttpRequestHandler;
 import com.mpt.hxqh.mpt_project.api.JsonUtils;
 import com.mpt.hxqh.mpt_project.bean.Results;
-import com.mpt.hxqh.mpt_project.model.ASSET;
+import com.mpt.hxqh.mpt_project.model.INVENTORY;
 import com.mpt.hxqh.mpt_project.ui.widget.SwipeRefreshLayout;
+import com.mpt.hxqh.mpt_project.unit.MessageUtils;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 选择项
+ * ITEM选择项
  **/
 
-public class AssetChooseActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener, SwipeRefreshLayout.OnLoadListener {
+public class InventoryChooseActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener, SwipeRefreshLayout.OnLoadListener {
 
-    private static final String TAG = "AssetChooseActivity";
+    private static final String TAG = "InventoryChooseActivity";
 
 
-    public static final int ASSET_CODE = 1002;
+    public static final int INVENTORY_CODE = 1010;
 
     /**
      * 标题*
@@ -71,7 +73,7 @@ public class AssetChooseActivity extends BaseActivity implements SwipeRefreshLay
     /**
      * 适配器*
      */
-    private AssetChooseAdapter locationAdapter;
+    private InvertoryAdapter invertoryAdapter;
     /**
      * 编辑框*
      */
@@ -82,7 +84,6 @@ public class AssetChooseActivity extends BaseActivity implements SwipeRefreshLay
     private String searchText = "";
     private int page = 1;
 
-    ArrayList<ASSET> items = new ArrayList<ASSET>();
 
     private String location; //位置
 
@@ -124,7 +125,7 @@ public class AssetChooseActivity extends BaseActivity implements SwipeRefreshLay
         titleTextView.setText("Asset");
         setSearchEdit();
 
-        layoutManager = new LinearLayoutManager(AssetChooseActivity.this);
+        layoutManager = new LinearLayoutManager(InventoryChooseActivity.this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         layoutManager.scrollToPosition(0);
         recyclerView.setLayoutManager(layoutManager);
@@ -138,8 +139,7 @@ public class AssetChooseActivity extends BaseActivity implements SwipeRefreshLay
         refresh_layout.setOnRefreshListener(this);
         refresh_layout.setOnLoadListener(this);
 
-        initAdapter(new ArrayList<ASSET>());
-        items = new ArrayList<>();
+        initAdapter(new ArrayList<INVENTORY>());
         getData(searchText);
     }
 
@@ -191,8 +191,7 @@ public class AssetChooseActivity extends BaseActivity implements SwipeRefreshLay
                                             .getWindowToken(),
                                     InputMethodManager.HIDE_NOT_ALWAYS);
                     searchText = search.getText().toString();
-                    locationAdapter.removeAll(items);
-                    items = new ArrayList<ASSET>();
+                    invertoryAdapter.removeAll(invertoryAdapter.getData());
                     nodatalayout.setVisibility(View.GONE);
                     refresh_layout.setRefreshing(true);
                     page = 1;
@@ -210,8 +209,8 @@ public class AssetChooseActivity extends BaseActivity implements SwipeRefreshLay
      */
     private void getData(String search) {
         String url = null;
-        url = HttpManager.getLocationAssetUrl(search, location, page, 20);
-        HttpManager.getDataPagingInfo(AssetChooseActivity.this, url, new HttpRequestHandler<Results>() {
+        url = HttpManager.getINVENTORYURL(search, location, page, 20);
+        HttpManager.getDataPagingInfo(InventoryChooseActivity.this, url, new HttpRequestHandler<Results>() {
             @Override
             public void onSuccess(Results results) {
                 Log.i(TAG, "data=" + results);
@@ -219,7 +218,7 @@ public class AssetChooseActivity extends BaseActivity implements SwipeRefreshLay
 
             @Override
             public void onSuccess(Results results, int totalPages, int currentPage) {
-                ArrayList<ASSET> item = JsonUtils.parsingASSET(results.getResultlist());
+                ArrayList<INVENTORY> item = JsonUtils.parsingINVENTORY(results.getResultlist());
                 refresh_layout.setRefreshing(false);
                 refresh_layout.setLoading(false);
                 if (item == null || item.isEmpty()) {
@@ -228,17 +227,16 @@ public class AssetChooseActivity extends BaseActivity implements SwipeRefreshLay
 
                     if (item != null || item.size() != 0) {
                         if (page == 1) {
-                            items = new ArrayList<ASSET>();
-                            initAdapter(new ArrayList<ASSET>());
+                            initAdapter(new ArrayList<INVENTORY>());
                         }
-                        for (int i = 0; i < item.size(); i++) {
-                            items.add(item.get(i));
+                        if (page > totalPages) {
+                            MessageUtils.showMiddleToast(InventoryChooseActivity.this, getString(R.string.have_load_out_all_the_data));
+                        } else {
+                            addData(item);
                         }
-                        addData(item);
                     }
                     nodatalayout.setVisibility(View.GONE);
 
-                    initAdapter(items);
                 }
             }
 
@@ -255,17 +253,17 @@ public class AssetChooseActivity extends BaseActivity implements SwipeRefreshLay
     /**
      * 获取数据*
      */
-    private void initAdapter(final List<ASSET> list) {
-        locationAdapter = new AssetChooseAdapter(AssetChooseActivity.this, R.layout.list_item, list);
-        recyclerView.setAdapter(locationAdapter);
-        locationAdapter.setOnRecyclerViewItemClickListener(new BaseQuickAdapter.OnRecyclerViewItemClickListener() {
+    private void initAdapter(final List<INVENTORY> list) {
+        invertoryAdapter = new InvertoryAdapter(InventoryChooseActivity.this, R.layout.list_item, list);
+        recyclerView.setAdapter(invertoryAdapter);
+        invertoryAdapter.setOnRecyclerViewItemClickListener(new BaseQuickAdapter.OnRecyclerViewItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-
                 Intent intent = getIntent();
-                intent.putExtra("Assetnum", list.get(position).getASSETNUM());
-                intent.putExtra("Itemnum", list.get(position).getITEMNUM());
-                setResult(ASSET_CODE, intent);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("Inventory", (Serializable) invertoryAdapter.getData().get(position));
+                intent.putExtras(bundle);
+                setResult(INVENTORY_CODE, intent);
                 finish();
 
             }
@@ -275,7 +273,7 @@ public class AssetChooseActivity extends BaseActivity implements SwipeRefreshLay
     /**
      * 添加数据*
      */
-    private void addData(final List<ASSET> list) {
-        locationAdapter.addData(list);
+    private void addData(final List<INVENTORY> list) {
+        invertoryAdapter.addData(list);
     }
 }

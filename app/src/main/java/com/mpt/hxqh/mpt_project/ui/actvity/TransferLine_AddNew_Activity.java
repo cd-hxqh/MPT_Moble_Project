@@ -22,9 +22,11 @@ import com.flyco.dialog.widget.NormalListDialog;
 import com.mpt.hxqh.mpt_project.R;
 import com.mpt.hxqh.mpt_project.config.Constants;
 import com.mpt.hxqh.mpt_project.manager.AppManager;
+import com.mpt.hxqh.mpt_project.model.INVENTORY;
 import com.mpt.hxqh.mpt_project.model.INVUSE;
 import com.mpt.hxqh.mpt_project.model.WebResult;
 import com.mpt.hxqh.mpt_project.unit.AccountUtils;
+import com.mpt.hxqh.mpt_project.unit.MessageUtils;
 import com.mpt.hxqh.mpt_project.webserviceclient.AndroidClientService;
 
 /**
@@ -40,7 +42,7 @@ public class TransferLine_AddNew_Activity extends BaseActivity {
 
     private Button submit;
 
-//    private TextView orderTextView; //Order
+    //    private TextView orderTextView; //Order
     private TextView usetypeTextView; //usetype
     private TextView linetypeTextView; //linetype
     private TextView itemnumTextView; //itemnum
@@ -58,11 +60,11 @@ public class TransferLine_AddNew_Activity extends BaseActivity {
     private LinearLayout buttonLayout;
     private Button quit;
     private Button option;
-    private String[] optionList = new String[]{"Back","Save"};
+    private String[] optionList = new String[]{"Back", "Save"};
 
-    private String[] usetypeList = new String[]{"Issue","Return","Transfer"};
+    private String[] usetypeList = new String[]{"Issue", "Return", "Transfer"};
 
-    private String[] linetypeList = new String[]{"Item","Tool"};
+    private String[] linetypeList = new String[]{"Item", "Tool"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -178,7 +180,7 @@ public class TransferLine_AddNew_Activity extends BaseActivity {
                 @Override
                 public void onOperItemClick(AdapterView<?> parent, View view, int position, long id) {
 //                    linetypeTextView.setText(linetypeList[position]);
-                    switch (position){
+                    switch (position) {
                         case 0://Back
                             normalListDialog.superDismiss();
                             finish();
@@ -232,6 +234,7 @@ public class TransferLine_AddNew_Activity extends BaseActivity {
         @Override
         public void onClick(View view) {
             Intent intent = new Intent(TransferLine_AddNew_Activity.this, AssetChooseActivity.class);
+            intent.putExtra("LOCATION", storeroom);
             startActivityForResult(intent, 0);
         }
     };
@@ -253,14 +256,14 @@ public class TransferLine_AddNew_Activity extends BaseActivity {
     private View.OnClickListener itemnumOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            Intent intent = new Intent(TransferLine_AddNew_Activity.this, ItemChooseActivity.class);
-            intent.putExtra("storeroom",storeroom);
+            Intent intent = new Intent(TransferLine_AddNew_Activity.this, InventoryChooseActivity.class);
+            intent.putExtra("LOCATION", storeroom);
             startActivityForResult(intent, 0);
         }
     };
 
-    private void usetypeDialog(){
-        final NormalListDialog normalListDialog= new NormalListDialog(TransferLine_AddNew_Activity.this,usetypeList);
+    private void usetypeDialog() {
+        final NormalListDialog normalListDialog = new NormalListDialog(TransferLine_AddNew_Activity.this, usetypeList);
         normalListDialog.title("Usage Type")
                 .showAnim(mBasIn)//
                 .dismissAnim(mBasOut)//
@@ -274,8 +277,8 @@ public class TransferLine_AddNew_Activity extends BaseActivity {
         });
     }
 
-    private void linetypeDialog(){
-        final NormalListDialog normalListDialog= new NormalListDialog(TransferLine_AddNew_Activity.this,linetypeList);
+    private void linetypeDialog() {
+        final NormalListDialog normalListDialog = new NormalListDialog(TransferLine_AddNew_Activity.this, linetypeList);
         normalListDialog.title("Usage Type")
                 .showAnim(mBasIn)//
                 .dismissAnim(mBasOut)//
@@ -322,7 +325,7 @@ public class TransferLine_AddNew_Activity extends BaseActivity {
         new AsyncTask<String, String, WebResult>() {
             @Override
             protected WebResult doInBackground(String... strings) {
-                WebResult reviseresult = AndroidClientService.AddAssetTrsLin(TransferLine_AddNew_Activity.this, invusenum,usetypeTextView.getText().toString(),
+                WebResult reviseresult = AndroidClientService.AddAssetTrsLin(TransferLine_AddNew_Activity.this, invusenum, usetypeTextView.getText().toString(),
                         linetypeTextView.getText().toString(), itemnumTextView.getText().toString(), tostorelocTextView.getText().toString()
                         , rotassetnumTextView.getText().toString(), issuetoTextView.getText().toString(), quantityTextView.getText().toString(), Constants.TRANSFER_URL);
                 return reviseresult;
@@ -331,18 +334,16 @@ public class TransferLine_AddNew_Activity extends BaseActivity {
             @Override
             protected void onPostExecute(WebResult workResult) {
                 super.onPostExecute(workResult);
+                closeProgressDialog();
                 if (workResult == null) {
-                    Toast.makeText(TransferLine_AddNew_Activity.this, "false", Toast.LENGTH_SHORT).show();
+                    MessageUtils.showMiddleToast(TransferLine_AddNew_Activity.this, workResult.returnStr);
                 } else {
-                    Toast.makeText(TransferLine_AddNew_Activity.this, workResult.returnStr, Toast.LENGTH_SHORT).show();
-//                    setResult(100);
+                    MessageUtils.showMiddleToast(TransferLine_AddNew_Activity.this, workResult.returnStr);
                     finish();
                 }
-                closeProgressDialog();
+
             }
         }.execute();
-        //}else {
-        closeProgressDialog();
     }
 
     @Override
@@ -353,9 +354,9 @@ public class TransferLine_AddNew_Activity extends BaseActivity {
                 String location = data.getExtras().getString("Location");
                 tostorelocTextView.setText(location);
                 break;
-            case ItemChooseActivity.ITEM_CODE:
-                String item = data.getExtras().getString("Itemnum");
-                itemnumTextView.setText(item);
+            case InventoryChooseActivity.INVENTORY_CODE: //ITEM选择
+                INVENTORY inventory = (INVENTORY) data.getSerializableExtra("Inventory");
+                itemnumTextView.setText(inventory.getITEMNUM());
                 break;
             case AssetChooseActivity.ASSET_CODE:
                 String asset = data.getExtras().getString("Assetnum");

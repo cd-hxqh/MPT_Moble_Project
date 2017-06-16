@@ -8,6 +8,7 @@ import com.mpt.hxqh.mpt_project.bean.Results;
 import com.mpt.hxqh.mpt_project.config.Constants;
 import com.mpt.hxqh.mpt_project.model.ASSET;
 import com.mpt.hxqh.mpt_project.model.INVBALANCES;
+import com.mpt.hxqh.mpt_project.model.INVENTORY;
 import com.mpt.hxqh.mpt_project.model.INVUSE;
 import com.mpt.hxqh.mpt_project.model.INVUSELINE;
 import com.mpt.hxqh.mpt_project.model.ITEM;
@@ -139,6 +140,31 @@ public class JsonUtils<E> {
      */
     public static WebResult parsingWebResult(String data) {
 
+        WebResult webResult = new WebResult();
+        try {
+            JSONObject dataJson = new JSONObject(data);
+            if (dataJson.has("event")) {
+                webResult.event = dataJson.getString("event");
+            }
+            if (dataJson.has("returnStr")) {
+                webResult.returnStr = dataJson.getString("returnStr");
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        return webResult;
+    }
+
+
+
+    /**
+     * 不分页解析返回的结果*
+     */
+    public static WebResult parsingWebResult1(String data) {
+
         String result = null;
         WebResult webResult = new WebResult();
         if (data.contains("|")){
@@ -147,6 +173,7 @@ public class JsonUtils<E> {
         }
         return webResult;
     }
+
 
     /**
      * 解析开始工作流返回信息
@@ -480,6 +507,61 @@ public class JsonUtils<E> {
             return null;
         }
     }
+
+
+    /**
+     * INVENTORY选择
+     */
+    public static ArrayList<INVENTORY> parsingINVENTORY(String data) {
+        ArrayList<INVENTORY> list = null;
+        INVENTORY inventory = null;
+        try {
+            JSONArray jsonArray = new JSONArray(data);
+            JSONObject jsonObject;
+            list = new ArrayList<INVENTORY>();
+            for (int i = 0; i < jsonArray.length(); i++) {
+                inventory = new INVENTORY();
+                jsonObject = jsonArray.getJSONObject(i);
+                Field[] field = inventory.getClass().getDeclaredFields();        //获取实体类的所有属性，返回Field数组
+                for (int j = 0; j < field.length; j++) {     //遍历所有属性
+                    field[j].setAccessible(true);
+                    String name = field[j].getName();    //获取属性的名字
+                    if (jsonObject.has(name) && jsonObject.getString(name) != null && !jsonObject.getString(name).equals("")) {
+                        try {
+                            // 调用getter方法获取属性值
+                            Method getOrSet = inventory.getClass().getMethod("get" + name);
+                            Object value = getOrSet.invoke(inventory);
+                            if (value == null) {
+                                //调用setter方法设属性值
+                                Class[] parameterTypes = new Class[1];
+                                parameterTypes[0] = field[j].getType();
+                                getOrSet = inventory.getClass().getDeclaredMethod("set" + name, parameterTypes);
+                                getOrSet.invoke(inventory, jsonObject.getString(name));
+                            }
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                }
+                list.add(inventory);
+            }
+            return list;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
+
+
+
+
+
+
+
 
     /**
      */

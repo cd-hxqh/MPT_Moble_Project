@@ -83,46 +83,44 @@ public class AccountUtils {
 
     public static void ClearPassWord(Context cxt) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(cxt);
-        sharedPreferences.edit().putString(cxt.getString(R.string.logined_member_password),"").commit();
+        sharedPreferences.edit().putString(cxt.getString(R.string.logined_member_password), "").commit();
     }
 
     /**
      * 记录登录返回信息
-     * @param cxt
-     * @param insertSite
-     * @param insertOrg
-     * @param personId
      *
+     * @param cxt
+     * @param personId
      */
-    public static void setLoginDetails(Context cxt,String insertOrg,String insertSite,String personId,String userName,String displayName){
+    public static void setLoginDetails(Context cxt, String personId, String userName, String displayName) {
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(cxt);
-        sharedPreferences.edit().putString(cxt.getString(R.string.login_insertOrg), insertOrg).putString(cxt.getString(R.string.login_insertSite), insertSite)
+        sharedPreferences.edit()
                 .putString(cxt.getString(R.string.login_personId), personId).putString(cxt.getString(R.string.login_userName), userName)
                 .putString(cxt.getString(R.string.login_displayName), displayName).commit();
     }
 
-    public static String getinsertOrg(Context cxt){
+    public static String getinsertOrg(Context cxt) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(cxt);
         return sharedPreferences.getString(cxt.getString(R.string.login_insertOrg), "");
     }
 
-    public static String getinsertSite(Context cxt){
+    public static String getinsertSite(Context cxt) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(cxt);
         return sharedPreferences.getString(cxt.getString(R.string.login_insertSite), "");
     }
 
-    public static String getpersonId(Context cxt){
+    public static String getpersonId(Context cxt) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(cxt);
         return sharedPreferences.getString(cxt.getString(R.string.login_personId), "");
     }
 
-    public static String getuserName(Context cxt){
+    public static String getuserName(Context cxt) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(cxt);
         return sharedPreferences.getString(cxt.getString(R.string.login_userName), "");
     }
 
-    public static String getdisplayName(Context cxt){
+    public static String getdisplayName(Context cxt) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(cxt);
         return sharedPreferences.getString(cxt.getString(R.string.login_displayName), "");
     }
@@ -153,18 +151,15 @@ public class AccountUtils {
 
     /**
      * 设置部门
-     *
-     *
      */
 
     public static void setDepartment(Context cxt, String department) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(cxt);
         sharedPreferences.edit().putString(cxt.getString(R.string.login_department), department).commit();
     }
+
     /**
      * 获取部门
-     *
-     *
      */
 
     public static String getDepartment(Context cxt) {
@@ -191,9 +186,6 @@ public class AccountUtils {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(cxt);
         return sharedPreferences.getString(cxt.getString(R.string.ip_address), "");
     }
-
-
-
 
 
 }

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -36,10 +37,10 @@ import com.mpt.hxqh.mpt_project.config.Constants;
 import com.mpt.hxqh.mpt_project.manager.AppManager;
 import com.mpt.hxqh.mpt_project.model.UDASST;
 import com.mpt.hxqh.mpt_project.model.UDASSTREP;
-import com.mpt.hxqh.mpt_project.model.WebResult;
 import com.mpt.hxqh.mpt_project.model.WorkFlowResult;
 import com.mpt.hxqh.mpt_project.ui.widget.SwipeRefreshLayout;
 import com.mpt.hxqh.mpt_project.unit.AccountUtils;
+import com.mpt.hxqh.mpt_project.unit.MessageUtils;
 import com.mpt.hxqh.mpt_project.webserviceclient.AndroidClientService;
 
 import java.util.ArrayList;
@@ -97,7 +98,7 @@ public class Udasst_Details_Activity extends BaseActivity {
     private BaseAnimatorSet mBasOut;
 
     private NormalListDialog normalListDialog;
-    private String[] optionList = new String[]{"Back", "Route","AddLine"};
+    private String[] optionList = new String[]{"Back", "Route", "AddLine"};
 
     private ProgressDialog mProgressDialog;
 
@@ -149,9 +150,8 @@ public class Udasst_Details_Activity extends BaseActivity {
             descriptionTextView.setText(udasst.getDESCRIPTION());
             locationTextView.setText(udasst.getLOCATION());
             statusTextView.setText(udasst.getUDSTATUS());
-            installDateTextView.setText(udasst.getUDINSTALLDATE());
+            installDateTextView.setText(udasst.getUDREPDATE());
         }
-
 
 
         layoutManager = new LinearLayoutManager(Udasst_Details_Activity.this);
@@ -222,8 +222,7 @@ public class Udasst_Details_Activity extends BaseActivity {
             normalListDialog.setOnOperItemClickL(new OnOperItemClickL() {
                 @Override
                 public void onOperItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                    linetypeTextView.setText(linetypeList[position]);
-                    switch (position){
+                    switch (position) {
                         case 0://Back
                             normalListDialog.superDismiss();
                             finish();
@@ -232,16 +231,17 @@ public class Udasst_Details_Activity extends BaseActivity {
                             normalListDialog.superDismiss();
                             if (udasst.getUDSTATUS().equals(Constants.ASSETREP_START)) {//启动工作流
                                 MaterialDialogOneBtn();
-                            } else if (!udasst.getUDSTATUS().equals(Constants.ASSETREP_END)){//审批工作流
+                            } else if (!udasst.getUDSTATUS().equals(Constants.ASSETREP_END)) {//审批工作流
                                 EditDialog();
-                            }else {
-                                Toast.makeText(Udasst_Details_Activity.this, "This state cannot be modified", Toast.LENGTH_SHORT).show();
+                            } else {
+                                MessageUtils.showMiddleToast(Udasst_Details_Activity.this, "Workflow is finished; cannot start again");
                             }
                             break;
                         case 2://AddLine
                             normalListDialog.superDismiss();
-                            Intent intent = new Intent(Udasst_Details_Activity.this,UdasstLine_AddNew_Activity.class);
-                            intent.putExtra("repairnum",udasst.getREPAIRNUM());
+                            Intent intent=getIntent();
+                            intent.setClass(Udasst_Details_Activity.this, UdasstLine_AddNew_Activity.class);
+                            intent.putExtra("repairnum", udasst.getREPAIRNUM());
                             startActivity(intent);
 
                             break;
@@ -294,6 +294,7 @@ public class Udasst_Details_Activity extends BaseActivity {
             protected WorkFlowResult doInBackground(String... strings) {
                 WorkFlowResult result = AndroidClientService.startwf(Udasst_Details_Activity.this,
                         "ASSETREP", "UDASST", udasst.getUDASSTNUM(), "UDASSTNUM", AccountUtils.getpersonId(Udasst_Details_Activity.this));
+                Log.i(TAG, "result=" + result);
                 return result;
             }
 
@@ -360,7 +361,7 @@ public class Udasst_Details_Activity extends BaseActivity {
             @Override
             protected WorkFlowResult doInBackground(String... strings) {
                 WorkFlowResult result = AndroidClientService.approve(Udasst_Details_Activity.this,
-                        "ASSETREP", "UDASST", udasst.getUDASSTID()+"", "UDASSTID", zx, desc,
+                        "ASSETREP", "UDASST", udasst.getUDASSTID() + "", "UDASSTID", zx, desc,
                         AccountUtils.getpersonId(Udasst_Details_Activity.this));
                 return result;
             }
@@ -369,28 +370,28 @@ public class Udasst_Details_Activity extends BaseActivity {
             protected void onPostExecute(WorkFlowResult s) {
                 super.onPostExecute(s);
                 if (s == null || s.wonum == null || s.errorMsg == null) {
-                    Toast.makeText(Udasst_Details_Activity.this, "Failure of approval!", Toast.LENGTH_SHORT).show();
-                } else if (s.wonum.equals(udasst.getUDASSTID()+"") && s.errorMsg != null) {
+                    MessageUtils.showMiddleToast(Udasst_Details_Activity.this, s.errorMsg);
+                } else if (s.wonum.equals(udasst.getUDASSTID() + "") && s.errorMsg != null) {
                     statusTextView.setText(s.errorMsg);
                     udasst.setUDSTATUS(s.errorMsg);
-                    Toast.makeText(Udasst_Details_Activity.this, "Approval success!", Toast.LENGTH_SHORT).show();
+                    MessageUtils.showMiddleToast(Udasst_Details_Activity.this, "Approval success!");
                 } else {
-                    Toast.makeText(Udasst_Details_Activity.this, "Failure of approval!", Toast.LENGTH_SHORT).show();
+                    MessageUtils.showMiddleToast(Udasst_Details_Activity.this, s.errorMsg);
                 }
                 mProgressDialog.dismiss();
             }
         }.execute();
     }
 
-    private SwipeRefreshLayout.OnRefreshListener refreshOnRefreshListener=new SwipeRefreshLayout.OnRefreshListener() {
+    private SwipeRefreshLayout.OnRefreshListener refreshOnRefreshListener = new SwipeRefreshLayout.OnRefreshListener() {
         @Override
         public void onRefresh() {
-            page=1;
+            page = 1;
             getData();
         }
     };
 
-    private SwipeRefreshLayout.OnLoadListener refreshOnLoadListener=new SwipeRefreshLayout.OnLoadListener() {
+    private SwipeRefreshLayout.OnLoadListener refreshOnLoadListener = new SwipeRefreshLayout.OnLoadListener() {
         @Override
         public void onLoad() {
             page++;
@@ -426,7 +427,7 @@ public class Udasst_Details_Activity extends BaseActivity {
 
             @Override
             public void onSuccess(Results results, int totalPages, int currentPage) {
-                ArrayList<UDASSTREP> item = JsonUtils.parsingUDASSTREP( results.getResultlist());
+                ArrayList<UDASSTREP> item = JsonUtils.parsingUDASSTREP(results.getResultlist());
                 refresh_layout.setRefreshing(false);
                 refresh_layout.setLoading(false);
                 if (item == null || item.isEmpty()) {

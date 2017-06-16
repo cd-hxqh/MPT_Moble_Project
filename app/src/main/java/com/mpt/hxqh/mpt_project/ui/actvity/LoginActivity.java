@@ -1,9 +1,9 @@
 package com.mpt.hxqh.mpt_project.ui.actvity;
 
 import android.content.Intent;
-import android.graphics.Paint;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -15,7 +15,6 @@ import android.widget.Toast;
 import com.flyco.animation.BaseAnimatorSet;
 import com.flyco.animation.BounceEnter.BounceTopEnter;
 import com.flyco.animation.SlideExit.SlideBottomExit;
-import com.flyco.dialog.listener.OnBtnClickL;
 import com.flyco.dialog.listener.OnBtnEditClickL;
 import com.flyco.dialog.widget.NormalEditTextDialog;
 import com.mpt.hxqh.mpt_project.R;
@@ -103,8 +102,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         checkBox.setOnCheckedChangeListener(cheBoxOnCheckedChangListener);
         mLogin.setOnClickListener(this);
 
-        if (AccountUtils.getIpAddress(LoginActivity.this)==null||AccountUtils.getIpAddress(LoginActivity.this).equals("")){
-            AccountUtils.setIpAddress(LoginActivity.this,Constants.HTTP_API_IP);
+        if (AccountUtils.getIpAddress(LoginActivity.this) == null || AccountUtils.getIpAddress(LoginActivity.this).equals("")) {
+            AccountUtils.setIpAddress(LoginActivity.this, Constants.HTTP_API_IP);
         }
         ipconfig.setOnClickListener(ipOnClickListener);
         quit.setOnClickListener(quitOnClickListener);
@@ -151,7 +150,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 new HttpRequestHandler<String>() {
                     @Override
                     public void onSuccess(String data) {
-
+                        Log.i(TAG,"data="+data);
                         MessageUtils.showMiddleToast(LoginActivity.this, getString(R.string.login_success));
                         mLoadingDialog.dismiss();
                         if (isRemember) {
@@ -162,9 +161,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                         try {//保存登录返回信息
                             JSONObject object = new JSONObject(data);
                             JSONObject LoginDetails = object.getJSONObject("userLoginDetails");
-                            AccountUtils.setLoginDetails(LoginActivity.this, LoginDetails.getString("insertOrg"), LoginDetails.getString("insertSite"),
+                            AccountUtils.setLoginDetails(LoginActivity.this,
                                     LoginDetails.getString("personId"), object.getString("userName"), LoginDetails.getString("displayName"));
+                            Log.i(TAG, "personId" + LoginDetails.getString("personId"));
                         } catch (JSONException e) {
+                            Log.i(TAG,"222222");
                             e.printStackTrace();
                         }
                         AccountUtils.setIsOffLine(LoginActivity.this, false);
@@ -222,7 +223,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         }
     };
 
-    private void setIP(){
+    private void setIP() {
         final NormalEditTextDialog editTextDialog = new NormalEditTextDialog(LoginActivity.this);
         editTextDialog.title("Configure IP")
                 .content(AccountUtils.getIpAddress(LoginActivity.this))
@@ -238,7 +239,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 }, new OnBtnEditClickL() {
                     @Override
                     public void onBtnClick(String text) {
-                        AccountUtils.setIpAddress(LoginActivity.this,text);
+                        AccountUtils.setIpAddress(LoginActivity.this, text);
                         editTextDialog.dismiss();
                     }
                 }

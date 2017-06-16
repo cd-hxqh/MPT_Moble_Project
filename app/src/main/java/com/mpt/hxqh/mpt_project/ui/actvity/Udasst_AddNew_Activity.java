@@ -10,7 +10,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.flyco.animation.BaseAnimatorSet;
 import com.flyco.animation.BounceEnter.BounceTopEnter;
@@ -22,10 +21,10 @@ import com.flyco.dialog.widget.NormalListDialog;
 import com.mpt.hxqh.mpt_project.R;
 import com.mpt.hxqh.mpt_project.config.Constants;
 import com.mpt.hxqh.mpt_project.manager.AppManager;
-import com.mpt.hxqh.mpt_project.model.MAINVUSE;
 import com.mpt.hxqh.mpt_project.model.WebResult;
 import com.mpt.hxqh.mpt_project.unit.AccountUtils;
 import com.mpt.hxqh.mpt_project.unit.DateTimeSelect;
+import com.mpt.hxqh.mpt_project.unit.MessageUtils;
 import com.mpt.hxqh.mpt_project.webserviceclient.AndroidClientService;
 
 /**
@@ -235,18 +234,17 @@ public class Udasst_AddNew_Activity extends BaseActivity {
             @Override
             protected void onPostExecute(WebResult workResult) {
                 super.onPostExecute(workResult);
+                closeProgressDialog();
                 if (workResult == null) {
-                    Toast.makeText(Udasst_AddNew_Activity.this, "false", Toast.LENGTH_SHORT).show();
+                    MessageUtils.showMiddleToast(Udasst_AddNew_Activity.this, "false");
                 } else {
-                    Toast.makeText(Udasst_AddNew_Activity.this, workResult.returnStr, Toast.LENGTH_SHORT).show();
-//                    setResult(100);
+                    MessageUtils.showMiddleToast(Udasst_AddNew_Activity.this, workResult.returnStr);
                     finish();
                 }
                 closeProgressDialog();
             }
         }.execute();
-        //}else {
-        closeProgressDialog();
+
     }
 
     @Override

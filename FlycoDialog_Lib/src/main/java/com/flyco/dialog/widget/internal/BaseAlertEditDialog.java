@@ -10,7 +10,6 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.flyco.dialog.listener.OnBtnClickL;
 import com.flyco.dialog.listener.OnBtnEditClickL;
 import com.flyco.dialog.widget.base.BaseDialog;
 
@@ -51,9 +50,9 @@ public abstract class BaseAlertEditDialog<T extends BaseAlertEditDialog<T>> exte
     protected TextView mTvBtnRight;
     protected TextView mTvBtnMiddle;
     /** btn text(按钮内容) */
-    protected String mBtnLeftText = "取消";
-    protected String mBtnRightText = "确定";
-    protected String mBtnMiddleText = "继续";
+    protected String mBtnLeftText = "cancel";
+    protected String mBtnRightText = "confirm";
+    protected String mBtnMiddleText = "go on";
     /** btn textcolor(按钮字体颜色) */
     protected int mLeftBtnTextColor;
     protected int mRightBtnTextColor;
@@ -209,10 +208,6 @@ public abstract class BaseAlertEditDialog<T extends BaseAlertEditDialog<T>> exte
     public T content(String content) {
         mContent = content;
         return (T) this;
-    }
-
-    public String getContent() {
-        return mTvContent.getText().toString();
     }
 
     /** set content gravity(设置正文内容,显示位置) */

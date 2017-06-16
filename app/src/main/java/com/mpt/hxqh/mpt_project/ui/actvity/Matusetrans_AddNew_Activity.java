@@ -104,7 +104,7 @@ public class Matusetrans_AddNew_Activity extends BaseActivity {
     @Override
     protected void initView() {
         backImageView.setOnClickListener(backImageViewOnClickListener);
-        titleTextView.setText(R.string.Material_outbound_text);
+        titleTextView.setText(R.string.add_actural_text);
         backImageView.setVisibility(View.GONE);
         buttonLayout.setVisibility(View.VISIBLE);
         submit.setText("save");

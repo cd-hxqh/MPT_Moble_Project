@@ -107,7 +107,7 @@ public class Wpmaterial_AddNew_Activity extends BaseActivity {
     @Override
     protected void initView() {
         backImageView.setOnClickListener(backImageViewOnClickListener);
-        titleTextView.setText(R.string.asset_management_text);
+        titleTextView.setText(R.string.add_plan_text);
         backImageView.setVisibility(View.GONE);
         buttonLayout.setVisibility(View.VISIBLE);
         submit.setText("save");

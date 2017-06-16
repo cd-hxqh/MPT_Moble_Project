@@ -51,9 +51,9 @@ public class AndroidClientService {
      * @return
      */
     public static WorkFlowResult startwf(Context context, String processname, String mbo, String keyValue, String key, String loginid) {
-
+        Log.i(TAG, "processname=" + processname + ",mbo=" + mbo + ",keyValue=" + keyValue + ",key=" + key + ",loginid=" + loginid);
         String url = AccountUtils.getIpAddress(context) + Constants.WORK_FLOW_URL;
-        Log.e("发送工作流",url);
+        Log.e("发送工作流", url);
         SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         soapEnvelope.implicitTypes = true;
         soapEnvelope.dotNet = true;
@@ -62,13 +62,11 @@ public class AndroidClientService {
         soapReq.addProperty("mbo", mbo);//如工单WORKORDER
         soapReq.addProperty("keyValue", keyValue);//对应的表ID的值，如工单需要传送WONUM的值，采购申请prnum的值
         soapReq.addProperty("key", key);//对应的表ID，如工单：wonum，采购申请，prnum
-        soapReq.addProperty("loginid",loginid);//用户id
-        Log.e("发送工作流",soapReq.toString());
+        soapReq.addProperty("loginid", loginid);//用户id
         soapEnvelope.setOutputSoapObject(soapReq);
         HttpTransportSE httpTransport = new HttpTransportSE(url, timeOut);
         try {
             httpTransport.call("urn:action", soapEnvelope);
-            Log.e("发送工作流",soapEnvelope.toString());
         } catch (IOException | XmlPullParserException e) {
             return null;
         }
@@ -76,6 +74,7 @@ public class AndroidClientService {
         WorkFlowResult result = null;
         try {
             obj = soapEnvelope.getResponse().toString();
+            Log.i(TAG, "obj=" + obj);
             result = JsonUtils.parsingStartWF(obj, key);
         } catch (SoapFault soapFault) {
             soapFault.printStackTrace();
@@ -88,7 +87,8 @@ public class AndroidClientService {
      *
      * @return
      */
-    public static WorkFlowResult approve(Context context, String processname, String mbo, String keyValue, String key, String zx, String desc,String loginid) {
+    public static WorkFlowResult approve(Context context, String processname, String mbo, String keyValue, String key, String zx, String desc, String loginid) {
+        Log.i(TAG, "processname=" + processname + ",mbo=" + mbo + ",keyValue=" + keyValue + ",key=" + key + ",zx=" + zx + ",desc" + desc + ",loginid=" + loginid);
         String url = AccountUtils.getIpAddress(context) + Constants.WORK_FLOW_URL;
         SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         soapEnvelope.implicitTypes = true;
@@ -102,23 +102,26 @@ public class AndroidClientService {
         if (!desc.equals("")) {
             soapReq.addProperty("desc", desc);//审批意见
         }
-        soapReq.addProperty("loginid",loginid);//用户id
+        soapReq.addProperty("loginid", loginid);//用户id
         soapEnvelope.setOutputSoapObject(soapReq);
         HttpTransportSE httpTransport = new HttpTransportSE(url, timeOut);
         try {
             httpTransport.call("urn:action", soapEnvelope);
         } catch (IOException e) {
+            Log.i(TAG, "111111");
             return null;
         } catch (XmlPullParserException e) {
+            Log.i(TAG, "22222");
             return null;
         }
         String obj = null;
         WorkFlowResult result = null;
         try {
             obj = soapEnvelope.getResponse().toString();
+            Log.i(TAG, "审批:" + obj);
             result = JsonUtils.parsingGoOn(obj, key);
+            Log.i(TAG,"result="+result);
         } catch (SoapFault soapFault) {
-            Log.i(TAG, "ssssss");
             return null;
         }
         return result;
@@ -126,6 +129,7 @@ public class AndroidClientService {
 
     /**
      * 资产转移新增方法
+     *
      * @return
      */
     public static WebResult AddAssetTrs(Context context, String description, String fromstoreloc, String invowner, String createby, String url) {
@@ -152,7 +156,7 @@ public class AndroidClientService {
             obj = soapEnvelope.getResponse().toString();
 
             Log.i(TAG, "obj=" + obj);
-            webResult = JsonUtils.parsingWebResult(obj);
+            webResult = JsonUtils.parsingWebResult1(obj);
         } catch (SoapFault soapFault) {
             soapFault.printStackTrace();
         }
@@ -161,6 +165,7 @@ public class AndroidClientService {
 
     /**
      * 资产转移行新增方法
+     *
      * @return
      */
     public static WebResult AddAssetTrsLin(Context context, String invusenum, String usetype, String linetype, String itemnum
@@ -192,7 +197,7 @@ public class AndroidClientService {
             obj = soapEnvelope.getResponse().toString();
 
             Log.i(TAG, "obj=" + obj);
-            webResult = JsonUtils.parsingWebResult(obj);
+            webResult = JsonUtils.parsingWebResult1(obj);
         } catch (SoapFault soapFault) {
             soapFault.printStackTrace();
         }
@@ -201,6 +206,7 @@ public class AndroidClientService {
 
     /**
      * 物料转移新增方法
+     *
      * @return
      */
     public static WebResult AddMatoutb(Context context, String description, String fromstoreloc, String invowner, String usetype, String url) {
@@ -236,6 +242,7 @@ public class AndroidClientService {
 
     /**
      * 物料转移行新增行方法
+     *
      * @return
      */
     public static WebResult AddMatoutbLin(Context context, String invusenum, String itemnum, String frombin, String usetype
@@ -282,6 +289,7 @@ public class AndroidClientService {
 
     /**
      * 物料退库新增方法
+     *
      * @return
      */
     public static WebResult AddMatRf(Context context, String description, String fromstoreloc, String invowner, String createby, String url) {
@@ -317,10 +325,11 @@ public class AndroidClientService {
 
     /**
      * 物料退库行新增行方法
+     *
      * @return
      */
     public static WebResult AddMatRfLin(Context context, String invusenum, String itemnum, String rotassetnum, String enterby
-            , String quantity, String linetype, String newphyscnt, String remark,String url) {
+            , String quantity, String linetype, String newphyscnt, String remark, String url) {
 
         SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         soapEnvelope.implicitTypes = true;
@@ -357,9 +366,10 @@ public class AndroidClientService {
 
     /**
      * 物料盘点新增方法
+     *
      * @return
      */
-    public static WebResult AddMatSto(Context context, String description, String location, String vendor, String createby,String visitd, String url) {
+    public static WebResult AddMatSto(Context context, String description, String location, String vendor, String createby, String visitd, String url) {
 
         SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         soapEnvelope.implicitTypes = true;
@@ -393,10 +403,11 @@ public class AndroidClientService {
 
     /**
      * 物料退库行新增行方法
+     *
      * @return
      */
     public static WebResult AddMatStoLine(Context context, String stocktnum, String assetnum, String checkserial, String remark
-            , String ischeck,String url) {
+            , String ischeck, String url) {
 
         SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         soapEnvelope.implicitTypes = true;
@@ -430,9 +441,10 @@ public class AndroidClientService {
 
     /**
      * 采购接收新增方法
+     *
      * @return
      */
-    public static WebResult AddPo(Context context, String description,String userid, String url) {
+    public static WebResult AddPo(Context context, String description, String userid, String url) {
 
         SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         soapEnvelope.implicitTypes = true;
@@ -463,10 +475,11 @@ public class AndroidClientService {
 
     /**
      * 采购接收新增行方法
+     *
      * @return
      */
     public static WebResult AddPoLine(Context context, String userid, String ponum, String itemnum, String conversion
-            , String orderqty,String url) {
+            , String orderqty, String url) {
 
         SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         soapEnvelope.implicitTypes = true;
@@ -500,17 +513,18 @@ public class AndroidClientService {
 
     /**
      * 资产维修新增方法
+     *
      * @return
      */
-    public static WebResult AddRepair(Context context, String description,String location,String repairdate,String createby, String url) {
-
+    public static WebResult AddRepair(Context context, String description, String location, String repairdate, String createby, String url) {
+        Log.i(TAG, "url=" + AccountUtils.getIpAddress(context) + url);
         SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         soapEnvelope.implicitTypes = true;
         soapEnvelope.dotNet = true;
         SoapObject soapReq = new SoapObject(NAMESPACE, "mptmobileserviceAddRepair");
         soapReq.addProperty("DESCRIPTION", description);//描述
         soapReq.addProperty("LOCATION", location);//位置
-        soapReq.addProperty("REPAIRDATE", repairdate);//维修时间
+        soapReq.addProperty("UDREPDATE", repairdate);//维修时间
         soapReq.addProperty("CREATEBY", createby);//创建人
         soapEnvelope.setOutputSoapObject(soapReq);
         HttpTransportSE httpTransport = new HttpTransportSE(AccountUtils.getIpAddress(context) + url, timeOut);
@@ -526,7 +540,7 @@ public class AndroidClientService {
             obj = soapEnvelope.getResponse().toString();
 
             Log.i(TAG, "obj=" + obj);
-            webResult = JsonUtils.parsingWebResult(obj);
+            webResult = JsonUtils.parsingWebResult1(obj);
         } catch (SoapFault soapFault) {
             soapFault.printStackTrace();
         }
@@ -535,9 +549,10 @@ public class AndroidClientService {
 
     /**
      * 资产维修新增行方法
+     *
      * @return
      */
-    public static WebResult AddRepairLine(Context context, String repairnum,String udrepdate,String udasstnum, String url) {
+    public static WebResult AddRepairLine(Context context, String repairnum, String udrepdate, String udasstnum, String url) {
 
         SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         soapEnvelope.implicitTypes = true;
@@ -560,7 +575,7 @@ public class AndroidClientService {
             obj = soapEnvelope.getResponse().toString();
 
             Log.i(TAG, "obj=" + obj);
-            webResult = JsonUtils.parsingWebResult(obj);
+            webResult = JsonUtils.parsingWebResult1(obj);
         } catch (SoapFault soapFault) {
             soapFault.printStackTrace();
         }
@@ -569,9 +584,10 @@ public class AndroidClientService {
 
     /**
      * 资产报废新增方法
+     *
      * @return
      */
-    public static WebResult AddRetire(Context context, String description,String location,String retireloc,String retiredate,String createby, String url) {
+    public static WebResult AddRetire(Context context, String description, String location, String retireloc, String retiredate, String createby, String url) {
 
         SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         soapEnvelope.implicitTypes = true;
@@ -605,9 +621,10 @@ public class AndroidClientService {
 
     /**
      * 资产报废新增行方法
+     *
      * @return
      */
-    public static WebResult AddRetireLine(Context context, String description,String location,String retireloc, String url) {
+    public static WebResult AddRetireLine(Context context, String description, String location, String retireloc, String url) {
 
         SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         soapEnvelope.implicitTypes = true;
@@ -639,9 +656,10 @@ public class AndroidClientService {
 
     /**
      * 资产移动新增方法
+     *
      * @return
      */
-    public static WebResult AddMove(Context context, String description,String fromloc,String tosite,String createby, String url) {
+    public static WebResult AddMove(Context context, String description, String fromloc, String tosite, String createby, String url) {
 
         SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         soapEnvelope.implicitTypes = true;
@@ -674,9 +692,10 @@ public class AndroidClientService {
 
     /**
      * 资产移动新增行方法
+     *
      * @return
      */
-    public static WebResult AddMoveLine(Context context, String assettrannum,String assetnum,String fromsite,String tosite,String createby, String url) {
+    public static WebResult AddMoveLine(Context context, String assettrannum, String assetnum, String fromsite, String tosite, String createby, String url) {
 
         SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         soapEnvelope.implicitTypes = true;
@@ -710,6 +729,7 @@ public class AndroidClientService {
 
     /**
      * 物料出站新增方法
+     *
      * @return
      */
     public static WebResult AddOut(Context context, String description, String url) {
@@ -742,12 +762,13 @@ public class AndroidClientService {
 
     /**
      * 物料出站计划新增方法
+     *
      * @return
      */
-    public static WebResult AddOutPlanLine(Context context, String wonum,String itemnum,
-                                           String description,String location,String issueto,String linetype,
-                                           String restype,String quantity,String storelocsite,String unitcost,
-                                           String orderunit,String createby,String url) {
+    public static WebResult AddOutPlanLine(Context context, String wonum, String itemnum,
+                                           String description, String location, String issueto, String linetype,
+                                           String restype, String quantity, String storelocsite, String unitcost,
+                                           String orderunit, String createby, String url) {
 
         SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         soapEnvelope.implicitTypes = true;
@@ -788,11 +809,12 @@ public class AndroidClientService {
 
     /**
      * 物料出站实际新增方法
+     *
      * @return
      */
-    public static WebResult AddOutActuralLine(Context context, String wonum,String itemnum,
-                                           String description,String linetype,String siteid,String quantity,
-                                           String unitcost,String location,String trantype,String createby,String url) {
+    public static WebResult AddOutActuralLine(Context context, String wonum, String itemnum,
+                                              String description, String linetype, String siteid, String quantity,
+                                              String unitcost, String location, String trantype, String createby, String url) {
 
         SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         soapEnvelope.implicitTypes = true;
@@ -842,7 +864,7 @@ public class AndroidClientService {
         soapReq.addProperty("mboKey", mboKey);//表主键 如：WONUM
         soapReq.addProperty("mboKeyValue", mboKeyValue);//表主键值
         soapEnvelope.setOutputSoapObject(soapReq);
-        HttpTransportSE httpTransport = new HttpTransportSE(AccountUtils.getIpAddress(context)+ url, timeOut);
+        HttpTransportSE httpTransport = new HttpTransportSE(AccountUtils.getIpAddress(context) + url, timeOut);
         try {
             httpTransport.call("urn:action", soapEnvelope);
         } catch (IOException | XmlPullParserException e) {
@@ -900,7 +922,7 @@ public class AndroidClientService {
     /**
      * 通用修改
      */
-    public static String permissionWebService(Context context,String name) {
+    public static String permissionWebService(Context context, String name) {
 
         SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         soapEnvelope.implicitTypes = true;
@@ -910,7 +932,7 @@ public class AndroidClientService {
         //soapReq.addProperty("user", "A01934");//新增信息json
         soapEnvelope.setOutputSoapObject(soapReq);
 
-        HttpTransportSE httpTransport = new HttpTransportSE(AccountUtils.getIpAddress(context)+"/meaweb/services/MOBILESERVICE", timeOut);
+        HttpTransportSE httpTransport = new HttpTransportSE(AccountUtils.getIpAddress(context) + "/meaweb/services/MOBILESERVICE", timeOut);
 
         try {
 
