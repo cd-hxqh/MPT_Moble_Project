@@ -2,7 +2,6 @@ package com.mpt.hxqh.mpt_project.ui.actvity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -81,7 +80,8 @@ public class Po_Details_Activity extends BaseActivity {
     private LinearLayout buttonLayout;
     private Button quit;
     private Button option;
-    private String[] optionList = new String[]{"Back","AddLine"};
+    //    private String[] optionList = new String[]{"Back","AddLine"};
+    private String[] optionList = new String[]{"Back"};
     private BaseAnimatorSet mBasIn;
     private BaseAnimatorSet mBasOut;
 
@@ -205,21 +205,19 @@ public class Po_Details_Activity extends BaseActivity {
                 @Override
                 public void onOperItemClick(AdapterView<?> parent, View view, int position, long id) {
 //                    linetypeTextView.setText(linetypeList[position]);
-                    switch (position){
+                    switch (position) {
                         case 0://Back
                             normalListDialog.superDismiss();
                             finish();
                             break;
-//                        case 1://Route
+//                        case 1://AddLine
+//                            normalListDialog.superDismiss();
+//                            Intent intent = new Intent(Po_Details_Activity.this,PoLine_AddNew_Activity.class);
+//                            intent.putExtra("ponum",po.getPONUM());
+////            intent.putExtra("storeroom",po.g);
+//                            startActivity(intent);
+//
 //                            break;
-                        case 1://AddLine
-                            normalListDialog.superDismiss();
-                            Intent intent = new Intent(Po_Details_Activity.this,PoLine_AddNew_Activity.class);
-                            intent.putExtra("ponum",po.getPONUM());
-//            intent.putExtra("storeroom",po.g);
-                            startActivity(intent);
-
-                            break;
                     }
 //                    normalListDialog.dismiss();
                 }
@@ -314,8 +312,8 @@ public class Po_Details_Activity extends BaseActivity {
     private View.OnClickListener addOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            Intent intent = new Intent(Po_Details_Activity.this,PoLine_AddNew_Activity.class);
-            intent.putExtra("ponum",po.getPONUM());
+            Intent intent = new Intent(Po_Details_Activity.this, PoLine_AddNew_Activity.class);
+            intent.putExtra("ponum", po.getPONUM());
 //            intent.putExtra("storeroom",po.g);
             startActivity(intent);
         }

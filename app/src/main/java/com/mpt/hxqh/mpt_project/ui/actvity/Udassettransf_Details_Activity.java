@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -276,7 +275,6 @@ public class Udassettransf_Details_Activity extends BaseActivity {
      * 获取数据*
      */
     private void getData() {
-        Log.i(TAG,"num="+udassettransf.getASSETTRANNUM());
         HttpManager.getDataPagingInfo(Udassettransf_Details_Activity.this, HttpManager.getUDTRANSFLINEURL(udassettransf.getASSETTRANNUM(), page, 20), new HttpRequestHandler<Results>() {
             @Override
             public void onSuccess(Results results) {

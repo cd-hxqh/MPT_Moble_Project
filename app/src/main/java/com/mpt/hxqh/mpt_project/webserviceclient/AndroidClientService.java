@@ -248,7 +248,6 @@ public class AndroidClientService {
     public static WebResult AddMatoutbLin(Context context, String invusenum, String itemnum, String frombin, String usetype
             , String linetype, String tositeid, String rotassetnum, String quantity, String tostoreloc, String tobin
             , String issueto, String enterby, String conversion, String url) {
-
         SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         soapEnvelope.implicitTypes = true;
         soapEnvelope.dotNet = true;
@@ -327,7 +326,7 @@ public class AndroidClientService {
      * @return
      */
     public static WebResult AddMatRfLin(Context context, String invusenum, String itemnum, String rotassetnum, String enterby
-            , String quantity, String linetype, String newphyscnt, String remark, String url) {
+            , String quantity, String usetype,String linetype, String newphyscnt, String remark, String url) {
 
         SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         soapEnvelope.implicitTypes = true;
@@ -338,6 +337,7 @@ public class AndroidClientService {
         soapReq.addProperty("ROTASSETNUM", rotassetnum);//
         soapReq.addProperty("ENTERBY", enterby);//
         soapReq.addProperty("QUANTITY", quantity);//
+        soapReq.addProperty("USETYPE", usetype);//
         soapReq.addProperty("LINETYPE", linetype);//
         soapReq.addProperty("NEWPHYSCNT", newphyscnt);//
         soapReq.addProperty("REMARK", remark);//
@@ -621,15 +621,16 @@ public class AndroidClientService {
      *
      * @return
      */
-    public static WebResult AddRetireLine(Context context, String description, String location, String retireloc, String url) {
+    public static WebResult AddRetireLine(Context context, String repairnum, String assetnum, String retiredate,String retireloc, String url) {
 
         SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         soapEnvelope.implicitTypes = true;
         soapEnvelope.dotNet = true;
         SoapObject soapReq = new SoapObject(NAMESPACE, "mptmobileserviceAddRetireLine");
-        soapReq.addProperty("RETIRENUM", description);//资产报废主表单号
-        soapReq.addProperty("ASSETNUM", location);//资产编号
-        soapReq.addProperty("RETIREDATE", retireloc);//报废日期
+        soapReq.addProperty("RETIRENUM", repairnum);//资产报废主表单号
+        soapReq.addProperty("ASSETNUM", assetnum);//资产编号
+        soapReq.addProperty("RETIREDATE", retiredate);//报废日期
+        soapReq.addProperty("RETIRELOC", retireloc);//库房
         soapEnvelope.setOutputSoapObject(soapReq);
         HttpTransportSE httpTransport = new HttpTransportSE(AccountUtils.getIpAddress(context) + url, timeOut);
         try {
@@ -811,8 +812,8 @@ public class AndroidClientService {
      * @return
      */
     public static WebResult AddOutActuralLine(Context context, String wonum, String itemnum,
-                                              String description, String linetype, String siteid, String quantity,
-                                              String unitcost, String location, String trantype, String createby, String url) {
+                                              String description, String linetype,String storeloc,String siteid, String quantity,
+                                              String unitcost, String location, String trantype, String createby, String rotassetnum,String url) {
 
         SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         soapEnvelope.implicitTypes = true;
@@ -822,12 +823,14 @@ public class AndroidClientService {
         soapReq.addProperty("ITEMNUM", itemnum);//项目编号
         soapReq.addProperty("DESCRIPTION", description);//描述
         soapReq.addProperty("LINETYPE", linetype);//行类型
+        soapReq.addProperty("STORELOC", storeloc);//地点
         soapReq.addProperty("SITEID", siteid);//地点
         soapReq.addProperty("Quantity", quantity);//数量
         soapReq.addProperty("UnitCost", unitcost);//单位成本
         soapReq.addProperty("Location", location);//位置
         soapReq.addProperty("TranType", trantype);//交易类型
         soapReq.addProperty("CREATEBY", createby);//创建人
+        soapReq.addProperty("ROTASSETNUM", rotassetnum);//rotassetnum
         soapEnvelope.setOutputSoapObject(soapReq);
         HttpTransportSE httpTransport = new HttpTransportSE(AccountUtils.getIpAddress(context) + url, timeOut);
         try {
@@ -842,7 +845,7 @@ public class AndroidClientService {
             obj = soapEnvelope.getResponse().toString();
 
             Log.i(TAG, "obj=" + obj);
-            webResult = JsonUtils.parsingWebResult(obj);
+            webResult = JsonUtils.parsingWebResult1(obj);
         } catch (SoapFault soapFault) {
             soapFault.printStackTrace();
         }

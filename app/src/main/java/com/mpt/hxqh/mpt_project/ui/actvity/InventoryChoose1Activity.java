@@ -21,27 +21,29 @@ import android.widget.TextView;
 
 import com.mpt.hxqh.mpt_project.R;
 import com.mpt.hxqh.mpt_project.adpter.BaseQuickAdapter;
-import com.mpt.hxqh.mpt_project.adpter.InvbalancesAdapter;
+import com.mpt.hxqh.mpt_project.adpter.Invertory1Adapter;
 import com.mpt.hxqh.mpt_project.api.HttpManager;
 import com.mpt.hxqh.mpt_project.api.HttpRequestHandler;
 import com.mpt.hxqh.mpt_project.api.JsonUtils;
 import com.mpt.hxqh.mpt_project.bean.Results;
-import com.mpt.hxqh.mpt_project.model.INVBALANCES;
+import com.mpt.hxqh.mpt_project.model.INVENTORY;
 import com.mpt.hxqh.mpt_project.ui.widget.SwipeRefreshLayout;
+import com.mpt.hxqh.mpt_project.unit.MessageUtils;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 选择项
+ * ITEM选择项
  **/
 
-public class InvbalancesChooseActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener, SwipeRefreshLayout.OnLoadListener {
+public class InventoryChoose1Activity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener, SwipeRefreshLayout.OnLoadListener {
 
-    private static final String TAG = "InvbalancesChooseActivity";
+    private static final String TAG = "InventoryChooseActivity";
 
 
-    public static final int INVBALANCES_CODE=1004;
+    public static final int INVENTORY_CODE = 1010;
 
     /**
      * 标题*
@@ -70,7 +72,7 @@ public class InvbalancesChooseActivity extends BaseActivity implements SwipeRefr
     /**
      * 适配器*
      */
-    private InvbalancesAdapter locationAdapter;
+    private Invertory1Adapter invertoryAdapter;
     /**
      * 编辑框*
      */
@@ -81,15 +83,32 @@ public class InvbalancesChooseActivity extends BaseActivity implements SwipeRefr
     private String searchText = "";
     private int page = 1;
 
-    ArrayList<INVBALANCES> items = new ArrayList<INVBALANCES>();
+
+    private String location; //位置
+
+    private String  itemnum; //ITEM
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_list);
+        initData();
         findViewById();
         initView();
+
+    }
+
+    /**
+     * 初始化DAO
+     **/
+    private void initData() {
+        if(getIntent().hasExtra("LOCATION")){
+            location = getIntent().getExtras().getString("LOCATION");
+        }
+        if(getIntent().hasExtra("ITEMNUM")){
+            itemnum = getIntent().getExtras().getString("ITEMNUM");
+        }
 
     }
 
@@ -109,10 +128,10 @@ public class InvbalancesChooseActivity extends BaseActivity implements SwipeRefr
     @Override
     protected void initView() {
         backImageView.setOnClickListener(backImageViewOnClickListener);
-        titleTextView.setText("Bin");
+        titleTextView.setText("Storeroom");
         setSearchEdit();
 
-        layoutManager = new LinearLayoutManager(InvbalancesChooseActivity.this);
+        layoutManager = new LinearLayoutManager(InventoryChoose1Activity.this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         layoutManager.scrollToPosition(0);
         recyclerView.setLayoutManager(layoutManager);
@@ -126,8 +145,7 @@ public class InvbalancesChooseActivity extends BaseActivity implements SwipeRefr
         refresh_layout.setOnRefreshListener(this);
         refresh_layout.setOnLoadListener(this);
 
-        initAdapter(new ArrayList<INVBALANCES>());
-        items = new ArrayList<>();
+        initAdapter(new ArrayList<INVENTORY>());
         getData(searchText);
     }
 
@@ -179,8 +197,7 @@ public class InvbalancesChooseActivity extends BaseActivity implements SwipeRefr
                                             .getWindowToken(),
                                     InputMethodManager.HIDE_NOT_ALWAYS);
                     searchText = search.getText().toString();
-                    locationAdapter.removeAll(items);
-                    items = new ArrayList<INVBALANCES>();
+                    invertoryAdapter.removeAll(invertoryAdapter.getData());
                     nodatalayout.setVisibility(View.GONE);
                     refresh_layout.setRefreshing(true);
                     page = 1;
@@ -197,34 +214,36 @@ public class InvbalancesChooseActivity extends BaseActivity implements SwipeRefr
      * 获取数据*
      */
     private void getData(String search) {
-        HttpManager.getDataPagingInfo(InvbalancesChooseActivity.this, HttpManager.getInvbalancesUrl(search, page, 20), new HttpRequestHandler<Results>() {
+        String url = null;
+        if(null!=location&&null==itemnum) {
+            url = HttpManager.getINVENTORYURL(search, location, page, 20);
+        }else if(null==location&&null!=itemnum){
+            url = HttpManager.getINVENTORYURL1(search, itemnum, page, 20);
+        }
+        HttpManager.getDataPagingInfo(InventoryChoose1Activity.this, url, new HttpRequestHandler<Results>() {
             @Override
             public void onSuccess(Results results) {
-//                Log.i(TAG, "data=" + results);
             }
-
             @Override
             public void onSuccess(Results results, int totalPages, int currentPage) {
-                ArrayList<INVBALANCES> item = JsonUtils.parsingINVBALANCES(InvbalancesChooseActivity.this, results.getResultlist());
+                ArrayList<INVENTORY> item = JsonUtils.parsingINVENTORY(results.getResultlist());
                 refresh_layout.setRefreshing(false);
                 refresh_layout.setLoading(false);
                 if (item == null || item.isEmpty()) {
                     nodatalayout.setVisibility(View.VISIBLE);
                 } else {
-
                     if (item != null || item.size() != 0) {
                         if (page == 1) {
-                            items = new ArrayList<INVBALANCES>();
-                            initAdapter(new ArrayList<INVBALANCES>());
+                            initAdapter(new ArrayList<INVENTORY>());
                         }
-                        for (int i = 0; i < item.size(); i++) {
-                            items.add(item.get(i));
+                        if (page > totalPages) {
+                            MessageUtils.showMiddleToast(InventoryChoose1Activity.this, getString(R.string.have_load_out_all_the_data));
+                        } else {
+                            addData(item);
                         }
-                        addData(item);
                     }
                     nodatalayout.setVisibility(View.GONE);
 
-                    initAdapter(items);
                 }
             }
 
@@ -238,20 +257,20 @@ public class InvbalancesChooseActivity extends BaseActivity implements SwipeRefr
     }
 
 
-
     /**
      * 获取数据*
      */
-    private void initAdapter(final List<INVBALANCES> list) {
-        locationAdapter = new InvbalancesAdapter(InvbalancesChooseActivity.this, R.layout.list_item, list);
-        recyclerView.setAdapter(locationAdapter);
-        locationAdapter.setOnRecyclerViewItemClickListener(new BaseQuickAdapter.OnRecyclerViewItemClickListener() {
+    private void initAdapter(final List<INVENTORY> list) {
+        invertoryAdapter = new Invertory1Adapter(InventoryChoose1Activity.this, R.layout.list_item, list);
+        recyclerView.setAdapter(invertoryAdapter);
+        invertoryAdapter.setOnRecyclerViewItemClickListener(new BaseQuickAdapter.OnRecyclerViewItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-
                 Intent intent = getIntent();
-                intent.putExtra("binnum", list.get(position).getBINNUM());
-                setResult(INVBALANCES_CODE, intent);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("Inventory", (Serializable) invertoryAdapter.getData().get(position));
+                intent.putExtras(bundle);
+                setResult(INVENTORY_CODE, intent);
                 finish();
 
             }
@@ -261,7 +280,7 @@ public class InvbalancesChooseActivity extends BaseActivity implements SwipeRefr
     /**
      * 添加数据*
      */
-    private void addData(final List<INVBALANCES> list) {
-        locationAdapter.addData(list);
+    private void addData(final List<INVENTORY> list) {
+        invertoryAdapter.addData(list);
     }
 }

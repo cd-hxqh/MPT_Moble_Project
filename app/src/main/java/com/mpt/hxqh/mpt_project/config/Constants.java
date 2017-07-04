@@ -174,9 +174,9 @@ public class Constants {
     /**
      * 工作流状态
      */
-    public static final String ASSETREP_START = "WAPPR";//Asset Repair初始状态
+    public static final String ASSETREP_START = "ENTERED";//Asset Repair初始状态
     public static final String ASSETREP_END = "WCLOSE";//Asset Repair结束状态
-    public static final String ASSTRETIRE_START = "WAPPR";//Asset Retirement初始状态
+    public static final String ASSTRETIRE_START = "ENTERED";//Asset Retirement初始状态
     public static final String ASSTRETIRE_END = "CLOSE";//Asset Retirement结束状态
     public static final String ASTTRANS_START = "ENTERED";//Asset Transfer初始状态
     public static final String ASTTRANS_END = "CLOSE";//Asset Transfer结束状态

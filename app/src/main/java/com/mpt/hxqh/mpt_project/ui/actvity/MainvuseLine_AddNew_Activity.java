@@ -33,7 +33,7 @@ import com.mpt.hxqh.mpt_project.webserviceclient.AndroidClientService;
 public class MainvuseLine_AddNew_Activity extends BaseActivity {
 
     private static final String TAG = "MainvuseLine_AddNew_Activity";
-    public static final int TRANSFERLINE_CODE=2000;
+    public static final int TRANSFERLINE_CODE = 2000;
 
     private ImageView backImageView; //返回按钮
 
@@ -41,7 +41,7 @@ public class MainvuseLine_AddNew_Activity extends BaseActivity {
 
     private Button submit;
 
-//    private TextView orderTextView; //Order
+    private TextView usetypeTextView; //usetype_text
     private TextView linetypeTextView; //linetype
     private TextView itemnumTextView; //itemnum
     private TextView rotassetnumTextView; //rotassetnum
@@ -58,7 +58,11 @@ public class MainvuseLine_AddNew_Activity extends BaseActivity {
     private LinearLayout buttonLayout;
     private Button quit;
     private Button option;
-    private String[] optionList = new String[]{"Back","Save"};
+    private String[] optionList = new String[]{"Back", "Save"};
+
+    private String[] usetypeList = new String[]{"Issue", "Return", "Transfer"};
+
+    private String[] linetypeList = new String[]{"Item", "Tool"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,7 +87,7 @@ public class MainvuseLine_AddNew_Activity extends BaseActivity {
         backImageView = (ImageView) findViewById(R.id.title_back_id);
         titleTextView = (TextView) findViewById(R.id.title_name);
         submit = (Button) findViewById(R.id.sbmit_id);
-//        orderTextView = (TextView) findViewById(R.id.order_text_id);
+        usetypeTextView = (TextView) findViewById(R.id.usetype_text_id);
         linetypeTextView = (TextView) findViewById(R.id.linetype_text_id);
         itemnumTextView = (TextView) findViewById(R.id.itemnum_text_id);
         rotassetnumTextView = (TextView) findViewById(R.id.rotassetnum_text_id);
@@ -105,7 +109,10 @@ public class MainvuseLine_AddNew_Activity extends BaseActivity {
         submit.setText("save");
 //        submit.setVisibility(View.VISIBLE);
 
-        linetypeTextView.setText("Return");
+        usetypeTextView.setText("Return");
+        linetypeTextView.setText("Item");
+        usetypeTextView.setOnClickListener(usetypeOnClickListener);
+        linetypeTextView.setOnClickListener(linetypeOnClickListener);
         itemnumTextView.setOnClickListener(itemnumOnClickListener);
         rotassetnumTextView.setOnClickListener(rotassetnumOnClickListener);
 //        from_storeroomTextView.setOnClickListener(locationTextViewOnClickListener);
@@ -132,6 +139,58 @@ public class MainvuseLine_AddNew_Activity extends BaseActivity {
             submitDataInfo();
         }
     };
+
+
+    /**
+     * usetype
+     **/
+    private View.OnClickListener usetypeOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            usetypeDialog();
+        }
+    };
+
+    /**
+     * linetype
+     **/
+    private View.OnClickListener linetypeOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            linetypeDialog();
+        }
+    };
+
+    private void usetypeDialog() {
+        final NormalListDialog normalListDialog = new NormalListDialog(MainvuseLine_AddNew_Activity.this, usetypeList);
+        normalListDialog.title("Usage Type")
+                .showAnim(mBasIn)//
+                .dismissAnim(mBasOut)//
+                .show();
+        normalListDialog.setOnOperItemClickL(new OnOperItemClickL() {
+            @Override
+            public void onOperItemClick(AdapterView<?> parent, View view, int position, long id) {
+                usetypeTextView.setText(usetypeList[position]);
+                normalListDialog.dismiss();
+            }
+        });
+    }
+
+    private void linetypeDialog() {
+        final NormalListDialog normalListDialog = new NormalListDialog(MainvuseLine_AddNew_Activity.this, linetypeList);
+        normalListDialog.title("Usage Type")
+                .showAnim(mBasIn)//
+                .dismissAnim(mBasOut)//
+                .show();
+        normalListDialog.setOnOperItemClickL(new OnOperItemClickL() {
+            @Override
+            public void onOperItemClick(AdapterView<?> parent, View view, int position, long id) {
+                linetypeTextView.setText(linetypeList[position]);
+                normalListDialog.dismiss();
+            }
+        });
+    }
+
 
     private View.OnClickListener quitOnClickListener = new View.OnClickListener() {
         @Override
@@ -170,7 +229,7 @@ public class MainvuseLine_AddNew_Activity extends BaseActivity {
                 @Override
                 public void onOperItemClick(AdapterView<?> parent, View view, int position, long id) {
 //                    linetypeTextView.setText(linetypeList[position]);
-                    switch (position){
+                    switch (position) {
                         case 0://Back
                             normalListDialog.superDismiss();
                             finish();
@@ -185,6 +244,7 @@ public class MainvuseLine_AddNew_Activity extends BaseActivity {
             });
         }
     };
+
 
     /**
      * itemnum
@@ -204,10 +264,10 @@ public class MainvuseLine_AddNew_Activity extends BaseActivity {
     private View.OnClickListener rotassetnumOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            Intent intent=getIntent();
+            Intent intent = getIntent();
             intent.setClass(MainvuseLine_AddNew_Activity.this, AssetChooseActivity.class);
-            intent.putExtra("CODE",TRANSFERLINE_CODE);
-            intent.putExtra("ITEMNUM",itemnumTextView.getText().toString());
+            intent.putExtra("CODE", TRANSFERLINE_CODE);
+            intent.putExtra("ITEMNUM", itemnumTextView.getText().toString());
 //            intent.putExtra("LOCATION",storeroom);
             startActivityForResult(intent, 0);
         }
@@ -268,9 +328,9 @@ public class MainvuseLine_AddNew_Activity extends BaseActivity {
         new AsyncTask<String, String, WebResult>() {
             @Override
             protected WebResult doInBackground(String... strings) {
-                WebResult reviseresult = AndroidClientService.AddMatRfLin(MainvuseLine_AddNew_Activity.this, invusenum,itemnumTextView.getText().toString(),
+                WebResult reviseresult = AndroidClientService.AddMatRfLin(MainvuseLine_AddNew_Activity.this, invusenum, itemnumTextView.getText().toString(),
                         rotassetnumTextView.getText().toString(), AccountUtils.getpersonId(MainvuseLine_AddNew_Activity.this), quantityTextView.getText().toString()
-                        , linetypeTextView.getText().toString(), newphyscntTextView.getText().toString(), remarkTextView.getText().toString(),Constants.TRANSFER_URL);
+                        , usetypeTextView.getText().toString(), linetypeTextView.getText().toString(), newphyscntTextView.getText().toString(), remarkTextView.getText().toString(), Constants.TRANSFER_URL);
                 return reviseresult;
             }
 

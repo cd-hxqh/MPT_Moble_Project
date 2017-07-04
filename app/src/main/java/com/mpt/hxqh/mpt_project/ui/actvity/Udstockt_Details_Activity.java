@@ -225,7 +225,7 @@ public class Udstockt_Details_Activity extends BaseActivity {
                             break;
                         case 1://Route
                             normalListDialog.superDismiss();
-                            if (udstockt.getSTATUS().equals(Constants.MPT_STOTAK_START)) {//启动工作流
+                            if (udstockt.getSTATUS().equals(Constants.ASTTRANS_START)) {//启动工作流
                                 MaterialDialogOneBtn();
                             } else if (!udstockt.getSTATUS().equals(Constants.MPT_STOTAK_END)) {//审批工作流
                                 EditDialog();

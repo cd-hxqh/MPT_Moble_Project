@@ -169,8 +169,8 @@ public class JsonUtils<E> {
         String result = null;
         WebResult webResult = new WebResult();
         if (data.contains("|")){
-            webResult.event = data.split("\\|")[0];
-            webResult.returnStr = data.split("\\|")[1];
+            webResult.returnStr = data.split("\\|")[0];
+            webResult.event = data.split("\\|")[1];
         }
         return webResult;
     }
@@ -188,6 +188,9 @@ public class JsonUtils<E> {
         WorkFlowResult webResult = new WorkFlowResult();
         try {
             JSONObject object = new JSONObject(data);
+            if (object.has("errorMsg") && !object.getString("errorMsg").equals("")) {
+                webResult.errorMsg = object.getString("errorMsg");
+            }
             if (object.has("msg") && !object.getString("msg").equals("")) {
                 webResult.errorMsg = object.getString("msg");
             }

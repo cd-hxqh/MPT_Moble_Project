@@ -7,14 +7,12 @@ import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.flyco.animation.BaseAnimatorSet;
 import com.flyco.animation.BounceEnter.BounceTopEnter;
@@ -294,19 +292,18 @@ public class Udasst_Details_Activity extends BaseActivity {
             protected WorkFlowResult doInBackground(String... strings) {
                 WorkFlowResult result = AndroidClientService.startwf(Udasst_Details_Activity.this,
                         "ASSETREP", "UDASST", udasst.getUDASSTNUM(), "UDASSTNUM", AccountUtils.getpersonId(Udasst_Details_Activity.this));
-                Log.i(TAG, "result=" + result);
                 return result;
             }
 
             @Override
             protected void onPostExecute(WorkFlowResult s) {
                 super.onPostExecute(s);
-                if (s != null && s.errorMsg != null && s.errorMsg.equals("工作流启动成功")) {
-                    Toast.makeText(Udasst_Details_Activity.this, "starting success!", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(Udasst_Details_Activity.this, "boot failure", Toast.LENGTH_SHORT).show();
-                }
                 mProgressDialog.dismiss();
+                if (s != null && s.errorMsg != null && s.errorMsg.equals("工作流启动成功")) {
+                    MessageUtils.showMiddleToast(Udasst_Details_Activity.this,"starting success!");
+                } else {
+                    MessageUtils.showMiddleToast(Udasst_Details_Activity.this,s.errorMsg);
+                }
             }
         }.execute();
     }

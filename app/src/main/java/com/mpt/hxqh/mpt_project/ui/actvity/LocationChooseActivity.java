@@ -29,6 +29,7 @@ import com.mpt.hxqh.mpt_project.api.JsonUtils;
 import com.mpt.hxqh.mpt_project.bean.Results;
 import com.mpt.hxqh.mpt_project.model.LOCATIONS;
 import com.mpt.hxqh.mpt_project.ui.widget.SwipeRefreshLayout;
+import com.mpt.hxqh.mpt_project.unit.MessageUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -85,6 +86,7 @@ public class LocationChooseActivity extends BaseActivity implements SwipeRefresh
     ArrayList<LOCATIONS> items = new ArrayList<LOCATIONS>();
 
     private String type; //类型
+    private String status; //状态
 
 
     @Override
@@ -100,6 +102,9 @@ public class LocationChooseActivity extends BaseActivity implements SwipeRefresh
     private void initData() {
         if (getIntent().hasExtra("type")) {
             type = getIntent().getStringExtra("type");
+        }
+        if (getIntent().hasExtra("status")) {
+            status = getIntent().getStringExtra("status");
         }
     }
 
@@ -208,7 +213,15 @@ public class LocationChooseActivity extends BaseActivity implements SwipeRefresh
      */
     private void getData(String search) {
         String url = null;
-        url = HttpManager.getLocation1Url(search, type, page, 20);
+        if (null == type) {
+            url = HttpManager.getLocationUrl0(search, page, 20);
+        } else {
+            if (null == status) {
+                url = HttpManager.getLocation1Url(search, type, page, 20);
+            } else {
+                url = HttpManager.getLocation2Url(search, type, status, page, 20);
+            }
+        }
         HttpManager.getDataPagingInfo(LocationChooseActivity.this, url, new HttpRequestHandler<Results>() {
             @Override
             public void onSuccess(Results results) {
@@ -229,14 +242,14 @@ public class LocationChooseActivity extends BaseActivity implements SwipeRefresh
                             items = new ArrayList<LOCATIONS>();
                             initAdapter(new ArrayList<LOCATIONS>());
                         }
-                        for (int i = 0; i < item.size(); i++) {
-                            items.add(item.get(i));
+                        if (page > totalPages) {
+                            MessageUtils.showMiddleToast(LocationChooseActivity.this, getString(R.string.have_load_out_all_the_data));
+                        } else {
+                            addData(item);
                         }
-                        addData(item);
                     }
                     nodatalayout.setVisibility(View.GONE);
 
-                    initAdapter(items);
                 }
             }
 
@@ -259,11 +272,11 @@ public class LocationChooseActivity extends BaseActivity implements SwipeRefresh
         locationAdapter.setOnRecyclerViewItemClickListener(new BaseQuickAdapter.OnRecyclerViewItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-
+                LOCATIONS locations = (LOCATIONS) locationAdapter.getData().get(position);
                 Intent intent = getIntent();
-                intent.putExtra("Location", list.get(position).getLOCATION());
-                intent.putExtra("Invowner", list.get(position).getINVOWNER());
-                intent.putExtra("siteid", list.get(position).getSITEID());
+                intent.putExtra("Location", locations.getLOCATION());
+                intent.putExtra("Invowner", locations.getINVOWNER());
+                intent.putExtra("siteid", locations.getSITEID());
                 setResult(LOCATION_CODE, intent);
                 finish();
 

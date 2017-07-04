@@ -87,6 +87,8 @@ public class InventoryChooseActivity extends BaseActivity implements SwipeRefres
 
     private String location; //位置
 
+    private String  itemnum; //ITEM
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,8 +104,13 @@ public class InventoryChooseActivity extends BaseActivity implements SwipeRefres
      * 初始化DAO
      **/
     private void initData() {
-        location = getIntent().getExtras().getString("LOCATION");
-        Log.i(TAG, "location=" + location);
+        if(getIntent().hasExtra("LOCATION")){
+            location = getIntent().getExtras().getString("LOCATION");
+        }
+        if(getIntent().hasExtra("ITEMNUM")){
+            itemnum = getIntent().getExtras().getString("ITEMNUM");
+        }
+
     }
 
 
@@ -209,13 +216,16 @@ public class InventoryChooseActivity extends BaseActivity implements SwipeRefres
      */
     private void getData(String search) {
         String url = null;
-        url = HttpManager.getINVENTORYURL(search, location, page, 20);
+        if(null!=location&&null==itemnum) {
+            url = HttpManager.getINVENTORYURL(search, location, page, 20);
+        }else if(null==location&&null!=itemnum){
+            url = HttpManager.getINVENTORYURL1(search, itemnum, page, 20);
+        }
         HttpManager.getDataPagingInfo(InventoryChooseActivity.this, url, new HttpRequestHandler<Results>() {
             @Override
             public void onSuccess(Results results) {
                 Log.i(TAG, "data=" + results);
             }
-
             @Override
             public void onSuccess(Results results, int totalPages, int currentPage) {
                 ArrayList<INVENTORY> item = JsonUtils.parsingINVENTORY(results.getResultlist());
@@ -224,7 +234,6 @@ public class InventoryChooseActivity extends BaseActivity implements SwipeRefres
                 if (item == null || item.isEmpty()) {
                     nodatalayout.setVisibility(View.VISIBLE);
                 } else {
-
                     if (item != null || item.size() != 0) {
                         if (page == 1) {
                             initAdapter(new ArrayList<INVENTORY>());

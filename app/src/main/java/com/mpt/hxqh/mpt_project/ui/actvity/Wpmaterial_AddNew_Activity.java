@@ -22,6 +22,7 @@ import com.flyco.dialog.widget.NormalListDialog;
 import com.mpt.hxqh.mpt_project.R;
 import com.mpt.hxqh.mpt_project.config.Constants;
 import com.mpt.hxqh.mpt_project.manager.AppManager;
+import com.mpt.hxqh.mpt_project.model.INVENTORY;
 import com.mpt.hxqh.mpt_project.model.WebResult;
 import com.mpt.hxqh.mpt_project.unit.AccountUtils;
 import com.mpt.hxqh.mpt_project.unit.MessageUtils;
@@ -34,8 +35,8 @@ public class Wpmaterial_AddNew_Activity extends BaseActivity {
 
     private static final String TAG = "Wpmaterial_AddNew_Activity";
 
-    public static final int LOCATIONS_CODE=3000;
-    public static final int SITE_CODE=3001;
+    public static final int LOCATIONS_CODE = 3000;
+    public static final int SITE_CODE = 3001;
 
     private ImageView backImageView; //返回按钮
 
@@ -293,9 +294,16 @@ public class Wpmaterial_AddNew_Activity extends BaseActivity {
         @Override
         public void onClick(View v) {
             if (textView == locationTextView) {
-                Intent intent = new Intent(Wpmaterial_AddNew_Activity.this, LocationChooseActivity.class);
-                intent.putExtra("type", "=STOREROOM");
-                startActivityForResult(intent, LOCATIONS_CODE);
+                if (itemTextView.getText().toString().equals("")) {
+                    Intent intent = new Intent(Wpmaterial_AddNew_Activity.this, LocationChooseActivity.class);
+                    intent.putExtra("type", "=STOREROOM,=LABOR,=COURIER");
+                    startActivityForResult(intent, LOCATIONS_CODE);
+                } else {
+                    Intent intent = new Intent(Wpmaterial_AddNew_Activity.this, InventoryChoose1Activity.class);
+                    intent.putExtra("ITEMNUM", itemTextView.getText().toString());
+                    startActivityForResult(intent, LOCATIONS_CODE);
+                }
+
             } else {
                 Intent intent = new Intent(Wpmaterial_AddNew_Activity.this, LocationChooseActivity.class);
                 intent.putExtra("type", "=STOREROOM");
@@ -377,7 +385,9 @@ public class Wpmaterial_AddNew_Activity extends BaseActivity {
         switch (resultCode) {
             case ItemChooseActivity.ITEM_CODE:
                 String itemnum = data.getExtras().getString("Itemnum");
+                String description = data.getExtras().getString("description");
                 itemTextView.setText(itemnum);
+                descriptionTextView.setText(description);
                 break;
             case LocationChooseActivity.LOCATION_CODE:
                 String location = data.getExtras().getString("Location");
@@ -397,10 +407,11 @@ public class Wpmaterial_AddNew_Activity extends BaseActivity {
                 String personid = data.getExtras().getString("personid");
                 issuetoTextView.setText(personid);
                 break;
-//            case RESULT_OK:
-//                String result = data.getExtras().getString("result");
-//                snTextView.setText(result);
-//                break;
+            case InventoryChoose1Activity.INVENTORY_CODE:
+                INVENTORY inventory = (INVENTORY) data.getSerializableExtra("Inventory");
+                locationTextView.setText(inventory.getLOCATION());
+                storelocsiteTextView.setText(inventory.getSITEID());
+                break;
         }
     }
 

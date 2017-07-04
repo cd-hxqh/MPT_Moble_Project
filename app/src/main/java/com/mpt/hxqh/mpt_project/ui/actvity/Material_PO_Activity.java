@@ -98,7 +98,8 @@ public class Material_PO_Activity extends BaseActivity implements SwipeRefreshLa
     ArrayList<PO> items = new ArrayList<PO>();
     private BaseAnimatorSet mBasIn;
     private BaseAnimatorSet mBasOut;
-    private String[] optionList = new String[]{"Back","Add","Receive scanning"};
+//    private String[] optionList = new String[]{"Back","Add","Receive scanning"};
+    private String[] optionList = new String[]{"Back","Receive scanning"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -213,12 +214,12 @@ public class Material_PO_Activity extends BaseActivity implements SwipeRefreshLa
                             normalListDialog.superDismiss();
                             finish();
                             break;
-                        case 1://Add
-                            normalListDialog.superDismiss();
-                            Intent intent = new Intent(Material_PO_Activity.this,PO_AddNew_Activity.class);
-                            startActivity(intent);
-
-                            break;
+//                        case 1://Add
+//                            normalListDialog.superDismiss();
+//                            Intent intent = new Intent(Material_PO_Activity.this,PO_AddNew_Activity.class);
+//                            startActivity(intent);
+//
+//                            break;
                         case 2:
                             normalListDialog.superDismiss();
                             Intent intent2 = new Intent(Material_PO_Activity.this,PO_AddNew_Activity.class);

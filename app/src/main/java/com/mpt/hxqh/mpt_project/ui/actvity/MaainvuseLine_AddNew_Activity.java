@@ -33,7 +33,7 @@ import com.mpt.hxqh.mpt_project.webserviceclient.AndroidClientService;
 public class MaainvuseLine_AddNew_Activity extends BaseActivity {
 
     private static final String TAG = "TransferLine_AddNew_Activity";
-    public static final int TRANSFERLINE_CODE=2000;
+    public static final int TRANSFERLINE_CODE = 2000;
 
     private ImageView backImageView; //返回按钮
 
@@ -62,7 +62,7 @@ public class MaainvuseLine_AddNew_Activity extends BaseActivity {
     private LinearLayout buttonLayout;
     private Button quit;
     private Button option;
-    private String[] optionList = new String[]{"Back","Save"};
+    private String[] optionList = new String[]{"Back", "Save"};
 
     private String[] linetypeList = new String[]{"Item", "Tool"};
 
@@ -189,7 +189,7 @@ public class MaainvuseLine_AddNew_Activity extends BaseActivity {
                 @Override
                 public void onOperItemClick(AdapterView<?> parent, View view, int position, long id) {
 //                    linetypeTextView.setText(linetypeList[position]);
-                    switch (position){
+                    switch (position) {
                         case 0://Back
                             normalListDialog.superDismiss();
                             finish();
@@ -234,6 +234,7 @@ public class MaainvuseLine_AddNew_Activity extends BaseActivity {
         @Override
         public void onClick(View view) {
             Intent intent = new Intent(MaainvuseLine_AddNew_Activity.this, LocationChooseActivity.class);
+            intent.putExtra("type", "=STOREROOM");
             startActivityForResult(intent, 0);
         }
     };

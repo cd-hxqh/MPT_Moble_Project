@@ -20,6 +20,7 @@ public class INVUSELINE implements Serializable {
     public String TOLOCATION;//TOLOCATION
     public String TOSITEID;//TOSITEID
     public String TOSTORELOC;//TOSTORELOC
+    public String USETYPE;//USETYPE
 
 
     public String getINVUSELINENUM() {
@@ -116,5 +117,13 @@ public class INVUSELINE implements Serializable {
 
     public void setTOSTORELOC(String TOSTORELOC) {
         this.TOSTORELOC = TOSTORELOC;
+    }
+
+    public String getUSETYPE() {
+        return USETYPE;
+    }
+
+    public void setUSETYPE(String USETYPE) {
+        this.USETYPE = USETYPE;
     }
 }

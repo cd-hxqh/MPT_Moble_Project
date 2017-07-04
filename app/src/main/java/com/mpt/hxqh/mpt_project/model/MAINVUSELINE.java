@@ -9,9 +9,21 @@ import java.io.Serializable;
 
 public class MAINVUSELINE implements Serializable {
     public String LINETYPE;//LINETYPE
+    public String INVUSENUM;//INVUSENUM
+    public String USETYPE;//USETYPE
+    public String ITEMNUM;//ITEMNUM
     public String QUANTITY;//QUANTITY
     public String TOLOCATION;//TOLOCATION
     public String TOSTORELOC;//TOSTORELOC
+    public String INVUSELINENUM;//INVUSELINENUM
+
+    public String getINVUSELINENUM() {
+        return INVUSELINENUM;
+    }
+
+    public void setINVUSELINENUM(String INVUSELINENUM) {
+        this.INVUSELINENUM = INVUSELINENUM;
+    }
 
     public String getLINETYPE() {
         return LINETYPE;
@@ -43,5 +55,29 @@ public class MAINVUSELINE implements Serializable {
 
     public void setTOSTORELOC(String TOSTORELOC) {
         this.TOSTORELOC = TOSTORELOC;
+    }
+
+    public String getINVUSENUM() {
+        return INVUSENUM;
+    }
+
+    public void setINVUSENUM(String INVUSENUM) {
+        this.INVUSENUM = INVUSENUM;
+    }
+
+    public String getUSETYPE() {
+        return USETYPE;
+    }
+
+    public void setUSETYPE(String USETYPE) {
+        this.USETYPE = USETYPE;
+    }
+
+    public String getITEMNUM() {
+        return ITEMNUM;
+    }
+
+    public void setITEMNUM(String ITEMNUM) {
+        this.ITEMNUM = ITEMNUM;
     }
 }

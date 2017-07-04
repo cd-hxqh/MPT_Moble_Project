@@ -31,6 +31,7 @@ import com.mpt.hxqh.mpt_project.webserviceclient.AndroidClientService;
 public class UdretireLine_AddNew_Activity extends BaseActivity {
 
     private static final String TAG = "UdretireLine_AddNew_Activity";
+    private static final int LOCATION_CODE = 3000;
 
     private ImageView backImageView; //返回按钮
 
@@ -38,8 +39,9 @@ public class UdretireLine_AddNew_Activity extends BaseActivity {
 
     private Button submit;
 
-//    private TextView orderTextView; //Order
+    //    private TextView orderTextView; //Order
     private TextView assetnumTextView; //assetnum
+    private TextView retirelocTextView; //retireloc_text_id
     private TextView retiredateTextView; //retiredate
 
     private String repairnum;
@@ -50,7 +52,7 @@ public class UdretireLine_AddNew_Activity extends BaseActivity {
     private LinearLayout buttonLayout;
     private Button quit;
     private Button option;
-    private String[] optionList = new String[]{"Back","Save"};
+    private String[] optionList = new String[]{"Back", "Save"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,8 +76,8 @@ public class UdretireLine_AddNew_Activity extends BaseActivity {
         backImageView = (ImageView) findViewById(R.id.title_back_id);
         titleTextView = (TextView) findViewById(R.id.title_name);
         submit = (Button) findViewById(R.id.sbmit_id);
-//        orderTextView = (TextView) findViewById(R.id.order_text_id);
         assetnumTextView = (TextView) findViewById(R.id.assetnum_text_id);
+        retirelocTextView = (TextView) findViewById(R.id.retireloc_text_id);
         retiredateTextView = (TextView) findViewById(R.id.retiredate_text_id);
 
         buttonLayout = (LinearLayout) findViewById(R.id.button_layout);
@@ -91,9 +93,9 @@ public class UdretireLine_AddNew_Activity extends BaseActivity {
         backImageView.setVisibility(View.GONE);
         buttonLayout.setVisibility(View.VISIBLE);
         submit.setText("save");
-//        submit.setVisibility(View.VISIBLE);
 
         assetnumTextView.setOnClickListener(assetnumOnClickListener);
+        retirelocTextView.setOnClickListener(retirelocOnClickListener);
         retiredateTextView.setOnClickListener(DateOnClickListener);
         submit.setOnClickListener(submitOnClickListener);
 
@@ -155,7 +157,7 @@ public class UdretireLine_AddNew_Activity extends BaseActivity {
                 @Override
                 public void onOperItemClick(AdapterView<?> parent, View view, int position, long id) {
 //                    linetypeTextView.setText(linetypeList[position]);
-                    switch (position){
+                    switch (position) {
                         case 0://Back
                             normalListDialog.superDismiss();
                             finish();
@@ -177,9 +179,20 @@ public class UdretireLine_AddNew_Activity extends BaseActivity {
     private View.OnClickListener assetnumOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            Intent intent=getIntent();
+            Intent intent = getIntent();
             intent.setClass(UdretireLine_AddNew_Activity.this, AssetChooseActivity.class);
             startActivityForResult(intent, 0);
+        }
+    };
+    /**
+     * rotassetnum
+     **/
+    private View.OnClickListener retirelocOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Intent intent = new Intent(UdretireLine_AddNew_Activity.this, LocationChooseActivity.class);
+            intent.putExtra("type", "!=HOLDING");
+            startActivityForResult(intent, LOCATION_CODE);
         }
     };
 
@@ -228,7 +241,7 @@ public class UdretireLine_AddNew_Activity extends BaseActivity {
             protected WebResult doInBackground(String... strings) {
                 WebResult reviseresult = AndroidClientService.AddRetireLine(UdretireLine_AddNew_Activity.this, repairnum,
                         assetnumTextView.getText().toString(), retiredateTextView.getText().toString()
-                        , Constants.TRANSFER_URL);
+                        , retirelocTextView.getText().toString(), Constants.TRANSFER_URL);
                 return reviseresult;
             }
 
@@ -255,6 +268,10 @@ public class UdretireLine_AddNew_Activity extends BaseActivity {
             case AssetChooseActivity.ASSET_CODE:
                 String asset = data.getExtras().getString("Assetnum");
                 assetnumTextView.setText(asset);
+                break;
+            case LocationChooseActivity.LOCATION_CODE:
+                String location = data.getExtras().getString("Location");
+                retirelocTextView.setText(location);
                 break;
 //            case RESULT_OK:
 //                String result = data.getExtras().getString("result");

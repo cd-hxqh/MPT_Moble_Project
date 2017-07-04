@@ -165,5 +165,8 @@
     <string name="add_plan_text">Add Plan</string>
     <string name="add_actural_text">Add Actural</string>
     <string name="have_load_out_all_the_data">have load out all the data</string>
+    <string name="item2_text">Item</string>
+    <string name="line3_text">Line</string>
+    <string name="usage_type3_text">Usage Type</string>
 
 </resources>

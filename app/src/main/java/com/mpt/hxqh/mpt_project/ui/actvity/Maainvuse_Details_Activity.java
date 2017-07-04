@@ -4,7 +4,6 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -29,7 +28,6 @@ import com.flyco.dialog.widget.NormalListDialog;
 import com.mpt.hxqh.mpt_project.R;
 import com.mpt.hxqh.mpt_project.adpter.BaseQuickAdapter;
 import com.mpt.hxqh.mpt_project.adpter.InvuseLineAdapter;
-import com.mpt.hxqh.mpt_project.adpter.MaInvuseLineAdapter;
 import com.mpt.hxqh.mpt_project.api.HttpManager;
 import com.mpt.hxqh.mpt_project.api.HttpRequestHandler;
 import com.mpt.hxqh.mpt_project.api.JsonUtils;
@@ -38,11 +36,10 @@ import com.mpt.hxqh.mpt_project.config.Constants;
 import com.mpt.hxqh.mpt_project.manager.AppManager;
 import com.mpt.hxqh.mpt_project.model.INVUSE;
 import com.mpt.hxqh.mpt_project.model.INVUSELINE;
-import com.mpt.hxqh.mpt_project.model.MAINVUSE;
-import com.mpt.hxqh.mpt_project.model.MAINVUSELINE;
 import com.mpt.hxqh.mpt_project.model.WorkFlowResult;
 import com.mpt.hxqh.mpt_project.ui.widget.SwipeRefreshLayout;
 import com.mpt.hxqh.mpt_project.unit.AccountUtils;
+import com.mpt.hxqh.mpt_project.unit.MessageUtils;
 import com.mpt.hxqh.mpt_project.webserviceclient.AndroidClientService;
 
 import java.util.ArrayList;
@@ -95,7 +92,7 @@ public class Maainvuse_Details_Activity extends BaseActivity {
     private LinearLayout buttonLayout;
     private Button quit;
     private Button option;
-    private String[] optionList = new String[]{"Back", "Route","AddLine"};
+    private String[] optionList = new String[]{"Back", "Route", "AddLine"};
     private BaseAnimatorSet mBasIn;
     private BaseAnimatorSet mBasOut;
 
@@ -225,7 +222,7 @@ public class Maainvuse_Details_Activity extends BaseActivity {
                 @Override
                 public void onOperItemClick(AdapterView<?> parent, View view, int position, long id) {
 //                    linetypeTextView.setText(linetypeList[position]);
-                    switch (position){
+                    switch (position) {
                         case 0://Back
                             normalListDialog.superDismiss();
                             finish();
@@ -234,17 +231,17 @@ public class Maainvuse_Details_Activity extends BaseActivity {
                             normalListDialog.superDismiss();
                             if (mainvuse.getSTATUS().equals(Constants.MPT_MATTF_START)) {//启动工作流
                                 MaterialDialogOneBtn();
-                            } else if (!mainvuse.getSTATUS().equals(Constants.MPT_MATTF_END)){//审批工作流
+                            } else if (!mainvuse.getSTATUS().equals(Constants.MPT_MATTF_END)) {//审批工作流
                                 EditDialog();
-                            }else {
-                                Toast.makeText(Maainvuse_Details_Activity.this, "This state cannot be modified", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(Maainvuse_Details_Activity.this, "Workflow is finished; cannot start again", Toast.LENGTH_SHORT).show();
                             }
                             break;
                         case 2://AddLine
                             normalListDialog.superDismiss();
-                            Intent intent = new Intent(Maainvuse_Details_Activity.this,MaainvuseLine_AddNew_Activity.class);
-                            intent.putExtra("invusenum",mainvuse.getINVUSENUM());
-                            intent.putExtra("storeroom",mainvuse.getFROMSTORELOC());
+                            Intent intent = new Intent(Maainvuse_Details_Activity.this, MaainvuseLine_AddNew_Activity.class);
+                            intent.putExtra("invusenum", mainvuse.getINVUSENUM());
+                            intent.putExtra("storeroom", mainvuse.getFROMSTORELOC());
                             startActivity(intent);
 
                             break;
@@ -303,12 +300,13 @@ public class Maainvuse_Details_Activity extends BaseActivity {
             @Override
             protected void onPostExecute(WorkFlowResult s) {
                 super.onPostExecute(s);
-                if (s != null && s.errorMsg != null && s.errorMsg.equals("工作流启动成功")) {
-                    Toast.makeText(Maainvuse_Details_Activity.this, "starting success!", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(Maainvuse_Details_Activity.this, "boot failure", Toast.LENGTH_SHORT).show();
-                }
                 mProgressDialog.dismiss();
+                if (s != null && s.errorMsg != null && s.errorMsg.equals("工作流启动成功")) {
+                    MessageUtils.showMiddleToast(Maainvuse_Details_Activity.this, "starting success!");
+                } else {
+                    MessageUtils.showMiddleToast(Maainvuse_Details_Activity.this, s.errorMsg);
+                }
+
             }
         }.execute();
     }
@@ -363,7 +361,7 @@ public class Maainvuse_Details_Activity extends BaseActivity {
             @Override
             protected WorkFlowResult doInBackground(String... strings) {
                 WorkFlowResult result = AndroidClientService.approve(Maainvuse_Details_Activity.this,
-                        "MPT_MATTF", "INVUSE", mainvuse.getINVUSEID()+"", "INVUSEID", zx, desc,
+                        "MPT_MATTF", "INVUSE", mainvuse.getINVUSEID() + "", "INVUSEID", zx, desc,
                         AccountUtils.getpersonId(Maainvuse_Details_Activity.this));
                 return result;
             }
@@ -371,16 +369,16 @@ public class Maainvuse_Details_Activity extends BaseActivity {
             @Override
             protected void onPostExecute(WorkFlowResult s) {
                 super.onPostExecute(s);
+                mProgressDialog.dismiss();
                 if (s == null || s.wonum == null || s.errorMsg == null) {
-                    Toast.makeText(Maainvuse_Details_Activity.this, "Failure of approval!", Toast.LENGTH_SHORT).show();
-                } else if (s.wonum.equals(mainvuse.getINVUSEID()+"") && s.errorMsg != null) {
+                    MessageUtils.showMiddleToast(Maainvuse_Details_Activity.this, s.errorMsg);
+                } else if (s.wonum.equals(mainvuse.getINVUSEID() + "") && s.errorMsg != null) {
                     statusTextView.setText(s.errorMsg);
                     mainvuse.setSTATUS(s.errorMsg);
-                    Toast.makeText(Maainvuse_Details_Activity.this, "Approval success!", Toast.LENGTH_SHORT).show();
+                    MessageUtils.showMiddleToast(Maainvuse_Details_Activity.this, "Approval success!");
                 } else {
-                    Toast.makeText(Maainvuse_Details_Activity.this, "Failure of approval!", Toast.LENGTH_SHORT).show();
+                    MessageUtils.showMiddleToast(Maainvuse_Details_Activity.this, s.errorMsg);
                 }
-                mProgressDialog.dismiss();
             }
         }.execute();
     }
@@ -472,9 +470,9 @@ public class Maainvuse_Details_Activity extends BaseActivity {
     private View.OnClickListener addOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            Intent intent = new Intent(Maainvuse_Details_Activity.this,MaainvuseLine_AddNew_Activity.class);
-            intent.putExtra("invusenum",mainvuse.getINVUSENUM());
-            intent.putExtra("storeroom",mainvuse.getFROMSTORELOC());
+            Intent intent = new Intent(Maainvuse_Details_Activity.this, MaainvuseLine_AddNew_Activity.class);
+            intent.putExtra("invusenum", mainvuse.getINVUSENUM());
+            intent.putExtra("storeroom", mainvuse.getFROMSTORELOC());
             startActivity(intent);
         }
     };

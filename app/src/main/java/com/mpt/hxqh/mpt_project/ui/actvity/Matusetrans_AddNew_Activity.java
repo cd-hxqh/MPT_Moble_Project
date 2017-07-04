@@ -22,6 +22,7 @@ import com.flyco.dialog.widget.NormalListDialog;
 import com.mpt.hxqh.mpt_project.R;
 import com.mpt.hxqh.mpt_project.config.Constants;
 import com.mpt.hxqh.mpt_project.manager.AppManager;
+import com.mpt.hxqh.mpt_project.model.INVENTORY;
 import com.mpt.hxqh.mpt_project.model.WebResult;
 import com.mpt.hxqh.mpt_project.unit.AccountUtils;
 import com.mpt.hxqh.mpt_project.webserviceclient.AndroidClientService;
@@ -33,21 +34,29 @@ public class Matusetrans_AddNew_Activity extends BaseActivity {
 
     private static final String TAG = "Matusetrans_AddNew_Activity";
 
+    public static final int MATUSETRANS_CODE=2005;
+
+    public static final int LOCATIONS_CODE = 3000;
+    public static final int SITE_CODE = 3001;
+
     private ImageView backImageView; //返回按钮
 
     private TextView titleTextView; //标题
 
     private Button submit;
 
-//    private TextView orderTextView; //Order
+    //    private TextView orderTextView; //Order
     private TextView itemnumTextView; //itemnum
-    private EditText descriptionTextView; //description
+    private TextView descriptionTextView; //description
     private TextView linetypeTextView; //linetype
+    private TextView storeroomTextView; //Storeroom
     private TextView siteidTextView; //siteid
     private EditText quantityTextView; //quantity
     private EditText unitcostTextView; //unitcost
     private TextView locationTextView; //location
     private TextView trantypeTextView; //trantype
+    private LinearLayout rotassetnumLayout; //rotassetnum
+    private TextView rotassetnumTextView; //rotassetnum
 
     private String wonum;
 
@@ -57,7 +66,7 @@ public class Matusetrans_AddNew_Activity extends BaseActivity {
     private LinearLayout buttonLayout;
     private Button quit;
     private Button option;
-    private String[] optionList = new String[]{"Back","Save"};
+    private String[] optionList = new String[]{"Back", "Save"};
 
     private String[] linetypeList = new String[]{"Item", "Material"};
     private String[] trantypeList = new String[]{"ISSUE", "RETURN"};
@@ -86,13 +95,16 @@ public class Matusetrans_AddNew_Activity extends BaseActivity {
         submit = (Button) findViewById(R.id.sbmit_id);
 //        orderTextView = (TextView) findViewById(R.id.order_text_id);
         itemnumTextView = (TextView) findViewById(R.id.item_text_id);
-        descriptionTextView = (EditText) findViewById(R.id.description_text_id);
+        descriptionTextView = (TextView) findViewById(R.id.description_text_id);
         linetypeTextView = (TextView) findViewById(R.id.linetype_text_id);
+        storeroomTextView = (TextView) findViewById(R.id.location_text2_id);
         siteidTextView = (TextView) findViewById(R.id.siteid_text_id);
         quantityTextView = (EditText) findViewById(R.id.quantity_text_id);
         unitcostTextView = (EditText) findViewById(R.id.unitcost_text_id);
         locationTextView = (TextView) findViewById(R.id.location_text_id);
         trantypeTextView = (TextView) findViewById(R.id.trantype_text_id);
+        rotassetnumLayout = (LinearLayout) findViewById(R.id.rotassetnum_linearLayout_id);
+        rotassetnumTextView = (TextView) findViewById(R.id.rotassetnum_text_id);
 
 
         buttonLayout = (LinearLayout) findViewById(R.id.button_layout);
@@ -112,9 +124,12 @@ public class Matusetrans_AddNew_Activity extends BaseActivity {
 
         itemnumTextView.setOnClickListener(itemnumOnClickListener);
         linetypeTextView.setOnClickListener(linetypeOnClickListener);
+        storeroomTextView.setOnClickListener(new locationTextViewOnClickListener(storeroomTextView));
         siteidTextView.setOnClickListener(siteidOnClickListener);
         locationTextView.setOnClickListener(new locationTextViewOnClickListener(locationTextView));
-        trantypeTextView.setOnClickListener(trantypeOnClickListener);
+//        trantypeTextView.setOnClickListener(trantypeOnClickListener);
+        trantypeTextView.setText("ISSUE");
+        rotassetnumTextView.setOnClickListener(rotassetnumTextViewOnClickListener);
         submit.setOnClickListener(submitOnClickListener);
 
         quit.setOnClickListener(quitOnClickListener);
@@ -175,7 +190,7 @@ public class Matusetrans_AddNew_Activity extends BaseActivity {
                 @Override
                 public void onOperItemClick(AdapterView<?> parent, View view, int position, long id) {
 //                    linetypeTextView.setText(linetypeList[position]);
-                    switch (position){
+                    switch (position) {
                         case 0://Back
                             normalListDialog.superDismiss();
                             finish();
@@ -202,10 +217,25 @@ public class Matusetrans_AddNew_Activity extends BaseActivity {
         }
     };
 
+
     private View.OnClickListener siteidOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
             Intent intent = new Intent(Matusetrans_AddNew_Activity.this, SiteChooseActivity.class);
+            startActivityForResult(intent, 0);
+        }
+    };
+
+    /**
+     * rotassetnumTextView
+     **/
+    private View.OnClickListener rotassetnumTextViewOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Intent intent = new Intent(Matusetrans_AddNew_Activity.this, AssetChooseActivity.class);
+            intent.putExtra("CODE", MATUSETRANS_CODE);
+            intent.putExtra("ITEMNUM", itemnumTextView.getText().toString());
+            intent.putExtra("LOCATION", storeroomTextView.getText().toString());
             startActivityForResult(intent, 0);
         }
     };
@@ -222,7 +252,7 @@ public class Matusetrans_AddNew_Activity extends BaseActivity {
                 @Override
                 public void onOperItemClick(AdapterView<?> parent, View view, int position, long id) {
                     linetypeTextView.setText(linetypeList[position]);
-                    switch (position){
+                    switch (position) {
                         case 0://Item
                             descriptionTextView.setText("");
                             descriptionTextView.setClickable(false);
@@ -260,15 +290,32 @@ public class Matusetrans_AddNew_Activity extends BaseActivity {
         }
     };
 
-    private class locationTextViewOnClickListener implements View.OnClickListener{
+    private class locationTextViewOnClickListener implements View.OnClickListener {
         private TextView textView;
-        private locationTextViewOnClickListener(TextView textView){
+
+        private locationTextViewOnClickListener(TextView textView) {
             this.textView = textView;
         }
+
         @Override
         public void onClick(View v) {
-            Intent intent = new Intent(Matusetrans_AddNew_Activity.this, LocationChooseActivity.class);
-            startActivityForResult(intent, 0);
+            if (textView == storeroomTextView) {
+                if (itemnumTextView.getText().toString().equals("")) {
+                    Intent intent = new Intent(Matusetrans_AddNew_Activity.this, LocationChooseActivity.class);
+                    intent.putExtra("type", "=STOREROOM,=LABOR,=COURIER");
+                    startActivityForResult(intent, LOCATIONS_CODE);
+                } else {
+                    Intent intent = new Intent(Matusetrans_AddNew_Activity.this, InventoryChoose1Activity.class);
+                    intent.putExtra("ITEMNUM", itemnumTextView.getText().toString());
+                    startActivityForResult(intent, LOCATIONS_CODE);
+                }
+            } else if (textView == locationTextView) {
+                Intent intent = new Intent(Matusetrans_AddNew_Activity.this, LocationChooseActivity.class);
+                intent.putExtra("type", "=STOREROOM,=OPERATING,=REPAIR,=VENDOR");
+                intent.putExtra("status", "=ACTIVE,=LIMITEDUSE,=OPERATING,=NOT READY");
+                startActivityForResult(intent, 0);
+            }
+
         }
     }
 
@@ -306,10 +353,10 @@ public class Matusetrans_AddNew_Activity extends BaseActivity {
             @Override
             protected WebResult doInBackground(String... strings) {
                 WebResult reviseresult = AndroidClientService.AddOutActuralLine(Matusetrans_AddNew_Activity.this, wonum,
-                        itemnumTextView.getText().toString(), descriptionTextView.getText().toString(),linetypeTextView.getText().toString()
-                        ,siteidTextView.getText().toString(),quantityTextView.getText().toString(),unitcostTextView.getText().toString()
-                        ,locationTextView.getText().toString(),trantypeTextView.getText().toString()
-                        , AccountUtils.getpersonId(Matusetrans_AddNew_Activity.this),Constants.TRANSFER_URL);
+                        itemnumTextView.getText().toString(), descriptionTextView.getText().toString(), linetypeTextView.getText().toString()
+                        , storeroomTextView.getText().toString(), siteidTextView.getText().toString(), quantityTextView.getText().toString(), unitcostTextView.getText().toString()
+                        , locationTextView.getText().toString(), trantypeTextView.getText().toString(), rotassetnumTextView.getText().toString()
+                        , AccountUtils.getpersonId(Matusetrans_AddNew_Activity.this), Constants.TRANSFER_URL);
                 return reviseresult;
             }
 
@@ -342,12 +389,31 @@ public class Matusetrans_AddNew_Activity extends BaseActivity {
                 break;
             case LocationChooseActivity.LOCATION_CODE:
                 String location = data.getExtras().getString("Location");
-                locationTextView.setText(location);
+                if (requestCode == LOCATIONS_CODE) {
+                    storeroomTextView.setText(location);
+                    if (!location.equals("")) {
+                        rotassetnumLayout.setVisibility(View.VISIBLE);
+                    }
+                } else {
+                    locationTextView.setText(location);
+                }
                 break;
             case SiteChooseActivity.SITE_CODE:
                 String siteid = data.getExtras().getString("siteid");
                 siteidTextView.setText(siteid);
                 break;
+            case AssetChooseActivity.ASSET_CODE:
+                String assetnum = data.getExtras().getString("Assetnum");
+                rotassetnumTextView.setText(assetnum);
+                break;
+            case InventoryChoose1Activity.INVENTORY_CODE:
+                INVENTORY inventory = (INVENTORY) data.getSerializableExtra("Inventory");
+                storeroomTextView.setText(inventory.getLOCATION());
+                if (null != inventory.getLOCATION()) {
+                    rotassetnumLayout.setVisibility(View.VISIBLE);
+                }
+                break;
+
 //            case RESULT_OK:
 //                String result = data.getExtras().getString("result");
 //                snTextView.setText(result);

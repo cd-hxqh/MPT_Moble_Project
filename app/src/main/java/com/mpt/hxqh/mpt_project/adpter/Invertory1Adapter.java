@@ -4,7 +4,7 @@ import android.animation.Animator;
 import android.content.Context;
 
 import com.mpt.hxqh.mpt_project.R;
-import com.mpt.hxqh.mpt_project.model.MAINVUSELINE;
+import com.mpt.hxqh.mpt_project.model.INVENTORY;
 import com.mpt.hxqh.mpt_project.ui.widget.BaseViewHolder;
 
 import java.util.List;
@@ -12,12 +12,12 @@ import java.util.List;
 
 /**
  * Created by apple on 15/10/26
- * 转移适配器
+ * Inventory适配器
  */
-public class MaInvuseLineAdapter extends BaseQuickAdapter<MAINVUSELINE> {
+public class Invertory1Adapter extends BaseQuickAdapter<INVENTORY> {
     private int position;
 
-    public MaInvuseLineAdapter(Context context, int layoutResId, List data) {
+    public Invertory1Adapter(Context context, int layoutResId, List data) {
         super(context, layoutResId, data);
     }
 
@@ -30,11 +30,10 @@ public class MaInvuseLineAdapter extends BaseQuickAdapter<MAINVUSELINE> {
     }
 
     @Override
-    protected void convert(BaseViewHolder helper, MAINVUSELINE item) {
-        helper.setText(R.id.type_text_id, item.getINVUSELINENUM());
-        helper.setText(R.id.item_text_id, item.getITEMNUM());
-        helper.setText(R.id.desc_text_id, item.getUSETYPE());
-        helper.setText(R.id.storeroom_text_id, item.getQUANTITY());
+    protected void convert(BaseViewHolder helper, INVENTORY item) {
+        helper.setText(R.id.po_ponum_title, "Storeroom:");
+        helper.setText(R.id.num_text_id, item.getLOCATION());
+        helper.setText(R.id.description_text, item.getSTOREROOM_NAME());
     }
 
 

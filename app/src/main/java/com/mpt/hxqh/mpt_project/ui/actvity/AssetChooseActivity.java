@@ -88,7 +88,8 @@ public class AssetChooseActivity extends BaseActivity implements SwipeRefreshLay
     private String itemnum; //itemnum
     private String status;
 
-    private int code=0; //跳转标识
+    private int code = 0; //跳转标识
+
 
 
     @Override
@@ -105,19 +106,17 @@ public class AssetChooseActivity extends BaseActivity implements SwipeRefreshLay
      * 初始化DAO
      **/
     private void initData() {
-        if(getIntent().hasExtra("CODE")) {
+        if (getIntent().hasExtra("CODE")) {
             code = getIntent().getExtras().getInt("CODE");
         }
-        Log.i(TAG, "code=" + code);
-        if (code == TransferLine_AddNew_Activity.TRANSFERLINE_CODE) { //资产转移子表
+        if (code == TransferLine_AddNew_Activity.TRANSFERLINE_CODE||code==Matusetrans_AddNew_Activity.MATUSETRANS_CODE) { //资产转移子表或实际物理新增行
             itemnum = getIntent().getExtras().getString("ITEMNUM");
         } else if (code == UdassettransfLine_AddNew_Activity.UDASSETTRANS_CODE) {//资产移动子表
             status = getIntent().getExtras().getString("STATUS");
         }
-        if(getIntent().hasExtra("LOCATION")) {
+        if (getIntent().hasExtra("LOCATION")) {
             location = getIntent().getExtras().getString("LOCATION");
         }
-        Log.i(TAG, "location=" + location);
     }
 
 
@@ -225,7 +224,7 @@ public class AssetChooseActivity extends BaseActivity implements SwipeRefreshLay
      */
     private void getData(String search) {
         String url = null;
-        if (code == TransferLine_AddNew_Activity.TRANSFERLINE_CODE) { //资产转移行Asset选择
+        if (code == TransferLine_AddNew_Activity.TRANSFERLINE_CODE||code==Matusetrans_AddNew_Activity.MATUSETRANS_CODE) { //资产转移行Asset选择或实际物料新增行
             if (null == itemnum) {
                 url = HttpManager.getLocationAssetUrl(search, location, page, 20);
             } else {

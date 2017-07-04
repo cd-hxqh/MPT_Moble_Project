@@ -2,7 +2,6 @@ package com.mpt.hxqh.mpt_project.ui.actvity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -22,8 +21,6 @@ import com.flyco.dialog.widget.NormalDialog;
 import com.flyco.dialog.widget.NormalListDialog;
 import com.mpt.hxqh.mpt_project.R;
 import com.mpt.hxqh.mpt_project.adpter.BaseQuickAdapter;
-import com.mpt.hxqh.mpt_project.adpter.InvuseLineAdapter;
-import com.mpt.hxqh.mpt_project.adpter.MainvuseAdapter;
 import com.mpt.hxqh.mpt_project.adpter.MatusetransAdapter;
 import com.mpt.hxqh.mpt_project.adpter.WpmaterialAdapter;
 import com.mpt.hxqh.mpt_project.api.HttpManager;
@@ -31,12 +28,11 @@ import com.mpt.hxqh.mpt_project.api.HttpRequestHandler;
 import com.mpt.hxqh.mpt_project.api.JsonUtils;
 import com.mpt.hxqh.mpt_project.bean.Results;
 import com.mpt.hxqh.mpt_project.manager.AppManager;
-import com.mpt.hxqh.mpt_project.model.INVUSE;
-import com.mpt.hxqh.mpt_project.model.INVUSELINE;
 import com.mpt.hxqh.mpt_project.model.MATUSETRANS;
 import com.mpt.hxqh.mpt_project.model.WORKORDER;
 import com.mpt.hxqh.mpt_project.model.WPMATERIAL;
 import com.mpt.hxqh.mpt_project.ui.widget.SwipeRefreshLayout;
+import com.mpt.hxqh.mpt_project.unit.MessageUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -93,11 +89,11 @@ public class Workorder_Details_Activity extends BaseActivity {
     ArrayList<MATUSETRANS> item2 = new ArrayList<MATUSETRANS>();
     private int position = 0;
 
-//    private FloatingActionButton addButton;
+    //    private FloatingActionButton addButton;
     private BaseAnimatorSet mBasIn;
     private BaseAnimatorSet mBasOut;
 
-    private String[] optionList = new String[]{"Back","Add Plan","Add Actural"};
+    private String[] optionList = new String[]{"Back", "Add Plan", "Add Actural"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -227,7 +223,7 @@ public class Workorder_Details_Activity extends BaseActivity {
                 @Override
                 public void onOperItemClick(AdapterView<?> parent, View view, int position, long id) {
 //                    linetypeTextView.setText(linetypeList[position]);
-                    switch (position){
+                    switch (position) {
                         case 0://Back
                             normalListDialog.superDismiss();
                             finish();
@@ -236,15 +232,21 @@ public class Workorder_Details_Activity extends BaseActivity {
 //                            break;
                         case 1://Add plan
                             normalListDialog.superDismiss();
-                            Intent intent1 = new Intent(Workorder_Details_Activity.this,Wpmaterial_AddNew_Activity.class);
-                            intent1.putExtra("wonum",workorder.getWONUM());
+                            Intent intent1 = new Intent(Workorder_Details_Activity.this, Wpmaterial_AddNew_Activity.class);
+                            intent1.putExtra("wonum", workorder.getWONUM());
                             startActivity(intent1);
                             break;
                         case 2://Add actural
+
                             normalListDialog.superDismiss();
-                            Intent intent2 = new Intent(Workorder_Details_Activity.this,Matusetrans_AddNew_Activity.class);
-                            intent2.putExtra("wonum",workorder.getWONUM());
-                            startActivity(intent2);
+                            if (workorder.getSTATUS().equals("WAPPR")) {
+                                MessageUtils.showMiddleToast(Workorder_Details_Activity.this, "Actuals cannot be reported when the work order status is Waiting on Approval WAPPR");
+                            } else {
+                                Intent intent2 = new Intent(Workorder_Details_Activity.this, Matusetrans_AddNew_Activity.class);
+                                intent2.putExtra("wonum", workorder.getWONUM());
+                                startActivity(intent2);
+                            }
+
                             break;
                     }
                     normalListDialog.dismiss();
@@ -255,7 +257,7 @@ public class Workorder_Details_Activity extends BaseActivity {
 
     private View.OnClickListener planOnClickListener = new View.OnClickListener() {
         @Override
-        public void onClick(View v) {
+        public void onClick(View v) { //计划
             position = 0;
             initAdapter1(new ArrayList<WPMATERIAL>());
             getData1();
@@ -266,7 +268,7 @@ public class Workorder_Details_Activity extends BaseActivity {
 
     private View.OnClickListener actualOnClickListener = new View.OnClickListener() {
         @Override
-        public void onClick(View v) {
+        public void onClick(View v) { //实际
             position = 1;
             initAdapter2(new ArrayList<MATUSETRANS>());
             getData2();
@@ -281,7 +283,7 @@ public class Workorder_Details_Activity extends BaseActivity {
             page = 1;
             if (position == 0) {
                 getData1();
-            }else {
+            } else {
                 getData2();
             }
         }
@@ -293,7 +295,7 @@ public class Workorder_Details_Activity extends BaseActivity {
             page++;
             if (position == 0) {
                 getData1();
-            }else {
+            } else {
                 getData2();
             }
         }
@@ -354,14 +356,14 @@ public class Workorder_Details_Activity extends BaseActivity {
                             item1 = new ArrayList<WPMATERIAL>();
                             initAdapter1(item1);
                         }
-                        for (int i = 0; i < item.size(); i++) {
-                            item1.add(item.get(i));
+                        if (page > totalPages) {
+                            MessageUtils.showMiddleToast(Workorder_Details_Activity.this, getString(R.string.have_load_out_all_the_data));
+                        } else {
+                            addData(item);
                         }
-                        addData(item);
                     }
                     nodatalayout.setVisibility(View.GONE);
 
-                    initAdapter1(item1);
                 }
             }
 
@@ -396,14 +398,13 @@ public class Workorder_Details_Activity extends BaseActivity {
                             item2 = new ArrayList<MATUSETRANS>();
                             initAdapter2(item2);
                         }
-                        for (int i = 0; i < item.size(); i++) {
-                            item2.add(item.get(i));
+                        if (page > totalPages) {
+                            MessageUtils.showMiddleToast(Workorder_Details_Activity.this, getString(R.string.have_load_out_all_the_data));
+                        } else {
+                            addData2(item);
                         }
-                        addData2(item);
                     }
                     nodatalayout.setVisibility(View.GONE);
-
-                    initAdapter2(item2);
                 }
             }
 
@@ -433,7 +434,7 @@ public class Workorder_Details_Activity extends BaseActivity {
     private View.OnClickListener addOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            Intent intent = new Intent(Workorder_Details_Activity.this,MaainvuseLine_AddNew_Activity.class);
+            Intent intent = new Intent(Workorder_Details_Activity.this, MaainvuseLine_AddNew_Activity.class);
 //            intent.putExtra("invusenum",workorder.getINVUSENUM());
 //            intent.putExtra("storeroom",workorder.getFROMSTORELOC());
             startActivity(intent);

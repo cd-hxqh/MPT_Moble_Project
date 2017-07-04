@@ -31,10 +31,10 @@ public class InvuseLineAdapter extends BaseQuickAdapter<INVUSELINE> {
 
     @Override
     protected void convert(BaseViewHolder helper, INVUSELINE item) {
-        helper.setText(R.id.type_text_id, item.getLINETYPE());
+        helper.setText(R.id.type_text_id, item.getINVUSELINENUM());
         helper.setText(R.id.item_text_id, item.getITEMNUM());
-        helper.setText(R.id.desc_text_id, item.getDESCRIPTION());
-        helper.setText(R.id.storeroom_text_id, item.getTOSTORELOC());
+        helper.setText(R.id.desc_text_id, item.getUSETYPE());
+        helper.setText(R.id.storeroom_text_id, item.getQUANTITY());
     }
 
 

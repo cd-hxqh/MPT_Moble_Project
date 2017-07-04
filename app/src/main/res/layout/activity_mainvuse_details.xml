@@ -1,6 +1,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/light_gray"
@@ -14,13 +14,12 @@
 
     <ScrollView
         android:id="@+id/scrollview_id"
-        android:layout_below="@id/title_id"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@id/title_id"
         android:background="@color/white"
         android:fillViewport="true"
-        android:scrollbars="vertical"
-        >
+        android:scrollbars="vertical">
 
         <LinearLayout
             android:id="@+id/container"
@@ -196,7 +195,7 @@
                         android:layout_weight="1"
                         android:background="@color/light_bule"
                         android:gravity="center"
-                        android:text="@string/line_type_text"
+                        android:text="@string/line3_text"
                         android:textColor="@color/black"
                         android:textSize="@dimen/dimens_16sp" />
 
@@ -207,7 +206,7 @@
                         android:layout_weight="1"
                         android:background="@color/light_bule"
                         android:gravity="center"
-                        android:text="@string/to_loc_text"
+                        android:text="@string/item2_text"
                         android:textColor="@color/black"
                         android:textSize="@dimen/dimens_16sp" />
 
@@ -218,7 +217,7 @@
                         android:layout_weight="1"
                         android:background="@color/light_bule"
                         android:gravity="center"
-                        android:text="@string/to_storeroom1_text"
+                        android:text="@string/usage_type3_text"
                         android:textColor="@color/black"
                         android:textSize="@dimen/dimens_16sp" />
 
@@ -251,7 +250,9 @@
                             android:layout_height="wrap_content"
                             android:background="@color/white"></android.support.v7.widget.RecyclerView>
                     </com.mpt.hxqh.mpt_project.ui.widget.SwipeRefreshLayout>
+
                     <include layout="@layout/asset_buttom"></include>
+
                     <LinearLayout
                         android:id="@+id/have_not_data_id"
                         android:layout_width="match_parent"
@@ -273,13 +274,13 @@
         </LinearLayout>
     </ScrollView>
     <!--<android.support.design.widget.FloatingActionButton-->
-        <!--android:id="@+id/add_flaButton"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_gravity="end|bottom"-->
-        <!--app:borderWidth="0dp"-->
-        <!--android:layout_margin="@dimen/fab_margin"-->
-        <!--app:backgroundTint="@color/colorPrimaryDark"-->
-        <!--android:background="@drawable/floatbutton"-->
-        <!--android:src="@drawable/ic_add" />-->
+    <!--android:id="@+id/add_flaButton"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_gravity="end|bottom"-->
+    <!--app:borderWidth="0dp"-->
+    <!--android:layout_margin="@dimen/fab_margin"-->
+    <!--app:backgroundTint="@color/colorPrimaryDark"-->
+    <!--android:background="@drawable/floatbutton"-->
+    <!--android:src="@drawable/ic_add" />-->
 </RelativeLayout>
