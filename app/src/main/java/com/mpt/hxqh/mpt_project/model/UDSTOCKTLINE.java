@@ -17,6 +17,10 @@ public class UDSTOCKTLINE implements Serializable {
     public String PHASE;//PHASE
     public String REMARK;//REMARK
     public String LINE;//LINE
+    public String SERIALNUM;//SERIALNUM
+    public String ISCHECK;//ISCHECK
+    public int ISSCAN;//ISSCAN
+    public String UDSTOCKTLINEID;//UDSTOCKTLINEID
 
     public String getSTOCKTNUM() {
         return STOCKTNUM;
@@ -88,5 +92,37 @@ public class UDSTOCKTLINE implements Serializable {
 
     public void setLINE(String LINE) {
         this.LINE = LINE;
+    }
+
+    public String getSERIALNUM() {
+        return SERIALNUM;
+    }
+
+    public void setSERIALNUM(String SERIALNUM) {
+        this.SERIALNUM = SERIALNUM;
+    }
+
+    public String getISCHECK() {
+        return ISCHECK;
+    }
+
+    public void setISCHECK(String ISCHECK) {
+        this.ISCHECK = ISCHECK;
+    }
+
+    public int getISSCAN() {
+        return ISSCAN;
+    }
+
+    public void setISSCAN(int ISSCAN) {
+        this.ISSCAN = ISSCAN;
+    }
+
+    public String getUDSTOCKTLINEID() {
+        return UDSTOCKTLINEID;
+    }
+
+    public void setUDSTOCKTLINEID(String UDSTOCKTLINEID) {
+        this.UDSTOCKTLINEID = UDSTOCKTLINEID;
     }
 }

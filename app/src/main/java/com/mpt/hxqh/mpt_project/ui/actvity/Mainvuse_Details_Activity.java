@@ -91,7 +91,7 @@ public class Mainvuse_Details_Activity extends BaseActivity {
     private LinearLayout buttonLayout;
     private Button quit;
     private Button option;
-    private String[] optionList = new String[]{"Back", "Route","AddLine"};
+    private String[] optionList = new String[]{"Back", "Route", "Return", "AddLine"};
     private BaseAnimatorSet mBasIn;
     private BaseAnimatorSet mBasOut;
 
@@ -219,7 +219,7 @@ public class Mainvuse_Details_Activity extends BaseActivity {
                 @Override
                 public void onOperItemClick(AdapterView<?> parent, View view, int position, long id) {
 //                    linetypeTextView.setText(linetypeList[position]);
-                    switch (position){
+                    switch (position) {
                         case 0://Back
                             normalListDialog.superDismiss();
                             finish();
@@ -228,17 +228,24 @@ public class Mainvuse_Details_Activity extends BaseActivity {
                             normalListDialog.superDismiss();
                             if (mainvuse.getSTATUS().equals(Constants.MPT_MATRE_START)) {//启动工作流
                                 MaterialDialogOneBtn();
-                            } else if (!mainvuse.getSTATUS().equals(Constants.MPT_MATRE_END)){//审批工作流
+                            } else if (!mainvuse.getSTATUS().equals(Constants.MPT_MATRE_END)) {//审批工作流
                                 EditDialog();
-                            }else {
+                            } else {
                                 MessageUtils.showMiddleToast(Mainvuse_Details_Activity.this, "Workflow is finished; cannot start again");
                             }
                             break;
-                        case 2://AddLine
+                        case 2://Return
                             normalListDialog.superDismiss();
-                            Intent intent = new Intent(Mainvuse_Details_Activity.this,MainvuseLine_AddNew_Activity.class);
-                            intent.putExtra("invusenum",mainvuse.getINVUSENUM());
-                            intent.putExtra("storeroom",mainvuse.getFROMSTORELOC());
+                            Intent intent1 = new Intent(Mainvuse_Details_Activity.this, Return_Item_Activity.class);
+                            intent1.putExtra("invusenum", mainvuse.getINVUSENUM());
+                            startActivityForResult(intent1,0);
+
+                            break;
+                        case 3://AddLine
+                            normalListDialog.superDismiss();
+                            Intent intent = new Intent(Mainvuse_Details_Activity.this, MainvuseLine_AddNew_Activity.class);
+                            intent.putExtra("invusenum", mainvuse.getINVUSENUM());
+                            intent.putExtra("storeroom", mainvuse.getFROMSTORELOC());
                             startActivity(intent);
 
                             break;
@@ -299,9 +306,9 @@ public class Mainvuse_Details_Activity extends BaseActivity {
                 super.onPostExecute(s);
                 mProgressDialog.dismiss();
                 if (s != null && s.errorMsg != null && s.errorMsg.equals("工作流启动成功")) {
-                  MessageUtils.showMiddleToast(Mainvuse_Details_Activity.this,"starting success!");
+                    MessageUtils.showMiddleToast(Mainvuse_Details_Activity.this, "starting success!");
                 } else {
-                    MessageUtils.showMiddleToast(Mainvuse_Details_Activity.this,s.errorMsg);
+                    MessageUtils.showMiddleToast(Mainvuse_Details_Activity.this, s.errorMsg);
                 }
 
             }
@@ -358,7 +365,7 @@ public class Mainvuse_Details_Activity extends BaseActivity {
             @Override
             protected WorkFlowResult doInBackground(String... strings) {
                 WorkFlowResult result = AndroidClientService.approve(Mainvuse_Details_Activity.this,
-                        "MPT_MATRE", "INVUSE", mainvuse.getINVUSEID()+"", "INVUSEID", zx, desc,
+                        "MPT_MATRE", "INVUSE", mainvuse.getINVUSEID() + "", "INVUSEID", zx, desc,
                         AccountUtils.getpersonId(Mainvuse_Details_Activity.this));
                 return result;
             }
@@ -372,7 +379,7 @@ public class Mainvuse_Details_Activity extends BaseActivity {
                 } else if (s.wonum.equals(mainvuse.getINVUSEID() + "") && s.errorMsg != null) {
                     statusTextView.setText(s.errorMsg);
                     mainvuse.setSTATUS(s.errorMsg);
-                    MessageUtils.showMiddleToast(Mainvuse_Details_Activity.this,"Approval success!");
+                    MessageUtils.showMiddleToast(Mainvuse_Details_Activity.this, "Approval success!");
                 } else {
                     MessageUtils.showMiddleToast(Mainvuse_Details_Activity.this, s.errorMsg);
                 }
@@ -467,9 +474,9 @@ public class Mainvuse_Details_Activity extends BaseActivity {
     private View.OnClickListener addOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            Intent intent = new Intent(Mainvuse_Details_Activity.this,MainvuseLine_AddNew_Activity.class);
-            intent.putExtra("invusenum",mainvuse.getINVUSENUM());
-            intent.putExtra("storeroom",mainvuse.getFROMSTORELOC());
+            Intent intent = new Intent(Mainvuse_Details_Activity.this, MainvuseLine_AddNew_Activity.class);
+            intent.putExtra("invusenum", mainvuse.getINVUSENUM());
+            intent.putExtra("storeroom", mainvuse.getFROMSTORELOC());
             startActivity(intent);
         }
     };

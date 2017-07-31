@@ -10,7 +10,6 @@ import android.support.v7.widget.RecyclerView;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ImageSpan;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -21,7 +20,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.mpt.hxqh.mpt_project.R;
-import com.mpt.hxqh.mpt_project.adpter.AssetChooseAdapter;
 import com.mpt.hxqh.mpt_project.adpter.BaseQuickAdapter;
 import com.mpt.hxqh.mpt_project.adpter.MeasureunitChooseAdapter;
 import com.mpt.hxqh.mpt_project.api.HttpManager;

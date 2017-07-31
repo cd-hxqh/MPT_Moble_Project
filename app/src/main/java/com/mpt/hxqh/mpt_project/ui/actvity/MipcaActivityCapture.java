@@ -8,6 +8,7 @@ import android.media.MediaPlayer.OnCompletionListener;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
+import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceHolder.Callback;
 import android.view.SurfaceView;
@@ -49,6 +50,9 @@ public class MipcaActivityCapture extends BaseActivity implements Callback {
     private boolean vibrate;
 
 
+    private int mark;
+
+
     /**
      * Called when the activity is first created.
      */
@@ -58,7 +62,7 @@ public class MipcaActivityCapture extends BaseActivity implements Callback {
         setContentView(R.layout.activity_capture);
         //ViewUtil.addTopView(getApplicationContext(), this, R.string.scan_card);
         CameraManager.init(getApplication());
-
+        initData();
         viewfinderView = (ViewfinderView) findViewById(R.id.viewfinder_view);
 
         ImageView mButtonBack = (ImageView) findViewById(R.id.title_back_id);
@@ -75,6 +79,14 @@ public class MipcaActivityCapture extends BaseActivity implements Callback {
         hasSurface = false;
         inactivityTimer = new InactivityTimer(this);
 
+    }
+
+    /**获取标识**/
+    private void initData() {
+        if(getIntent().hasExtra("mark")){
+            mark=getIntent().getExtras().getInt("mark");
+            Log.e(TAG,"mark="+mark);
+        }
     }
 
 
@@ -140,7 +152,7 @@ public class MipcaActivityCapture extends BaseActivity implements Callback {
         if (resultString.equals("")) {
             Toast.makeText(MipcaActivityCapture.this, "Scan failed!", Toast.LENGTH_SHORT).show();
         } else {
-
+            Log.e(TAG,"resultString"+resultString);
             Intent resultIntent = getIntent();
             Bundle bundle = new Bundle();
             bundle.putString("result", resultString);

@@ -91,7 +91,7 @@ public class Udstockt_Details_Activity extends BaseActivity {
     private LinearLayout buttonLayout;
     private Button quit;
     private Button option;
-    private String[] optionList = new String[]{"Back", "Route", "AddLine"};
+    private String[] optionList = new String[]{"Back", "Route", "Stocktaking","AddLine"};
     private BaseAnimatorSet mBasIn;
     private BaseAnimatorSet mBasOut;
 
@@ -233,12 +233,19 @@ public class Udstockt_Details_Activity extends BaseActivity {
                                 MessageUtils.showMiddleToast(Udstockt_Details_Activity.this, "Workflow is finished; cannot start again");
                             }
                             break;
-                        case 2://AddLine
+                        case 2://Stocktaking
+                            normalListDialog.superDismiss();
+                            Intent intent1 = new Intent(Udstockt_Details_Activity.this, Material_Stocktaking_Activity.class);
+                            intent1.putExtra("stocktnum", udstockt.getSTOCKTNUM());
+                            startActivityForResult(intent1,0);
+
+                            break;
+                        case 3://AddLine
                             normalListDialog.superDismiss();
                             Intent intent = new Intent(Udstockt_Details_Activity.this, UdstocktLine_AddNew_Activity.class);
                             intent.putExtra("stocktnum", udstockt.getSTOCKTNUM());
                             intent.putExtra("LOCATION", udstockt.getLOCATION());
-                            startActivity(intent);
+                            startActivityForResult(intent,0);
 
                             break;
                     }

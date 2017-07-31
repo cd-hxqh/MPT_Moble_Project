@@ -21,7 +21,6 @@ import android.widget.TextView;
 
 import com.mpt.hxqh.mpt_project.R;
 import com.mpt.hxqh.mpt_project.adpter.BaseQuickAdapter;
-import com.mpt.hxqh.mpt_project.adpter.InvbalancesAdapter;
 import com.mpt.hxqh.mpt_project.adpter.SiteAdapter;
 import com.mpt.hxqh.mpt_project.api.HttpManager;
 import com.mpt.hxqh.mpt_project.api.HttpRequestHandler;

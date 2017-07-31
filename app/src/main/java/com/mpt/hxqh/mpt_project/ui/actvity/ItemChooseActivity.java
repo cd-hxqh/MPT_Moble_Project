@@ -23,13 +23,11 @@ import android.widget.TextView;
 import com.mpt.hxqh.mpt_project.R;
 import com.mpt.hxqh.mpt_project.adpter.BaseQuickAdapter;
 import com.mpt.hxqh.mpt_project.adpter.ItemAdapter;
-import com.mpt.hxqh.mpt_project.adpter.LocationAdapter;
 import com.mpt.hxqh.mpt_project.api.HttpManager;
 import com.mpt.hxqh.mpt_project.api.HttpRequestHandler;
 import com.mpt.hxqh.mpt_project.api.JsonUtils;
 import com.mpt.hxqh.mpt_project.bean.Results;
 import com.mpt.hxqh.mpt_project.model.ITEM;
-import com.mpt.hxqh.mpt_project.model.LOCATIONS;
 import com.mpt.hxqh.mpt_project.ui.widget.SwipeRefreshLayout;
 
 import java.util.ArrayList;

@@ -8,6 +8,7 @@ import com.mpt.hxqh.mpt_project.bean.Results;
 import com.mpt.hxqh.mpt_project.config.Constants;
 import com.mpt.hxqh.mpt_project.model.ASSET;
 import com.mpt.hxqh.mpt_project.model.COMPANIES;
+import com.mpt.hxqh.mpt_project.model.GETREFUNDLINE;
 import com.mpt.hxqh.mpt_project.model.INVBALANCES;
 import com.mpt.hxqh.mpt_project.model.INVENTORY;
 import com.mpt.hxqh.mpt_project.model.INVUSE;
@@ -173,6 +174,25 @@ public class JsonUtils<E> {
             webResult.event = data.split("\\|")[1];
         }
         return webResult;
+    }
+
+
+    /**
+     * 通用查询更新成功*
+     */
+    public static String  parsingString(String data) {
+
+        JSONObject object = null;
+        String success=null;
+        try {
+            object = new JSONObject(data);
+            if (object.has("success")) {
+                success = object.getString("success");
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return success;
     }
 
 
@@ -612,7 +632,7 @@ public class JsonUtils<E> {
         }
     }
 
-    /**
+       /**
      * 资产转移
      */
     public static ArrayList<INVUSE> parsingINVUSE(String data) {
@@ -657,6 +677,54 @@ public class JsonUtils<E> {
             return null;
         }
     }
+
+
+    /**
+     * 库存退回弹出框
+     */
+    public static ArrayList<GETREFUNDLINE> parsingGETREFUNDLINE(String data) {
+        ArrayList<GETREFUNDLINE> list = null;
+        GETREFUNDLINE getrefundline = null;
+        try {
+            JSONArray jsonArray = new JSONArray(data);
+            JSONObject jsonObject;
+            list = new ArrayList<GETREFUNDLINE>();
+            for (int i = 0; i < jsonArray.length(); i++) {
+                getrefundline = new GETREFUNDLINE();
+                jsonObject = jsonArray.getJSONObject(i);
+                Field[] field = getrefundline.getClass().getDeclaredFields();        //获取实体类的所有属性，返回Field数组
+                for (int j = 0; j < field.length; j++) {     //遍历所有属性
+                    field[j].setAccessible(true);
+                    String name = field[j].getName();    //获取属性的名字
+                    Log.i(TAG, "name=" + name);
+                    if (jsonObject.has(name) && jsonObject.getString(name) != null && !jsonObject.getString(name).equals("")) {
+                        try {
+                            // 调用getter方法获取属性值
+                            Method getOrSet = getrefundline.getClass().getMethod("get" + name);
+                            Object value = getOrSet.invoke(getrefundline);
+                            if (value == null) {
+                                //调用setter方法设属性值
+                                Class[] parameterTypes = new Class[1];
+                                parameterTypes[0] = field[j].getType();
+                                getOrSet = getrefundline.getClass().getDeclaredMethod("set" + name, parameterTypes);
+                                getOrSet.invoke(getrefundline, jsonObject.getString(name));
+                            }
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                }
+                list.add(getrefundline);
+            }
+            return list;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 
 
     /**
@@ -1434,5 +1502,27 @@ public class JsonUtils<E> {
             return null;
         }
     }
+
+
+    /**封装盘点数据**/
+    public static String  encapsulationUdstocktline(UDSTOCKTLINE udstocktline){
+
+        JSONObject json = new JSONObject();
+
+        try {
+            json.put("CHECKSERIAL", udstocktline.getCHECKSERIAL());
+            JSONArray jsonArray = new JSONArray();
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("", "");
+            jsonArray.put(jsonObject);
+            json.put("relationShip", jsonArray);
+        } catch (JSONException e) {
+            return null;
+        }
+
+        Log.i(TAG, "json=" + json);
+        return json.toString();
+    }
+
 
 }

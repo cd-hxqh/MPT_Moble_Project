@@ -168,5 +168,6 @@
     <string name="item2_text">Item</string>
     <string name="line3_text">Line</string>
     <string name="usage_type3_text">Usage Type</string>
+    <string name="return_item_text">Return Item</string>
 
 </resources>

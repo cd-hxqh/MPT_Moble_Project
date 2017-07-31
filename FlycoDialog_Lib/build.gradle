@@ -6,8 +6,8 @@ apply plugin: 'com.android.library'
 version = "1.2.2"
 android {
     compileSdkVersion 22
-    buildToolsVersion '22.0.1'
-    resourcePrefix "FlycoDialog_"    //这个随便填
+    buildToolsVersion '25.0.0'
+//    resourcePrefix "FlycoDialog_"    //这个随便填
     defaultConfig {
         minSdkVersion 8
         targetSdkVersion 23

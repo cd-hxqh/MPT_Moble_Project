@@ -5,6 +5,7 @@ package com.mpt.hxqh.mpt_project.config;
  */
 public class Constants {
 
+
     /**
      * 基础接口*
      */
@@ -131,6 +132,9 @@ public class Constants {
     public static final String MATOUTB_APPID = "MATOUTB";
     //物料退库的表名
     public static final String MAINVUSE_NAME = "INVUSE";
+    //物料退库行的表名
+    public static final String GETREFUNDLINE_NAME = "GETREFUNDLINE";
+
     //物料退库行的表名
     public static final String MAINVUSELINE_NAME = "INVUSELINE";
 

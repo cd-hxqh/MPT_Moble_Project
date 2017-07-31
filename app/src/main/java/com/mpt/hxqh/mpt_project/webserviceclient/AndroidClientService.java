@@ -321,6 +321,46 @@ public class AndroidClientService {
     }
 
     /**
+     * 物料退库行新增行方法(弹出框)
+     *
+     * @return
+     */
+    public static WebResult AddMatRfLin(Context context, String invusenum, String itemnum, String rotassetnum, String enterby
+            , String quantity,String linetype,String url) {
+        Log.e(TAG,"url="+AccountUtils.getIpAddress(context) + url);
+        Log.e(TAG,"invusenum="+invusenum+",itemnum="+itemnum+",rotassetnum="+rotassetnum+",enterby="+enterby+",quantity="+quantity+",linetype="+linetype);
+        SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+        soapEnvelope.implicitTypes = true;
+        soapEnvelope.dotNet = true;
+        SoapObject soapReq = new SoapObject(NAMESPACE, "mptmobileserviceAddMatRfLin");
+        soapReq.addProperty("INVUSENUM", invusenum);//
+        soapReq.addProperty("ITEMNUM", itemnum);//
+        soapReq.addProperty("ROTASSETNUM", rotassetnum);//
+        soapReq.addProperty("ENTERBY", enterby);//
+        soapReq.addProperty("QUANTITY", quantity);//
+        soapReq.addProperty("LINETYPE", linetype);//
+        soapEnvelope.setOutputSoapObject(soapReq);
+        HttpTransportSE httpTransport = new HttpTransportSE(AccountUtils.getIpAddress(context) + url, timeOut);
+        try {
+            httpTransport.call("urn:action", soapEnvelope);
+        } catch (IOException | XmlPullParserException e) {
+            return null;
+        }
+        String obj = null;
+        WebResult webResult = null;
+        try {
+            obj = soapEnvelope.getResponse().toString();
+
+            Log.i(TAG, "obj=" + obj);
+            webResult = JsonUtils.parsingWebResult1(obj);
+        } catch (SoapFault soapFault) {
+            soapFault.printStackTrace();
+        }
+        return webResult;
+    }
+
+
+    /**
      * 物料退库行新增行方法
      *
      * @return
@@ -346,7 +386,6 @@ public class AndroidClientService {
         try {
             httpTransport.call("urn:action", soapEnvelope);
         } catch (IOException | XmlPullParserException e) {
-//            e.printStackTrace();
             return null;
         }
         String obj = null;
@@ -855,7 +894,7 @@ public class AndroidClientService {
     /**
      * 通用修改
      */
-    public static WebResult UpdateWO(Context context, String json, String mboObjectName, String mboKey, String mboKeyValue, String url) {
+    public static String UpdateWO(Context context, String json, String mboObjectName, String mboKey, String mboKeyValue, String url) {
         SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         soapEnvelope.implicitTypes = true;
         soapEnvelope.dotNet = true;
@@ -872,14 +911,14 @@ public class AndroidClientService {
             return null;
         }
         String obj = null;
-        WebResult webResult = null;
+        String results=null;
         try {
             obj = soapEnvelope.getResponse().toString();
-//            webResult = JsonUtils.parsingInsertWO(obj, mboKey);
+            results=JsonUtils.parsingString(obj);
         } catch (SoapFault soapFault) {
             soapFault.printStackTrace();
         }
-        return webResult;
+        return results;
     }
 
     /**
@@ -892,8 +931,6 @@ public class AndroidClientService {
      */
     public static String connectWebService(Context context, String filename, String image, String ownertable, String ownerid, String url) {
 
-        Log.i(TAG, "filename=" + filename + ",ownertable=" + ownertable + ",ownerid=" + ownerid);
-        Log.i(TAG, "url=" + url);
         SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         soapEnvelope.implicitTypes = true;
         soapEnvelope.dotNet = true;
@@ -913,7 +950,6 @@ public class AndroidClientService {
         String webResult = null;
         try {
             webResult = soapEnvelope.getResponse().toString();
-            Log.i(TAG, "webResult=" + webResult);
         } catch (SoapFault soapFault) {
             soapFault.printStackTrace();
         }
@@ -950,7 +986,6 @@ public class AndroidClientService {
 
             obj = soapEnvelope.getResponse().toString();
 
-            Log.i("库存查询", "obj=" + obj);
 
         } catch (SoapFault soapFault) {
 

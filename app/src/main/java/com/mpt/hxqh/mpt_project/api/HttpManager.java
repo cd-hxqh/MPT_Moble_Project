@@ -202,6 +202,14 @@ public class HttpManager {
     }
 
 
+    /**根据serialnum查询Asset**/
+    public static String getAssetUrl(String sn) {
+
+        return "{'appid':'" + Constants.UDMPTASSET_APPID + "','objectname':'" + Constants.ASSET_NAME  + "','curpage':1,'showcount':20"+",'option':'read','orderby':'ASSETNUM ASC','condition':{'SERIALNUM':'=" + sn + "'}}";
+    }
+
+
+
     /**
      * 设置资产转移*
      */
@@ -340,6 +348,21 @@ public class HttpManager {
             return "{'appid':'" + Constants.MATREF_APPID + "','objectname':'" + Constants.MAINVUSE_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','condition':{'APPTYPE':'=MR'},'sinorsearch':{'INVUSENUM':'" + vlaue + "','DESCRIPTION':'" + vlaue + "'}}";
         }
     }
+
+
+    /**
+     * 设置物料退库弹出框*
+     */
+    public static String getMAINVUSE(String vlaue,String invusenum, int curpage, int showcount) {
+        if (vlaue.equals("")) {
+            return "{'appid':'" + Constants.MATREF_APPID + "','objectname':'" + Constants.GETREFUNDLINE_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','condition':{'INVUSENUM':'="+invusenum+"'}}";
+        } else {
+            return "{'appid':'" + Constants.MATREF_APPID + "','objectname':'" + Constants.GETREFUNDLINE_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','condition':{'INVUSENUM':'="+invusenum+"'},'sinorsearch':{'ITEMNUM':'" + vlaue + "','DESCRIPTION':'" + vlaue + "'}}";
+        }
+    }
+
+
+
 
     /**
      * 设置物料出库计划行表*
