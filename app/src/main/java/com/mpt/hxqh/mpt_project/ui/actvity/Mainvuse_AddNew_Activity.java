@@ -227,21 +227,21 @@ public class Mainvuse_AddNew_Activity extends BaseActivity {
      * 提交数据*
      */
     private void startAsyncTask() {
-        new AsyncTask<String, String, WebResult>() {
+        new AsyncTask<String, String, String>() {
             @Override
-            protected WebResult doInBackground(String... strings) {
-                WebResult reviseresult = AndroidClientService.AddMatRf(Mainvuse_AddNew_Activity.this, descriptionTextView.getText().toString(),
+            protected String doInBackground(String... strings) {
+                String reviseresult = AndroidClientService.AddMatRf(Mainvuse_AddNew_Activity.this, descriptionTextView.getText().toString(),
                         fromstoreroomTextView.getText().toString(), invownerTextView.getText().toString(), AccountUtils.getpersonId(Mainvuse_AddNew_Activity.this), Constants.TRANSFER_URL);
                 return reviseresult;
             }
 
             @Override
-            protected void onPostExecute(WebResult workResult) {
+            protected void onPostExecute(String workResult) {
                 super.onPostExecute(workResult);
                 if (workResult == null) {
                     Toast.makeText(Mainvuse_AddNew_Activity.this, "false", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(Mainvuse_AddNew_Activity.this, workResult.returnStr, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Mainvuse_AddNew_Activity.this, workResult, Toast.LENGTH_SHORT).show();
 //                    setResult(100);
                     finish();
                 }

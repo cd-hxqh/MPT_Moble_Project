@@ -349,10 +349,10 @@ public class Matusetrans_AddNew_Activity extends BaseActivity {
      * 提交数据*
      */
     private void startAsyncTask() {
-        new AsyncTask<String, String, WebResult>() {
+        new AsyncTask<String, String, String>() {
             @Override
-            protected WebResult doInBackground(String... strings) {
-                WebResult reviseresult = AndroidClientService.AddOutActuralLine(Matusetrans_AddNew_Activity.this, wonum,
+            protected String doInBackground(String... strings) {
+                String reviseresult = AndroidClientService.AddOutActuralLine(Matusetrans_AddNew_Activity.this, wonum,
                         itemnumTextView.getText().toString(), descriptionTextView.getText().toString(), linetypeTextView.getText().toString()
                         , storeroomTextView.getText().toString(), siteidTextView.getText().toString(), quantityTextView.getText().toString(), unitcostTextView.getText().toString()
                         , locationTextView.getText().toString(), trantypeTextView.getText().toString()
@@ -361,12 +361,12 @@ public class Matusetrans_AddNew_Activity extends BaseActivity {
             }
 
             @Override
-            protected void onPostExecute(WebResult workResult) {
+            protected void onPostExecute(String workResult) {
                 super.onPostExecute(workResult);
                 if (workResult == null) {
                     Toast.makeText(Matusetrans_AddNew_Activity.this, "false", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(Matusetrans_AddNew_Activity.this, workResult.returnStr, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Matusetrans_AddNew_Activity.this, workResult, Toast.LENGTH_SHORT).show();
 //                    setResult(100);
                     finish();
                 }

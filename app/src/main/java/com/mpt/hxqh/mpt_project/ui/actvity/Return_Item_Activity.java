@@ -379,10 +379,10 @@ public class Return_Item_Activity extends BaseActivity implements SwipeRefreshLa
     //提交选中的数据
     private void submitChooseData() {
 
-        new AsyncTask<String, String, WebResult>() {
+        new AsyncTask<String, String, String>() {
             @Override
-            protected WebResult doInBackground(String... strings) {
-                WebResult reviseresult = null;
+            protected String doInBackground(String... strings) {
+                String reviseresult = null;
                 for (int i = 0; i < chooseLine.size(); i++) {
 
                     GETREFUNDLINE line = chooseLine.get(i);
@@ -395,12 +395,12 @@ public class Return_Item_Activity extends BaseActivity implements SwipeRefreshLa
             }
 
             @Override
-            protected void onPostExecute(WebResult workResult) {
+            protected void onPostExecute(String workResult) {
                 super.onPostExecute(workResult);
                 if (workResult == null) {
                     Toast.makeText(Return_Item_Activity.this, "fail", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(Return_Item_Activity.this, workResult.returnStr, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Return_Item_Activity.this, workResult, Toast.LENGTH_SHORT).show();
                     finish();
                 }
                 closeProgressDialog();

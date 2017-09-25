@@ -344,10 +344,10 @@ public class MaainvuseLine_AddNew_Activity extends BaseActivity {
      * 提交数据*
      */
     private void startAsyncTask() {
-        new AsyncTask<String, String, WebResult>() {
+        new AsyncTask<String, String, String>() {
             @Override
-            protected WebResult doInBackground(String... strings) {
-                WebResult reviseresult = AndroidClientService.AddMatoutbLin(MaainvuseLine_AddNew_Activity.this, invusenum, itemnumTextView.getText().toString(),
+            protected String doInBackground(String... strings) {
+                String reviseresult = AndroidClientService.AddMatoutbLin(MaainvuseLine_AddNew_Activity.this, invusenum, itemnumTextView.getText().toString(),
                         formbinTextView.getText().toString(), usetypeTextView.getText().toString(), linetypeTextView.getText().toString()
                         , tositeTextView.getText().toString(), rotassetnumTextView.getText().toString(), quantityTextView.getText().toString()
                         , tostorelocTextView.getText().toString(), tobinTextView.getText().toString(), issuetoTextView.getText().toString()
@@ -356,19 +356,17 @@ public class MaainvuseLine_AddNew_Activity extends BaseActivity {
             }
 
             @Override
-            protected void onPostExecute(WebResult workResult) {
+            protected void onPostExecute(String workResult) {
                 super.onPostExecute(workResult);
                 if (workResult == null) {
                     Toast.makeText(MaainvuseLine_AddNew_Activity.this, "false", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(MaainvuseLine_AddNew_Activity.this, workResult.returnStr, Toast.LENGTH_SHORT).show();
-//                    setResult(100);
+                    Toast.makeText(MaainvuseLine_AddNew_Activity.this, workResult, Toast.LENGTH_SHORT).show();
                     finish();
                 }
                 closeProgressDialog();
             }
         }.execute();
-        //}else {
         closeProgressDialog();
     }
 

@@ -239,22 +239,22 @@ public class UdasstLine_AddNew_Activity extends BaseActivity {
      * 提交数据*
      */
     private void startAsyncTask() {
-        new AsyncTask<String, String, WebResult>() {
+        new AsyncTask<String, String, String>() {
             @Override
-            protected WebResult doInBackground(String... strings) {
-                WebResult reviseresult = AndroidClientService.AddRepairLine(UdasstLine_AddNew_Activity.this, repairnum,
+            protected String doInBackground(String... strings) {
+                String reviseresult = AndroidClientService.AddRepairLine(UdasstLine_AddNew_Activity.this, repairnum,
                         udrepdateTextView.getText().toString(), udasstnumTextView.getText().toString()
                         , Constants.TRANSFER_URL);
                 return reviseresult;
             }
 
             @Override
-            protected void onPostExecute(WebResult workResult) {
+            protected void onPostExecute(String workResult) {
                 super.onPostExecute(workResult);
                 if (workResult == null) {
                     MessageUtils.showMiddleToast(UdasstLine_AddNew_Activity.this, "false");
                 } else {
-                    MessageUtils.showMiddleToast(UdasstLine_AddNew_Activity.this, workResult.returnStr);
+                    MessageUtils.showMiddleToast(UdasstLine_AddNew_Activity.this, workResult);
                     finish();
                 }
                 closeProgressDialog();

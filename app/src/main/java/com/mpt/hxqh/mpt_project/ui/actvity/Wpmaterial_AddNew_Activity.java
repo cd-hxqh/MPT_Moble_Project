@@ -350,10 +350,10 @@ public class Wpmaterial_AddNew_Activity extends BaseActivity {
      * 提交数据*
      */
     private void startAsyncTask() {
-        new AsyncTask<String, String, WebResult>() {
+        new AsyncTask<String, String, String>() {
             @Override
-            protected WebResult doInBackground(String... strings) {
-                WebResult reviseresult = AndroidClientService.AddOutPlanLine(Wpmaterial_AddNew_Activity.this, wonum,
+            protected String doInBackground(String... strings) {
+                String reviseresult = AndroidClientService.AddOutPlanLine(Wpmaterial_AddNew_Activity.this, wonum,
                         itemTextView.getText().toString(), descriptionTextView.getText().toString(), locationTextView.getText().toString()
                         , issuetoTextView.getText().toString(), linetypeTextView.getText().toString(),
                         restypeTextView.getText().toString(), quantityTextView.getText().toString(),
@@ -363,13 +363,13 @@ public class Wpmaterial_AddNew_Activity extends BaseActivity {
             }
 
             @Override
-            protected void onPostExecute(WebResult workResult) {
+            protected void onPostExecute(String workResult) {
                 super.onPostExecute(workResult);
 
                 if (workResult == null) {
                     MessageUtils.showMiddleToast(Wpmaterial_AddNew_Activity.this, "failed");
                 } else {
-                    MessageUtils.showMiddleToast(Wpmaterial_AddNew_Activity.this, workResult.returnStr);
+                    MessageUtils.showMiddleToast(Wpmaterial_AddNew_Activity.this, workResult);
                     finish();
                 }
                 closeProgressDialog();

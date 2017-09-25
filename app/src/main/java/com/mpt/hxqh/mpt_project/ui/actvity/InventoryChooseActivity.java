@@ -129,7 +129,7 @@ public class InventoryChooseActivity extends BaseActivity implements SwipeRefres
     @Override
     protected void initView() {
         backImageView.setOnClickListener(backImageViewOnClickListener);
-        titleTextView.setText("Asset");
+        titleTextView.setText("ITEM");
         setSearchEdit();
 
         layoutManager = new LinearLayoutManager(InventoryChooseActivity.this);

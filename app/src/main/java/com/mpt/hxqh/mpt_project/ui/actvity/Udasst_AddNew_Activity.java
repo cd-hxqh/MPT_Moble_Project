@@ -224,22 +224,22 @@ public class Udasst_AddNew_Activity extends BaseActivity {
      * 提交数据*
      */
     private void startAsyncTask() {
-        new AsyncTask<String, String, WebResult>() {
+        new AsyncTask<String, String, String>() {
             @Override
-            protected WebResult doInBackground(String... strings) {
-                WebResult reviseresult = AndroidClientService.AddRepair(Udasst_AddNew_Activity.this, descriptionTextView.getText().toString(),
+            protected String doInBackground(String... strings) {
+                String reviseresult = AndroidClientService.AddRepair(Udasst_AddNew_Activity.this, descriptionTextView.getText().toString(),
                         locationTextView.getText().toString(), installDateTextView.getText().toString(), AccountUtils.getpersonId(Udasst_AddNew_Activity.this), Constants.TRANSFER_URL);
                 return reviseresult;
             }
 
             @Override
-            protected void onPostExecute(WebResult workResult) {
+            protected void onPostExecute(String workResult) {
                 super.onPostExecute(workResult);
                 closeProgressDialog();
                 if (workResult == null) {
                     MessageUtils.showMiddleToast(Udasst_AddNew_Activity.this, "false");
                 } else {
-                    MessageUtils.showMiddleToast(Udasst_AddNew_Activity.this, workResult.returnStr);
+                    MessageUtils.showMiddleToast(Udasst_AddNew_Activity.this,workResult);
                     finish();
                 }
                 closeProgressDialog();

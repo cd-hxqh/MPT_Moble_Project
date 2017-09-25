@@ -5,7 +5,6 @@ import android.util.Log;
 
 import com.mpt.hxqh.mpt_project.api.JsonUtils;
 import com.mpt.hxqh.mpt_project.config.Constants;
-import com.mpt.hxqh.mpt_project.model.WebResult;
 import com.mpt.hxqh.mpt_project.model.WorkFlowResult;
 import com.mpt.hxqh.mpt_project.unit.AccountUtils;
 
@@ -132,7 +131,7 @@ public class AndroidClientService {
      *
      * @return
      */
-    public static WebResult AddAssetTrs(Context context, String description, String fromstoreloc, String invowner, String createby, String url) {
+    public static String AddAssetTrs(Context context, String description, String fromstoreloc, String invowner, String createby, String url) {
 
         SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         soapEnvelope.implicitTypes = true;
@@ -151,16 +150,14 @@ public class AndroidClientService {
             return null;
         }
         String obj = null;
-        WebResult webResult = null;
         try {
             obj = soapEnvelope.getResponse().toString();
 
             Log.i(TAG, "obj=" + obj);
-            webResult = JsonUtils.parsingWebResult1(obj);
         } catch (SoapFault soapFault) {
             soapFault.printStackTrace();
         }
-        return webResult;
+        return obj;
     }
 
     /**
@@ -168,7 +165,7 @@ public class AndroidClientService {
      *
      * @return
      */
-    public static WebResult AddAssetTrsLin(Context context, String invusenum, String usetype, String linetype, String itemnum
+    public static String AddAssetTrsLin(Context context, String invusenum, String usetype, String linetype, String itemnum
             , String tostoreloc, String rotassetnum, String issueto, String quantity, String url) {
 
         SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
@@ -192,16 +189,14 @@ public class AndroidClientService {
             return null;
         }
         String obj = null;
-        WebResult webResult = null;
         try {
             obj = soapEnvelope.getResponse().toString();
 
             Log.i(TAG, "obj=" + obj);
-            webResult = JsonUtils.parsingWebResult1(obj);
         } catch (SoapFault soapFault) {
             soapFault.printStackTrace();
         }
-        return webResult;
+        return obj;
     }
 
     /**
@@ -209,7 +204,7 @@ public class AndroidClientService {
      *
      * @return
      */
-    public static WebResult AddMatoutb(Context context, String description, String fromstoreloc, String invowner, String usetype, String url) {
+    public static String AddMatoutb(Context context, String description, String fromstoreloc, String invowner, String usetype, String url) {
 
         SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         soapEnvelope.implicitTypes = true;
@@ -228,16 +223,15 @@ public class AndroidClientService {
             return null;
         }
         String obj = null;
-        WebResult webResult = null;
         try {
             obj = soapEnvelope.getResponse().toString();
 
             Log.i(TAG, "obj=" + obj);
-            webResult = JsonUtils.parsingWebResult1(obj);
         } catch (SoapFault soapFault) {
             soapFault.printStackTrace();
+
         }
-        return webResult;
+        return obj;
     }
 
     /**
@@ -245,7 +239,7 @@ public class AndroidClientService {
      *
      * @return
      */
-    public static WebResult AddMatoutbLin(Context context, String invusenum, String itemnum, String frombin, String usetype
+    public static String AddMatoutbLin(Context context, String invusenum, String itemnum, String frombin, String usetype
             , String linetype, String tositeid, String rotassetnum, String quantity, String tostoreloc, String tobin
             , String issueto, String enterby, String conversion, String url) {
         SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
@@ -274,15 +268,13 @@ public class AndroidClientService {
             return null;
         }
         String obj = null;
-        WebResult webResult = null;
         try {
             obj = soapEnvelope.getResponse().toString();
             Log.i(TAG, "obj=" + obj);
-            webResult = JsonUtils.parsingWebResult1(obj);
         } catch (SoapFault soapFault) {
             soapFault.printStackTrace();
         }
-        return webResult;
+        return obj;
     }
 
     /**
@@ -290,7 +282,7 @@ public class AndroidClientService {
      *
      * @return
      */
-    public static WebResult AddMatRf(Context context, String description, String fromstoreloc, String invowner, String createby, String url) {
+    public static String AddMatRf(Context context, String description, String fromstoreloc, String invowner, String createby, String url) {
 
         SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         soapEnvelope.implicitTypes = true;
@@ -309,15 +301,13 @@ public class AndroidClientService {
             return null;
         }
         String obj = null;
-        WebResult webResult = null;
         try {
             obj = soapEnvelope.getResponse().toString();
             Log.i(TAG, "obj=" + obj);
-            webResult = JsonUtils.parsingWebResult1(obj);
         } catch (SoapFault soapFault) {
             soapFault.printStackTrace();
         }
-        return webResult;
+        return obj;
     }
 
     /**
@@ -325,7 +315,7 @@ public class AndroidClientService {
      *
      * @return
      */
-    public static WebResult AddMatRfLin(Context context, String invusenum, String itemnum, String rotassetnum, String enterby
+    public static String AddMatRfLin(Context context, String invusenum, String itemnum, String rotassetnum, String enterby
             , String quantity, String linetype, String url) {
         Log.e(TAG, "url=" + AccountUtils.getIpAddress(context) + url);
         Log.e(TAG, "invusenum=" + invusenum + ",itemnum=" + itemnum + ",rotassetnum=" + rotassetnum + ",enterby=" + enterby + ",quantity=" + quantity + ",linetype=" + linetype);
@@ -347,16 +337,14 @@ public class AndroidClientService {
             return null;
         }
         String obj = null;
-        WebResult webResult = null;
         try {
             obj = soapEnvelope.getResponse().toString();
 
             Log.i(TAG, "obj=" + obj);
-            webResult = JsonUtils.parsingWebResult1(obj);
         } catch (SoapFault soapFault) {
             soapFault.printStackTrace();
         }
-        return webResult;
+        return obj;
     }
 
 
@@ -365,7 +353,7 @@ public class AndroidClientService {
      *
      * @return
      */
-    public static WebResult AddMatRfLin(Context context, String invusenum, String itemnum, String rotassetnum, String enterby
+    public static String AddMatRfLin(Context context, String invusenum, String itemnum, String rotassetnum, String enterby
             , String quantity, String usetype, String linetype, String newphyscnt, String remark, String url) {
 
         SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
@@ -389,16 +377,13 @@ public class AndroidClientService {
             return null;
         }
         String obj = null;
-        WebResult webResult = null;
         try {
             obj = soapEnvelope.getResponse().toString();
 
-            Log.i(TAG, "obj=" + obj);
-            webResult = JsonUtils.parsingWebResult1(obj);
         } catch (SoapFault soapFault) {
             soapFault.printStackTrace();
         }
-        return webResult;
+        return obj;
     }
 
     /**
@@ -406,7 +391,7 @@ public class AndroidClientService {
      *
      * @return
      */
-    public static WebResult AddMatSto(Context context, String description, String location, String vendor, String createby, String visitd, String url) {
+    public static String AddMatSto(Context context, String description, String location, String vendor, String createby, String visitd, String url) {
 
         SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         soapEnvelope.implicitTypes = true;
@@ -425,16 +410,14 @@ public class AndroidClientService {
             return null;
         }
         String obj = null;
-        WebResult webResult = null;
         try {
             obj = soapEnvelope.getResponse().toString();
 
             Log.i(TAG, "obj=" + obj);
-            webResult = JsonUtils.parsingWebResult1(obj);
         } catch (SoapFault soapFault) {
             soapFault.printStackTrace();
         }
-        return webResult;
+        return obj;
     }
 
     /**
@@ -442,7 +425,7 @@ public class AndroidClientService {
      *
      * @return
      */
-    public static WebResult AddMatStoLine(Context context, String stocktnum, String assetnum, String checkserial, String remark
+    public static String AddMatStoLine(Context context, String stocktnum, String assetnum, String checkserial, String remark
             , String ischeck, String url) {
         Log.i(TAG, "stocktnum=" + stocktnum + ",assetnum=" + assetnum + ",checkserial=" + checkserial + ",remark=" + remark + ",ISCHECK=" + ischeck);
         SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
@@ -463,16 +446,13 @@ public class AndroidClientService {
             return null;
         }
         String obj = null;
-        WebResult webResult = null;
         try {
             obj = soapEnvelope.getResponse().toString();
 
-            Log.i(TAG, "obj=" + obj);
-            webResult = JsonUtils.parsingWebResult1(obj);
         } catch (SoapFault soapFault) {
             soapFault.printStackTrace();
         }
-        return webResult;
+        return obj;
     }
 
     /**
@@ -480,7 +460,7 @@ public class AndroidClientService {
      *
      * @return
      */
-    public static WebResult AddPo(Context context, String description, String userid, String url) {
+    public static String AddPo(Context context, String description, String userid, String url) {
 
         SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         soapEnvelope.implicitTypes = true;
@@ -497,16 +477,14 @@ public class AndroidClientService {
             return null;
         }
         String obj = null;
-        WebResult webResult = null;
         try {
             obj = soapEnvelope.getResponse().toString();
 
             Log.i(TAG, "obj=" + obj);
-            webResult = JsonUtils.parsingWebResult1(obj);
         } catch (SoapFault soapFault) {
             soapFault.printStackTrace();
         }
-        return webResult;
+        return obj;
     }
 
     /**
@@ -514,7 +492,7 @@ public class AndroidClientService {
      *
      * @return
      */
-    public static WebResult AddPoLine(Context context, String userid, String ponum, String itemnum, String conversion
+    public static String AddPoLine(Context context, String userid, String ponum, String itemnum, String conversion
             , String orderqty, String url) {
 
         SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
@@ -531,20 +509,17 @@ public class AndroidClientService {
         try {
             httpTransport.call("urn:action", soapEnvelope);
         } catch (IOException | XmlPullParserException e) {
-//            e.printStackTrace();
             return null;
         }
         String obj = null;
-        WebResult webResult = null;
         try {
             obj = soapEnvelope.getResponse().toString();
 
             Log.i(TAG, "obj=" + obj);
-            webResult = JsonUtils.parsingWebResult1(obj);
         } catch (SoapFault soapFault) {
             soapFault.printStackTrace();
         }
-        return webResult;
+        return obj;
     }
 
     /**
@@ -552,7 +527,7 @@ public class AndroidClientService {
      *
      * @return
      */
-    public static WebResult AddRepair(Context context, String description, String location, String repairdate, String createby, String url) {
+    public static String AddRepair(Context context, String description, String location, String repairdate, String createby, String url) {
         Log.i(TAG, "url=" + AccountUtils.getIpAddress(context) + url);
         SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         soapEnvelope.implicitTypes = true;
@@ -571,16 +546,14 @@ public class AndroidClientService {
             return null;
         }
         String obj = null;
-        WebResult webResult = null;
         try {
+
             obj = soapEnvelope.getResponse().toString();
 
-            Log.i(TAG, "obj=" + obj);
-            webResult = JsonUtils.parsingWebResult1(obj);
         } catch (SoapFault soapFault) {
             soapFault.printStackTrace();
         }
-        return webResult;
+        return obj;
     }
 
     /**
@@ -588,7 +561,7 @@ public class AndroidClientService {
      *
      * @return
      */
-    public static WebResult AddRepairLine(Context context, String repairnum, String udrepdate, String udasstnum, String url) {
+    public static String AddRepairLine(Context context, String repairnum, String udrepdate, String udasstnum, String url) {
 
         SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         soapEnvelope.implicitTypes = true;
@@ -606,16 +579,14 @@ public class AndroidClientService {
             return null;
         }
         String obj = null;
-        WebResult webResult = null;
         try {
             obj = soapEnvelope.getResponse().toString();
 
             Log.i(TAG, "obj=" + obj);
-            webResult = JsonUtils.parsingWebResult1(obj);
         } catch (SoapFault soapFault) {
             soapFault.printStackTrace();
         }
-        return webResult;
+        return obj;
     }
 
     /**
@@ -623,7 +594,7 @@ public class AndroidClientService {
      *
      * @return
      */
-    public static WebResult AddRetire(Context context, String description, String location, String retireloc, String retiredate, String createby, String url) {
+    public static String AddRetire(Context context, String description, String location, String retireloc, String retiredate, String createby, String url) {
 
         SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         soapEnvelope.implicitTypes = true;
@@ -643,16 +614,14 @@ public class AndroidClientService {
             return null;
         }
         String obj = null;
-        WebResult webResult = null;
         try {
             obj = soapEnvelope.getResponse().toString();
 
             Log.i(TAG, "obj=" + obj);
-            webResult = JsonUtils.parsingWebResult1(obj);
         } catch (SoapFault soapFault) {
             soapFault.printStackTrace();
         }
-        return webResult;
+        return obj;
     }
 
     /**
@@ -660,7 +629,7 @@ public class AndroidClientService {
      *
      * @return
      */
-    public static WebResult AddRetireLine(Context context, String repairnum, String assetnum, String retiredate, String retireloc, String url) {
+    public static String AddRetireLine(Context context, String repairnum, String assetnum, String retiredate, String retireloc, String url) {
 
         SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         soapEnvelope.implicitTypes = true;
@@ -679,16 +648,14 @@ public class AndroidClientService {
             return null;
         }
         String obj = null;
-        WebResult webResult = null;
         try {
             obj = soapEnvelope.getResponse().toString();
 
             Log.i(TAG, "obj=" + obj);
-            webResult = JsonUtils.parsingWebResult1(obj);
         } catch (SoapFault soapFault) {
             soapFault.printStackTrace();
         }
-        return webResult;
+        return obj;
     }
 
     /**
@@ -696,7 +663,7 @@ public class AndroidClientService {
      *
      * @return
      */
-    public static WebResult AddMove(Context context, String description, String fromloc, String tosite, String createby, String url) {
+    public static String AddMove(Context context, String description, String fromloc, String tosite, String createby, String url) {
 
         SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         soapEnvelope.implicitTypes = true;
@@ -715,16 +682,14 @@ public class AndroidClientService {
             return null;
         }
         String obj = null;
-        WebResult webResult = null;
         try {
             obj = soapEnvelope.getResponse().toString();
 
             Log.i(TAG, "obj=" + obj);
-            webResult = JsonUtils.parsingWebResult1(obj);
         } catch (SoapFault soapFault) {
             soapFault.printStackTrace();
         }
-        return webResult;
+        return obj;
     }
 
     /**
@@ -732,7 +697,7 @@ public class AndroidClientService {
      *
      * @return
      */
-    public static WebResult AddMoveLine(Context context, String assettrannum, String assetnum, String fromsite, String tosite, String createby, String url) {
+    public static String AddMoveLine(Context context, String assettrannum, String assetnum, String fromsite, String tosite, String createby, String url) {
         Log.i(TAG, "assettrannum=" + assettrannum + ",assetnum=" + assetnum + ",fromsite=" + fromsite + ",tosite=" + tosite + ",createby=" + createby);
         SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         soapEnvelope.implicitTypes = true;
@@ -752,16 +717,13 @@ public class AndroidClientService {
             return null;
         }
         String obj = null;
-        WebResult webResult = null;
         try {
             obj = soapEnvelope.getResponse().toString();
 
-            Log.i(TAG, "obj=" + obj);
-            webResult = JsonUtils.parsingWebResult1(obj);
         } catch (SoapFault soapFault) {
             soapFault.printStackTrace();
         }
-        return webResult;
+        return obj;
     }
 
     /**
@@ -769,7 +731,7 @@ public class AndroidClientService {
      *
      * @return
      */
-    public static WebResult AddOut(Context context, String description, String url) {
+    public static String AddOut(Context context, String description, String url) {
 
         SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         soapEnvelope.implicitTypes = true;
@@ -785,16 +747,14 @@ public class AndroidClientService {
             return null;
         }
         String obj = null;
-        WebResult webResult = null;
         try {
             obj = soapEnvelope.getResponse().toString();
 
             Log.i(TAG, "obj=" + obj);
-            webResult = JsonUtils.parsingWebResult1(obj);
         } catch (SoapFault soapFault) {
             soapFault.printStackTrace();
         }
-        return webResult;
+        return obj;
     }
 
     /**
@@ -802,7 +762,7 @@ public class AndroidClientService {
      *
      * @return
      */
-    public static WebResult AddOutPlanLine(Context context, String wonum, String itemnum,
+    public static String AddOutPlanLine(Context context, String wonum, String itemnum,
                                            String description, String location, String issueto, String linetype,
                                            String restype, String quantity, String storelocsite, String unitcost,
                                            String orderunit, String createby, String url) {
@@ -831,16 +791,14 @@ public class AndroidClientService {
             return null;
         }
         String obj = null;
-        WebResult webResult = null;
         try {
             obj = soapEnvelope.getResponse().toString();
 
             Log.i(TAG, "obj=" + obj);
-            webResult = JsonUtils.parsingWebResult1(obj);
         } catch (SoapFault soapFault) {
             soapFault.printStackTrace();
         }
-        return webResult;
+        return obj;
     }
 
     /**
@@ -848,7 +806,7 @@ public class AndroidClientService {
      *
      * @return
      */
-    public static WebResult AddOutActuralLine(Context context, String wonum, String itemnum,
+    public static String AddOutActuralLine(Context context, String wonum, String itemnum,
                                               String description, String linetype, String storeloc, String siteid, String quantity,
                                               String unitcost, String location, String trantype, String createby, String rotassetnum, String url) {
         SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
@@ -876,16 +834,14 @@ public class AndroidClientService {
             return null;
         }
         String obj = null;
-        WebResult webResult = null;
         try {
             obj = soapEnvelope.getResponse().toString();
 
             Log.i(TAG, "obj=" + obj);
-            webResult = JsonUtils.parsingWebResult1(obj);
         } catch (SoapFault soapFault) {
             soapFault.printStackTrace();
         }
-        return webResult;
+        return obj;
     }
 
     /**
@@ -998,9 +954,9 @@ public class AndroidClientService {
      *
      * @return
      */
-    public static WebResult UdBOQList(Context context, String ponum, String jsonAarry,String url) {
+    public static String UdBOQList(Context context, String ponum, String jsonAarry, String url) {
 
-        Log.e(TAG,"ponum="+ponum+",jsonAarry="+jsonAarry+",url="+AccountUtils.getIpAddress(context) + url);
+        Log.e(TAG, "ponum=" + ponum + ",jsonAarry=" + jsonAarry + ",url=" + AccountUtils.getIpAddress(context) + url);
         SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         soapEnvelope.implicitTypes = true;
         soapEnvelope.dotNet = true;
@@ -1012,20 +968,18 @@ public class AndroidClientService {
         try {
             httpTransport.call("urn:action", soapEnvelope);
         } catch (IOException | XmlPullParserException e) {
-            Log.e(TAG,"异常:"+e.getMessage());
+            Log.e(TAG, "异常:" + e.getMessage());
             return null;
         }
         String obj = null;
-        WebResult webResult = null;
         try {
             obj = soapEnvelope.getResponse().toString();
 
             Log.i(TAG, "obj=" + obj);
-            webResult = JsonUtils.parsingWebResult1(obj);
         } catch (SoapFault soapFault) {
             soapFault.printStackTrace();
         }
-        return webResult;
+        return obj;
     }
 
 

@@ -326,23 +326,23 @@ public class TransferLine_AddNew_Activity extends BaseActivity {
      * 提交数据*
      */
     private void startAsyncTask() {
-        new AsyncTask<String, String, WebResult>() {
+        new AsyncTask<String, String, String>() {
             @Override
-            protected WebResult doInBackground(String... strings) {
-                WebResult reviseresult = AndroidClientService.AddAssetTrsLin(TransferLine_AddNew_Activity.this, invusenum, usetypeTextView.getText().toString(),
+            protected String doInBackground(String... strings) {
+                String reviseresult = AndroidClientService.AddAssetTrsLin(TransferLine_AddNew_Activity.this, invusenum, usetypeTextView.getText().toString(),
                         linetypeTextView.getText().toString(), itemnumTextView.getText().toString(), tostorelocTextView.getText().toString()
                         , rotassetnumTextView.getText().toString(), issuetoTextView.getText().toString(), quantityTextView.getText().toString(), Constants.TRANSFER_URL);
                 return reviseresult;
             }
 
             @Override
-            protected void onPostExecute(WebResult workResult) {
+            protected void onPostExecute(String workResult) {
                 super.onPostExecute(workResult);
                 closeProgressDialog();
                 if (workResult == null) {
-                    MessageUtils.showMiddleToast(TransferLine_AddNew_Activity.this, workResult.returnStr);
+                    MessageUtils.showMiddleToast(TransferLine_AddNew_Activity.this, "false");
                 } else {
-                    MessageUtils.showMiddleToast(TransferLine_AddNew_Activity.this, workResult.returnStr);
+                    MessageUtils.showMiddleToast(TransferLine_AddNew_Activity.this, workResult);
                     finish();
                 }
 

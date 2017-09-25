@@ -239,22 +239,22 @@ public class UdassettransfLine_AddNew_Activity extends BaseActivity {
      * 提交数据*
      */
     private void startAsyncTask() {
-        new AsyncTask<String, String, WebResult>() {
+        new AsyncTask<String, String, String>() {
             @Override
-            protected WebResult doInBackground(String... strings) {
-                WebResult reviseresult = AndroidClientService.AddMoveLine(UdassettransfLine_AddNew_Activity.this, assettrannum,
+            protected String doInBackground(String... strings) {
+                String reviseresult = AndroidClientService.AddMoveLine(UdassettransfLine_AddNew_Activity.this, assettrannum,
                         assetnumTextView.getText().toString(), fromsiteTextView.getText().toString(), tositeTextView.getText().toString()
                         , AccountUtils.getpersonId(UdassettransfLine_AddNew_Activity.this), Constants.TRANSFER_URL);
                 return reviseresult;
             }
 
             @Override
-            protected void onPostExecute(WebResult workResult) {
+            protected void onPostExecute(String workResult) {
                 super.onPostExecute(workResult);
                 if (workResult == null) {
                     Toast.makeText(UdassettransfLine_AddNew_Activity.this, "false", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(UdassettransfLine_AddNew_Activity.this, workResult.returnStr, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(UdassettransfLine_AddNew_Activity.this, workResult, Toast.LENGTH_SHORT).show();
 //                    setResult(100);
                     finish();
                 }

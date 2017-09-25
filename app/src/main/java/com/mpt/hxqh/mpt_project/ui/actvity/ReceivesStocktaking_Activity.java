@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -32,7 +31,6 @@ import com.mpt.hxqh.mpt_project.config.Constants;
 import com.mpt.hxqh.mpt_project.manager.AppManager;
 import com.mpt.hxqh.mpt_project.model.UDBOQLIST;
 import com.mpt.hxqh.mpt_project.model.UDSTOCKTLINE;
-import com.mpt.hxqh.mpt_project.model.WebResult;
 import com.mpt.hxqh.mpt_project.ui.widget.SwipeRefreshLayout;
 import com.mpt.hxqh.mpt_project.unit.AccountUtils;
 import com.mpt.hxqh.mpt_project.unit.MessageUtils;
@@ -491,22 +489,22 @@ public class ReceivesStocktaking_Activity extends BaseActivity {
      * 提交盘点的数据
      **/
     private void submitData() {
-        new AsyncTask<String, String, WebResult>() {
+        new AsyncTask<String, String, String>() {
             @Override
-            protected WebResult doInBackground(String... strings) {
-                WebResult reviseresult = AndroidClientService.UdBOQList(ReceivesStocktaking_Activity.this, ponum, JsonUtils.encapsUDBOQLISTList(udboqlist), Constants.TRANSFER_URL);
+            protected String doInBackground(String... strings) {
+                String reviseresult = AndroidClientService.UdBOQList(ReceivesStocktaking_Activity.this, ponum, JsonUtils.encapsUDBOQLISTList(udboqlist), Constants.TRANSFER_URL);
 
                 return reviseresult;
             }
 
             @Override
-            protected void onPostExecute(WebResult workResult) {
+            protected void onPostExecute(String workResult) {
                 super.onPostExecute(workResult);
                 closeProgressDialog();
                 if (workResult == null) {
                     MessageUtils.showMiddleToast(ReceivesStocktaking_Activity.this, "fail");
                 } else {
-                    MessageUtils.showMiddleToast(ReceivesStocktaking_Activity.this, workResult.returnStr);
+                    MessageUtils.showMiddleToast(ReceivesStocktaking_Activity.this, workResult);
                     finish();
                 }
 

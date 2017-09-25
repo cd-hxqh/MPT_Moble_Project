@@ -236,9 +236,9 @@ public class HttpManager {
      */
     public static String getINVENTORYURL(String vlaue, String location, int curpage, int showcount) {
         if (vlaue.equals("")) {
-            return "{'appid':'" + Constants.ASOUTB_NAME + "','objectname':'" + Constants.INVENTORY_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','orderby':'ITEMNUM ASC','condition':{'LOCATION':'" + location + "'}}";
+            return "{'appid':'" + Constants.ASOUTB_NAME + "','objectname':'" + Constants.INVENTORY_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','orderby':'ITEMNUM ASC','condition':{'LOCATION':'=" + location + "'}}";
         } else {
-            return "{'appid':'" + Constants.ASOUTB_NAME + "','objectname':'" + Constants.INVENTORY_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','orderby':'ITEMNUM ASC','condition':{'LOCATION':'" + location + "'},'sinorsearch':{'ITEMNUM':'" + vlaue + "'}}";
+            return "{'appid':'" + Constants.ASOUTB_NAME + "','objectname':'" + Constants.INVENTORY_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','orderby':'ITEMNUM ASC','condition':{'LOCATION':'=" + location + "'},'sinorsearch':{'ITEMNUM':'" + vlaue + "'}}";
         }
     }
     /**
@@ -246,9 +246,9 @@ public class HttpManager {
      */
     public static String getINVENTORYURL1(String vlaue, String itemnum, int curpage, int showcount) {
         if (vlaue.equals("")) {
-            return "{'appid':'" + Constants.ASOUTB_NAME + "','objectname':'" + Constants.INVENTORY_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','orderby':'ITEMNUM ASC','condition':{'ITEMNUM':'" + itemnum + "'}}";
+            return "{'appid':'" + Constants.ASOUTB_NAME + "','objectname':'" + Constants.INVENTORY_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','orderby':'ITEMNUM ASC','condition':{'ITEMNUM':'=" + itemnum + "'}}";
         } else {
-            return "{'appid':'" + Constants.ASOUTB_NAME + "','objectname':'" + Constants.INVENTORY_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','orderby':'ITEMNUM ASC','condition':{'ITEMNUM':'" + itemnum + "'},'sinorsearch':{'ITEMNUM':'" + vlaue + "'}}";
+            return "{'appid':'" + Constants.ASOUTB_NAME + "','objectname':'" + Constants.INVENTORY_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','orderby':'ITEMNUM ASC','condition':{'ITEMNUM':'=" + itemnum + "'},'sinorsearch':{'ITEMNUM':'" + vlaue + "'}}";
         }
     }
 

@@ -245,23 +245,23 @@ public class Udstockt_AddNew_Activity extends BaseActivity {
      * 提交数据*
      */
     private void startAsyncTask() {
-        new AsyncTask<String, String, WebResult>() {
+        new AsyncTask<String, String, String>() {
             @Override
-            protected WebResult doInBackground(String... strings) {
-                WebResult reviseresult = AndroidClientService.AddMatSto(Udstockt_AddNew_Activity.this, descriptionTextView.getText().toString(),
+            protected String doInBackground(String... strings) {
+                String reviseresult = AndroidClientService.AddMatSto(Udstockt_AddNew_Activity.this, descriptionTextView.getText().toString(),
                         locationTextView.getText().toString(), vendorView.getText().toString(), AccountUtils.getpersonId(Udstockt_AddNew_Activity.this),
                         new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()), Constants.TRANSFER_URL);
                 return reviseresult;
             }
 
             @Override
-            protected void onPostExecute(WebResult workResult) {
+            protected void onPostExecute(String workResult) {
                 super.onPostExecute(workResult);
                 closeProgressDialog();
                 if (workResult == null) {
                     MessageUtils.showMiddleToast(Udstockt_AddNew_Activity.this, "false");
                 } else {
-                    MessageUtils.showMiddleToast(Udstockt_AddNew_Activity.this, workResult.returnStr);
+                    MessageUtils.showMiddleToast(Udstockt_AddNew_Activity.this, workResult);
                     finish();
                 }
 
