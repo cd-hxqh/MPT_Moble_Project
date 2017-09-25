@@ -81,7 +81,7 @@ public class Po_Details_Activity extends BaseActivity {
     private Button quit;
     private Button option;
     //    private String[] optionList = new String[]{"Back","AddLine"};
-    private String[] optionList = new String[]{"Back"};
+    private String[] optionList = new String[]{"Back", "Receive Scanning"};
     private BaseAnimatorSet mBasIn;
     private BaseAnimatorSet mBasOut;
 
@@ -210,14 +210,13 @@ public class Po_Details_Activity extends BaseActivity {
                             normalListDialog.superDismiss();
                             finish();
                             break;
-//                        case 1://AddLine
-//                            normalListDialog.superDismiss();
-//                            Intent intent = new Intent(Po_Details_Activity.this,PoLine_AddNew_Activity.class);
-//                            intent.putExtra("ponum",po.getPONUM());
-////            intent.putExtra("storeroom",po.g);
-//                            startActivity(intent);
-//
-//                            break;
+                        case 1://AddLine
+                            normalListDialog.superDismiss();
+                            Intent intent = new Intent(Po_Details_Activity.this, ReceivesStocktaking_Activity.class);
+                            intent.putExtra("ponum", po.getPONUM());
+                            startActivity(intent);
+
+                            break;
                     }
 //                    normalListDialog.dismiss();
                 }

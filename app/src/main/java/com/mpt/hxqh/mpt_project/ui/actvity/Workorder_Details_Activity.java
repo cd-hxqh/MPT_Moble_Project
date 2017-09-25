@@ -239,8 +239,8 @@ public class Workorder_Details_Activity extends BaseActivity {
                         case 2://Add actural
 
                             normalListDialog.superDismiss();
-                            if (workorder.getSTATUS().equals("WAPPR")) {
-                                MessageUtils.showMiddleToast(Workorder_Details_Activity.this, "Actuals cannot be reported when the work order status is Waiting on Approval WAPPR");
+                            if (workorder.getSTATUS().equals("WAPPR")||workorder.getSTATUS().equals("COMP")) {
+                                MessageUtils.showMiddleToast(Workorder_Details_Activity.this, "Actuals cannot be reported when the work order status is Waiting on Approval WAPPR or COMP");
                             } else {
                                 Intent intent2 = new Intent(Workorder_Details_Activity.this, Matusetrans_AddNew_Activity.class);
                                 intent2.putExtra("wonum", workorder.getWONUM());
@@ -362,7 +362,6 @@ public class Workorder_Details_Activity extends BaseActivity {
                             addData(item);
                         }
                     }
-                    nodatalayout.setVisibility(View.GONE);
 
                 }
             }

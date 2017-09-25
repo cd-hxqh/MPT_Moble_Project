@@ -7,13 +7,13 @@ import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.flyco.animation.BaseAnimatorSet;
 import com.flyco.animation.BounceEnter.BounceTopEnter;
@@ -23,29 +23,32 @@ import com.flyco.dialog.listener.OnOperItemClickL;
 import com.flyco.dialog.widget.NormalDialog;
 import com.flyco.dialog.widget.NormalListDialog;
 import com.mpt.hxqh.mpt_project.R;
-import com.mpt.hxqh.mpt_project.adpter.BaseQuickAdapter;
-import com.mpt.hxqh.mpt_project.adpter.UdstockineScanAdapter;
+import com.mpt.hxqh.mpt_project.adpter.UdboqlistAdapter;
 import com.mpt.hxqh.mpt_project.api.HttpManager;
 import com.mpt.hxqh.mpt_project.api.HttpRequestHandler;
 import com.mpt.hxqh.mpt_project.api.JsonUtils;
 import com.mpt.hxqh.mpt_project.bean.Results;
 import com.mpt.hxqh.mpt_project.config.Constants;
 import com.mpt.hxqh.mpt_project.manager.AppManager;
-import com.mpt.hxqh.mpt_project.model.ASSET;
+import com.mpt.hxqh.mpt_project.model.UDBOQLIST;
 import com.mpt.hxqh.mpt_project.model.UDSTOCKTLINE;
+import com.mpt.hxqh.mpt_project.model.WebResult;
 import com.mpt.hxqh.mpt_project.ui.widget.SwipeRefreshLayout;
+import com.mpt.hxqh.mpt_project.unit.AccountUtils;
 import com.mpt.hxqh.mpt_project.unit.MessageUtils;
 import com.mpt.hxqh.mpt_project.webserviceclient.AndroidClientService;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
- * 物资盘点列表
+ * 采购接收
  **/
-public class Material_Stocktaking_Activity extends BaseActivity {
+public class ReceivesStocktaking_Activity extends BaseActivity {
 
-    private static String TAG = "Material_Stocktaking_Activity";
+    private static String TAG = "ReceivesStocktaking_Activity";
 
     private static final int STOCKTAKING_CODE = 1090;
     /**
@@ -57,10 +60,20 @@ public class Material_Stocktaking_Activity extends BaseActivity {
      */
     private TextView titleTextView;
 
+    private TextView ponumText;
+
     /**
-     * 扫描
+     * sn
      **/
-    private Button scanButton;
+    private TextView scanButton;
+
+    /**
+     * 检查按钮
+     **/
+    private Button checkButton;
+
+
+    /**提交更新**/
 
 
     /**
@@ -82,13 +95,13 @@ public class Material_Stocktaking_Activity extends BaseActivity {
     /**
      * 适配器*
      */
-    private UdstockineScanAdapter udstockineAdapter;
+    private UdboqlistAdapter udboqlistadapter;
 
     private int page = 1;
 
     ArrayList<UDSTOCKTLINE> items = new ArrayList<UDSTOCKTLINE>();
 
-    private String stocktnum; //主表编号
+    private String ponum; //ponum编号
 
     private LinearLayout buttonLayout;
     private Button quit;
@@ -97,12 +110,13 @@ public class Material_Stocktaking_Activity extends BaseActivity {
     private BaseAnimatorSet mBasIn;
     private BaseAnimatorSet mBasOut;
 
-    private List<UDSTOCKTLINE> stocktList=new ArrayList<UDSTOCKTLINE>();
+    private List<UDBOQLIST> udboqlist = new ArrayList<UDBOQLIST>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_udstocktaing_details);
+        setContentView(R.layout.activity_asset_receive);
         initData();
         findViewById();
         initView();
@@ -111,16 +125,19 @@ public class Material_Stocktaking_Activity extends BaseActivity {
         mBasOut = new SlideBottomExit();
 
     }
+
     private void initData() {
-        stocktnum = getIntent().getExtras().getString("stocktnum");
+        ponum = getIntent().getExtras().getString("ponum");
     }
 
     @Override
     protected void findViewById() {
         backImageView = (ImageView) findViewById(R.id.title_back_id);
         titleTextView = (TextView) findViewById(R.id.title_name);
+        ponumText = (TextView) findViewById(R.id.order_text_id);
 
-        scanButton = (Button) findViewById(R.id.snscan_button_id);
+        scanButton = (TextView) findViewById(R.id.serialnum_text_id);
+        checkButton = (Button) findViewById(R.id.snscan_button_id);
 
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView_id);
         refresh_layout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
@@ -140,13 +157,14 @@ public class Material_Stocktaking_Activity extends BaseActivity {
             }
         });
         backImageView.setVisibility(View.GONE);
-        titleTextView.setText(R.string.material_stocktaking_text);
-
+        titleTextView.setText(R.string.receive_scanning_text);
+        ponumText.setText(ponum);
         scanButton.setOnClickListener(scanButtonOnClickListener);
+        checkButton.setOnClickListener(checkButtonOnClickListener);
 
         buttonLayout.setVisibility(View.VISIBLE);
 
-        layoutManager = new LinearLayoutManager(Material_Stocktaking_Activity.this);
+        layoutManager = new LinearLayoutManager(ReceivesStocktaking_Activity.this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         layoutManager.scrollToPosition(0);
         recyclerView.setLayoutManager(layoutManager);
@@ -162,7 +180,7 @@ public class Material_Stocktaking_Activity extends BaseActivity {
         refresh_layout.setOnLoadListener(refreshOnLoadListener);
 
         refresh_layout.setRefreshing(true);
-        initAdapter(new ArrayList<UDSTOCKTLINE>());
+        initAdapter(new ArrayList<UDBOQLIST>());
         getData();
 
         quit.setOnClickListener(quitOnClickListener);
@@ -178,12 +196,34 @@ public class Material_Stocktaking_Activity extends BaseActivity {
     private View.OnClickListener scanButtonOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            Intent intent = new Intent(Material_Stocktaking_Activity.this, MipcaActivityCapture.class);
+            Intent intent = new Intent(ReceivesStocktaking_Activity.this, MipcaActivityCapture.class);
             intent.putExtra("mark", 1); //扫码标识
             startActivityForResult(intent, STOCKTAKING_CODE);
         }
     };
 
+
+    /**
+     * 检查sn码是否存在
+     **/
+    private View.OnClickListener checkButtonOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            isExist(scanButton.getText().toString());
+        }
+    };
+
+
+    /**
+     * 检查SN码是否存在
+     **/
+    private void isExist(String sn) {
+        if (sn.equals("")) {
+            MessageUtils.showMiddleToast(ReceivesStocktaking_Activity.this, "Please scan the sn code");
+        } else {
+            SearchSn(sn);
+        }
+    }
 
     private SwipeRefreshLayout.OnRefreshListener refreshOnRefreshListener = new SwipeRefreshLayout.OnRefreshListener() {
         @Override
@@ -204,16 +244,11 @@ public class Material_Stocktaking_Activity extends BaseActivity {
     /**
      * 获取数据*
      */
-    private void initAdapter(final List<UDSTOCKTLINE> list) {
+    private void initAdapter(final List<UDBOQLIST> list) {
         nodatalayout.setVisibility(View.GONE);
-        udstockineAdapter = new UdstockineScanAdapter(Material_Stocktaking_Activity.this, R.layout.list_stocktaking_item, list);
-        recyclerView.setAdapter(udstockineAdapter);
-        udstockineAdapter.setOnRecyclerViewItemClickListener(new BaseQuickAdapter.OnRecyclerViewItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
+        udboqlistadapter = new UdboqlistAdapter(ReceivesStocktaking_Activity.this, R.layout.list_udboqlist_item, list);
+        recyclerView.setAdapter(udboqlistadapter);
 
-            }
-        });
     }
 
 
@@ -221,14 +256,14 @@ public class Material_Stocktaking_Activity extends BaseActivity {
      * 获取数据*
      */
     private void getData() {
-        HttpManager.getDataPagingInfo(Material_Stocktaking_Activity.this, HttpManager.getUDSTOCKTLINEURL(stocktnum, page, 20), new HttpRequestHandler<Results>() {
+        HttpManager.getDataPagingInfo(ReceivesStocktaking_Activity.this, HttpManager.getUDBOQLISTURL(ponum, page, 20), new HttpRequestHandler<Results>() {
             @Override
             public void onSuccess(Results results) {
             }
 
             @Override
             public void onSuccess(Results results, int totalPages, int currentPage) {
-                ArrayList<UDSTOCKTLINE> item = JsonUtils.parsingUDSTOCKTLINE(results.getResultlist());
+                ArrayList<UDBOQLIST> item = JsonUtils.parsingUDBOQLIST(results.getResultlist());
                 refresh_layout.setRefreshing(false);
                 refresh_layout.setLoading(false);
                 if (item == null || item.isEmpty()) {
@@ -237,11 +272,10 @@ public class Material_Stocktaking_Activity extends BaseActivity {
 
                     if (item != null || item.size() != 0) {
                         if (page == 1) {
-                            items = new ArrayList<UDSTOCKTLINE>();
-                            initAdapter(items);
+                            initAdapter(new ArrayList<UDBOQLIST>());
                         }
                         if (page > totalPages) {
-                            MessageUtils.showMiddleToast(Material_Stocktaking_Activity.this, getString(R.string.have_load_out_all_the_data));
+                            MessageUtils.showMiddleToast(ReceivesStocktaking_Activity.this, getString(R.string.have_load_out_all_the_data));
                         } else {
                             addData(item);
                         }
@@ -262,10 +296,69 @@ public class Material_Stocktaking_Activity extends BaseActivity {
 
 
     /**
+     * 查询SN码是否存在
+     */
+    private void SearchSn(final String sn) {
+        HttpManager.getDataPagingInfo(ReceivesStocktaking_Activity.this, HttpManager.getSERIALNUMURL(sn, page, 20), new HttpRequestHandler<Results>() {
+            @Override
+            public void onSuccess(Results results) {
+            }
+
+            @Override
+            public void onSuccess(Results results, int totalPages, int currentPage) {
+                ArrayList<UDBOQLIST> item = JsonUtils.parsingUDBOQLIST(results.getResultlist());
+                if (item == null || item.isEmpty()) {
+                    MessageUtils.showMiddleToast(ReceivesStocktaking_Activity.this, "Serialnum does not exist");
+                } else {
+                    update(sn);
+                }
+            }
+
+            @Override
+            public void onFailure(String error) {
+            }
+        });
+
+    }
+
+
+    /**
+     * 判断SN码是否存在，如果存在，则将对应的SN码填写成已存在
+     **/
+
+    private void update(String serialnum) {
+        List<UDBOQLIST> ulist = udboqlistadapter.getData();
+        for (int i = 0; i < ulist.size(); i++) {
+            UDBOQLIST udboq = ulist.get(i);
+            String sn = udboq.getSERIALNUM();
+            if (sn.equals(serialnum)) {
+                udboq.setEXIST("Y");
+                udboq.setUPDATEBY(AccountUtils.getpersonId(ReceivesStocktaking_Activity.this));
+                udboq.setUPDATEDATE(currentDate());
+                udboqlistadapter.remove(i);
+                udboqlistadapter.add(i, udboq);
+                udboqlistadapter.notifyDataSetChanged();
+                udboqlist.add(udboq);
+            }
+        }
+    }
+
+
+    /**
+     * 获取当前日期
+     **/
+    private String currentDate() {
+        Date d = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        return sdf.format(d);
+    }
+
+
+    /**
      * 添加数据*
      */
-    private void addData(final List<UDSTOCKTLINE> list) {
-        udstockineAdapter.addData(list);
+    private void addData(final List<UDBOQLIST> list) {
+        udboqlistadapter.addData(list);
     }
 
 
@@ -290,80 +383,52 @@ public class Material_Stocktaking_Activity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
             case STOCKTAKING_CODE:
-                String results = data.getExtras().getString("result");
-                isExistSN(results);
+                if (resultCode == RESULT_OK) {
+                    String results = data.getExtras().getString("result");
+                    scanButton.setText(results);
+                }
+
                 break;
         }
 
     }
 
 
-    /**
-     * 根据SN号查询资产表是否存在
-     **/
-    private void isExistSN(String serialnum) {
-
-        HttpManager.getDataPagingInfo(Material_Stocktaking_Activity.this, HttpManager.getAssetUrl(serialnum), new HttpRequestHandler<Results>() {
-            @Override
-            public void onSuccess(Results results) {
-            }
-
-            @Override
-            public void onSuccess(Results results, int totalPages, int currentPage) {
-                ArrayList<ASSET> item = JsonUtils.parsingASSET(results.getResultlist());
-                if (item == null || item.isEmpty()) {
-                } else {
-                    update(item.get(0).getSERIALNUM());
-                }
-            }
-
-            @Override
-            public void onFailure(String error) {
-            }
-        });
-
-
-    }
-
-
-    /**
-     * 判断与子表中的数据对应
-     * 如果存在，则将SN加入到相应的NEW SN字段里面
-     * 并将背景颜色改成绿色
-     **/
-
-    private void update(String serialnum) {
-        List<UDSTOCKTLINE> ulist = udstockineAdapter.getData();
-        for (int i = 0; i < ulist.size(); i++) {
-            String sn = ulist.get(i).getSERIALNUM();
-            if (sn.equals(serialnum)) {
-                ulist.get(i).setCHECKSERIAL(sn);  //将SN加入到new sn 中
-                ulist.get(i).setISSCAN(1);//1显示绿色，0显示默认颜色
-                stocktList.add(ulist.get(i));
-                updateAdapter(i, ulist.get(i));
-            }
-        }
-    }
+//    /**
+//     * 根据SN号查询资产表是否存在
+//     **/
+//    private void isExistSN(String serialnum) {
+//
+//        HttpManager.getDataPagingInfo(ReceivesStocktaking_Activity.this, HttpManager.getAssetUrl(serialnum), new HttpRequestHandler<Results>() {
+//            @Override
+//            public void onSuccess(Results results) {
+//            }
+//
+//            @Override
+//            public void onSuccess(Results results, int totalPages, int currentPage) {
+//                ArrayList<ASSET> item = JsonUtils.parsingASSET(results.getResultlist());
+//                if (item == null || item.isEmpty()) {
+//                } else {
+//                    update(item.get(0).getSERIALNUM());
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(String error) {
+//            }
+//        });
+//
+//
+//    }
 
 
     /**
-     * 根据position刷新Adapter
+     * 退出按钮
      **/
-    private void updateAdapter(int postition, UDSTOCKTLINE udstocktline) {
-        udstockineAdapter.remove(postition);
-
-        udstockineAdapter.add(postition, udstocktline);
-
-        udstockineAdapter.notifyDataSetChanged();
-
-    }
-
-
-    /**退出按钮**/
     private View.OnClickListener quitOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            final NormalDialog dialog = new NormalDialog(Material_Stocktaking_Activity.this);
+            final NormalDialog dialog = new NormalDialog(ReceivesStocktaking_Activity.this);
             dialog.content("Sure to exit?")//
                     .showAnim(mBasIn)//
                     .dismissAnim(mBasOut)//
@@ -378,7 +443,7 @@ public class Material_Stocktaking_Activity extends BaseActivity {
                     new OnBtnClickL() {
                         @Override
                         public void onBtnClick() {
-                            AppManager.AppExit(Material_Stocktaking_Activity.this);
+                            AppManager.AppExit(ReceivesStocktaking_Activity.this);
                         }
                     });
 
@@ -386,11 +451,13 @@ public class Material_Stocktaking_Activity extends BaseActivity {
     };
 
 
-    /**操作按钮**/
+    /**
+     * 操作按钮
+     **/
     private View.OnClickListener optionOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            final NormalListDialog normalListDialog = new NormalListDialog(Material_Stocktaking_Activity.this, optionList);
+            final NormalListDialog normalListDialog = new NormalListDialog(ReceivesStocktaking_Activity.this, optionList);
             normalListDialog.title("Option")
                     .showAnim(mBasIn)//
                     .dismissAnim(mBasOut)//
@@ -405,9 +472,10 @@ public class Material_Stocktaking_Activity extends BaseActivity {
                             break;
                         case 1://Confirm
                             normalListDialog.superDismiss();
-                            if(null==stocktList||stocktList.size()==0){
-                            MessageUtils.showMiddleToast(Material_Stocktaking_Activity.this,"Please count data...");
-                            }else {
+                            if (null == udboqlist || udboqlist.size() == 0) {
+                                MessageUtils.showMiddleToast(ReceivesStocktaking_Activity.this, "Please count data...");
+                            } else {
+                                showProgressDialog("Waiting...");
                                 submitData();
                             }
                             break;
@@ -419,37 +487,32 @@ public class Material_Stocktaking_Activity extends BaseActivity {
     };
 
 
-    /**提交盘点的数据**/
+    /**
+     * 提交盘点的数据
+     **/
     private void submitData() {
-        new AsyncTask<String, String, String>() {
+        new AsyncTask<String, String, WebResult>() {
             @Override
-            protected String doInBackground(String... strings) {
-                String reviseresult = null;
-                for (int i = 0; i < stocktList.size(); i++) {
-
-                    UDSTOCKTLINE line = stocktList.get(i);
-                    reviseresult = AndroidClientService.UpdateWO(Material_Stocktaking_Activity.this, JsonUtils.encapsulationUdstocktline(line), "UDSTOCKTLINE",
-                            "UDSTOCKTLINEID", line.getUDSTOCKTLINEID()
-                            , Constants.WORK_URL);
-                }
+            protected WebResult doInBackground(String... strings) {
+                WebResult reviseresult = AndroidClientService.UdBOQList(ReceivesStocktaking_Activity.this, ponum, JsonUtils.encapsUDBOQLISTList(udboqlist), Constants.TRANSFER_URL);
 
                 return reviseresult;
             }
 
             @Override
-            protected void onPostExecute(String workResult) {
+            protected void onPostExecute(WebResult workResult) {
                 super.onPostExecute(workResult);
+                closeProgressDialog();
                 if (workResult == null) {
-                    Toast.makeText(Material_Stocktaking_Activity.this, "fail", Toast.LENGTH_SHORT).show();
+                    MessageUtils.showMiddleToast(ReceivesStocktaking_Activity.this, "fail");
                 } else {
-                    Toast.makeText(Material_Stocktaking_Activity.this, workResult, Toast.LENGTH_SHORT).show();
+                    MessageUtils.showMiddleToast(ReceivesStocktaking_Activity.this, workResult.returnStr);
                     finish();
                 }
-                closeProgressDialog();
+
             }
         }.execute();
     }
-
 
 
 }

@@ -34,7 +34,7 @@ public class Matusetrans_AddNew_Activity extends BaseActivity {
 
     private static final String TAG = "Matusetrans_AddNew_Activity";
 
-    public static final int MATUSETRANS_CODE=2005;
+    public static final int MATUSETRANS_CODE = 2005;
 
     public static final int LOCATIONS_CODE = 3000;
     public static final int SITE_CODE = 3001;
@@ -254,7 +254,7 @@ public class Matusetrans_AddNew_Activity extends BaseActivity {
                     linetypeTextView.setText(linetypeList[position]);
                     switch (position) {
                         case 0://Item
-                            descriptionTextView.setText("");
+//                            descriptionTextView.setText("");
                             descriptionTextView.setClickable(false);
                             itemnumTextView.setClickable(true);
                             normalListDialog.dismiss();
@@ -355,8 +355,8 @@ public class Matusetrans_AddNew_Activity extends BaseActivity {
                 WebResult reviseresult = AndroidClientService.AddOutActuralLine(Matusetrans_AddNew_Activity.this, wonum,
                         itemnumTextView.getText().toString(), descriptionTextView.getText().toString(), linetypeTextView.getText().toString()
                         , storeroomTextView.getText().toString(), siteidTextView.getText().toString(), quantityTextView.getText().toString(), unitcostTextView.getText().toString()
-                        , locationTextView.getText().toString(), trantypeTextView.getText().toString(), rotassetnumTextView.getText().toString()
-                        , AccountUtils.getpersonId(Matusetrans_AddNew_Activity.this), Constants.TRANSFER_URL);
+                        , locationTextView.getText().toString(), trantypeTextView.getText().toString()
+                        , AccountUtils.getpersonId(Matusetrans_AddNew_Activity.this), rotassetnumTextView.getText().toString(),Constants.TRANSFER_URL);
                 return reviseresult;
             }
 

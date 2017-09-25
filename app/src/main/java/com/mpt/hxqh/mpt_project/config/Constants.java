@@ -150,8 +150,12 @@ public class Constants {
 
     //采购接收appid
     public static final String WHIN_APPID = "WHIN";
+    //采购接收appid
+    public static final String ITEMREV_APPID = "ITEMREV";
     //采购接收的表名
     public static final String PO_NAME = "PO";
+    //采购接收的表名
+    public static final String UDBOQLIST_NAME = "UDBOQLIST";
     //采购接收行的表名
     public static final String POLINE_NAME = "POLINE";
 

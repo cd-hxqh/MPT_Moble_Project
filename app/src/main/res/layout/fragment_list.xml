@@ -22,15 +22,17 @@
             android:background="@drawable/editbox_background_normal"
             android:gravity="center"
             android:imeOptions="actionSearch"
-            android:maxLines="1"
-            android:singleLine="true" />
+            android:inputType="text"
+            android:lines="1"
+            android:singleLine="true"/>
     </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
+        android:layout_height="match_parent">
+
         <include layout="@layout/list"></include>
+
         <include layout="@layout/asset_buttom"></include>
     </RelativeLayout>
 

@@ -26,7 +26,6 @@ import com.flyco.dialog.widget.NormalDialog;
 import com.flyco.dialog.widget.NormalEditTextDialog;
 import com.flyco.dialog.widget.NormalListDialog;
 import com.mpt.hxqh.mpt_project.R;
-import com.mpt.hxqh.mpt_project.adpter.BaseQuickAdapter;
 import com.mpt.hxqh.mpt_project.adpter.InvuseLineAdapter;
 import com.mpt.hxqh.mpt_project.api.HttpManager;
 import com.mpt.hxqh.mpt_project.api.HttpRequestHandler;
@@ -407,12 +406,6 @@ public class Maainvuse_Details_Activity extends BaseActivity {
         nodatalayout.setVisibility(View.GONE);
         maInvuseLineAdapter = new InvuseLineAdapter(Maainvuse_Details_Activity.this, R.layout.list_transfer_item, list);
         recyclerView.setAdapter(maInvuseLineAdapter);
-        maInvuseLineAdapter.setOnRecyclerViewItemClickListener(new BaseQuickAdapter.OnRecyclerViewItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-
-            }
-        });
     }
 
 

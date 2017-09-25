@@ -169,5 +169,7 @@
     <string name="line3_text">Line</string>
     <string name="usage_type3_text">Usage Type</string>
     <string name="return_item_text">Return Item</string>
+    <string name="receive_scanning_text">Asset Receive</string>
+    <string name="serialnum_text">SERIALNUM:</string>
 
 </resources>

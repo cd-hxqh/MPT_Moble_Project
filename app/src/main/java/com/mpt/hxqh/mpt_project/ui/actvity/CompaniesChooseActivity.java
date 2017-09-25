@@ -44,7 +44,7 @@ public class CompaniesChooseActivity extends BaseActivity implements SwipeRefres
     private static final String TAG = "CompaniesChooseActivity";
 
 
-    public static final int COMPANIES_CODE=1009;
+    public static final int COMPANIES_CODE = 1009;
 
     /**
      * 标题*
@@ -174,7 +174,7 @@ public class CompaniesChooseActivity extends BaseActivity implements SwipeRefres
 
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == event.KEYCODE_UNKNOWN) {
                     // 先隐藏键盘
                     ((InputMethodManager) search.getContext().getSystemService(Context.INPUT_METHOD_SERVICE))
                             .hideSoftInputFromWindow(
@@ -237,7 +237,6 @@ public class CompaniesChooseActivity extends BaseActivity implements SwipeRefres
         });
 
     }
-
 
 
     /**

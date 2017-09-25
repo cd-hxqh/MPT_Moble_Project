@@ -26,6 +26,7 @@ import com.mpt.hxqh.mpt_project.model.SITE;
 import com.mpt.hxqh.mpt_project.model.UDASSETTRANSF;
 import com.mpt.hxqh.mpt_project.model.UDASST;
 import com.mpt.hxqh.mpt_project.model.UDASSTREP;
+import com.mpt.hxqh.mpt_project.model.UDBOQLIST;
 import com.mpt.hxqh.mpt_project.model.UDRETIRE;
 import com.mpt.hxqh.mpt_project.model.UDRETIRELINE;
 import com.mpt.hxqh.mpt_project.model.UDSTOCKT;
@@ -43,6 +44,7 @@ import org.json.JSONObject;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -161,7 +163,6 @@ public class JsonUtils<E> {
     }
 
 
-
     /**
      * 不分页解析返回的结果*
      */
@@ -169,7 +170,7 @@ public class JsonUtils<E> {
 
         String result = null;
         WebResult webResult = new WebResult();
-        if (data.contains("|")){
+        if (data.contains("|")) {
             webResult.returnStr = data.split("\\|")[0];
             webResult.event = data.split("\\|")[1];
         }
@@ -180,10 +181,10 @@ public class JsonUtils<E> {
     /**
      * 通用查询更新成功*
      */
-    public static String  parsingString(String data) {
+    public static String parsingString(String data) {
 
         JSONObject object = null;
-        String success=null;
+        String success = null;
         try {
             object = new JSONObject(data);
             if (object.has("success")) {
@@ -579,14 +580,6 @@ public class JsonUtils<E> {
     }
 
 
-
-
-
-
-
-
-
-
     /**
      */
     public static ArrayList<MEASUREUNIT> parsingMEASUREUNIT(String data) {
@@ -632,7 +625,7 @@ public class JsonUtils<E> {
         }
     }
 
-       /**
+    /**
      * 资产转移
      */
     public static ArrayList<INVUSE> parsingINVUSE(String data) {
@@ -724,7 +717,6 @@ public class JsonUtils<E> {
             return null;
         }
     }
-
 
 
     /**
@@ -1411,6 +1403,54 @@ public class JsonUtils<E> {
     }
 
     /**
+     * UDBOQLIST*
+     */
+    public static ArrayList<UDBOQLIST> parsingUDBOQLIST(String data) {
+        Log.i(TAG, "udpro data=" + data);
+        ArrayList<UDBOQLIST> list = null;
+        UDBOQLIST udboqlist = null;
+        try {
+            JSONArray jsonArray = new JSONArray(data);
+            JSONObject jsonObject;
+            list = new ArrayList<UDBOQLIST>();
+            Log.i(TAG, "jsonArray length=" + jsonArray.length());
+            for (int i = 0; i < jsonArray.length(); i++) {
+                udboqlist = new UDBOQLIST();
+                jsonObject = jsonArray.getJSONObject(i);
+                Field[] field = udboqlist.getClass().getDeclaredFields();        //获取实体类的所有属性，返回Field数组
+                for (int j = 0; j < field.length; j++) {     //遍历所有属性
+                    field[j].setAccessible(true);
+                    String name = field[j].getName();    //获取属性的名字
+                    Log.i(TAG, "name=" + name);
+                    if (jsonObject.has(name) && jsonObject.getString(name) != null && !jsonObject.getString(name).equals("")) {
+                        try {
+                            // 调用getter方法获取属性值
+                            Method getOrSet = udboqlist.getClass().getMethod("get" + name);
+                            Object value = getOrSet.invoke(udboqlist);
+                            if (value == null) {
+                                //调用setter方法设属性值
+                                Class[] parameterTypes = new Class[1];
+                                parameterTypes[0] = field[j].getType();
+                                getOrSet = udboqlist.getClass().getDeclaredMethod("set" + name, parameterTypes);
+                                getOrSet.invoke(udboqlist, jsonObject.getString(name));
+                            }
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                }
+                list.add(udboqlist);
+            }
+            return list;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
      * 采购接收*
      */
     public static ArrayList<POLINE> parsingPOLINE(String data) {
@@ -1454,8 +1494,6 @@ public class JsonUtils<E> {
             return null;
         }
     }
-
-
 
 
     /**
@@ -1504,8 +1542,10 @@ public class JsonUtils<E> {
     }
 
 
-    /**封装盘点数据**/
-    public static String  encapsulationUdstocktline(UDSTOCKTLINE udstocktline){
+    /**
+     * 封装盘点数据
+     **/
+    public static String encapsulationUdstocktline(UDSTOCKTLINE udstocktline) {
 
         JSONObject json = new JSONObject();
 
@@ -1524,5 +1564,32 @@ public class JsonUtils<E> {
         return json.toString();
     }
 
+
+    /**
+     * 封装需要提交的UDBOQLIST数据
+     **/
+    public static String encapsUDBOQLISTList(List<UDBOQLIST> udboqlistList) {
+        JSONArray jsonArray = new JSONArray();
+        try {
+            if (null != udboqlistList || !udboqlistList.isEmpty()) {
+                for (UDBOQLIST u : udboqlistList) {
+                    JSONObject jsonObject = new JSONObject();
+                    jsonObject.put("UDBOQLISTID", u.getUDBOQLISTID());
+                    jsonObject.put("UPDATEBY", u.getUPDATEBY());
+                    jsonObject.put("UPDATEDATE", u.getUPDATEDATE());
+                    jsonObject.put("ITEMNUM", u.getITEMNUM());
+                    jsonObject.put("EXIST", u.getEXIST());
+                    jsonObject.put("SERIALNUM", u.getSERIALNUM());
+                    jsonArray.put(jsonObject);
+
+                }
+                return jsonArray.toString();
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+        return null;
+    }
 
 }

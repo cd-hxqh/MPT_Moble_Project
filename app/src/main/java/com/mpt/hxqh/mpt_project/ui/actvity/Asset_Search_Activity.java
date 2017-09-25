@@ -28,7 +28,9 @@ import com.mpt.hxqh.mpt_project.dialog.FlippingLoadingDialog;
 import com.mpt.hxqh.mpt_project.manager.AppManager;
 import com.mpt.hxqh.mpt_project.model.ASSET;
 import com.mpt.hxqh.mpt_project.ui.widget.SwipeRefreshLayout;
+import com.mpt.hxqh.mpt_project.unit.MessageUtils;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,10 +45,12 @@ public class Asset_Search_Activity extends BaseActivity {
 
     private TextView titleTextView; //标题
 
-    private TextView locationTextView; //位置
+    private EditText locationTextView; //位置
+    private ImageView locationImagView; //位置
     private EditText snTextView; //SN
     private ImageView snImg;
-    private TextView itemnumTextView; //itemnum
+    private EditText itemnumTextView; //itemnum
+    private ImageView itemnumImageView; //itemnum
 
     private Button searchBtn;
 
@@ -99,10 +103,12 @@ public class Asset_Search_Activity extends BaseActivity {
 
         backImageView = (ImageView) findViewById(R.id.title_back_id);
         titleTextView = (TextView) findViewById(R.id.title_name);
-        locationTextView = (TextView) findViewById(R.id.location_text_id);
+        locationTextView = (EditText) findViewById(R.id.location_text_id);
+        locationImagView = (ImageView) findViewById(R.id.location_img_id);
         snTextView = (EditText) findViewById(R.id.sn_text_id);
         snImg = (ImageView) findViewById(R.id.sn_img);
-        itemnumTextView = (TextView) findViewById(R.id.itemnum_text_id);
+        itemnumTextView = (EditText) findViewById(R.id.itemnum_text_id);
+        itemnumImageView = (ImageView) findViewById(R.id.itemnum_img_id);
         searchBtn = (Button) findViewById(R.id.search_btn_id);
 
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView_id);
@@ -120,10 +126,10 @@ public class Asset_Search_Activity extends BaseActivity {
         quit.setOnClickListener(quitOnClickListener);
         back.setOnClickListener(backImageViewOnClickListener);
         titleTextView.setText(R.string.asset_text);
-        locationTextView.setOnClickListener(locationTextViewOnClickListener);
+        locationImagView.setOnClickListener(locationTextViewOnClickListener);
 //        snTextView.setOnClickListener(snEditTextOnClickListener);
         snImg.setOnClickListener(snEditTextOnClickListener);
-        itemnumTextView.setOnClickListener(itemnumOnClickListener);
+        itemnumImageView.setOnClickListener(itemnumOnClickListener);
         searchBtn.setOnClickListener(searchBtnOnClickListener);
 
         layoutManager = new LinearLayoutManager(Asset_Search_Activity.this);
@@ -222,6 +228,7 @@ public class Asset_Search_Activity extends BaseActivity {
         public void onClick(View view) {
             getLoadingDialog(getString(R.string.loading)).show();
             refresh_layout.setRefreshing(true);
+            assetAdapter.removeAll(assetAdapter.getData());
             getData();
         }
     };
@@ -299,17 +306,16 @@ public class Asset_Search_Activity extends BaseActivity {
 
                     if (item != null || item.size() != 0) {
                         if (page == 1) {
-                            items = new ArrayList<ASSET>();
-                            initAdapter(items);
+                            initAdapter(new ArrayList<ASSET>());
                         }
-                        for (int i = 0; i < item.size(); i++) {
-                            items.add(item.get(i));
+                        if (page > totalPages) {
+                            MessageUtils.showMiddleToast(Asset_Search_Activity.this, getString(R.string.have_load_out_all_the_data));
+                        } else {
+                            addData(item);
                         }
-                        addData(item);
                     }
                     nodatalayout.setVisibility(View.GONE);
 
-                    initAdapter(items);
                 }
             }
 
@@ -335,7 +341,7 @@ public class Asset_Search_Activity extends BaseActivity {
             public void onItemClick(View view, int position) {
                 Intent intent = new Intent(Asset_Search_Activity.this, Asset_Details_Activity.class);
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("asset", items.get(position));
+                bundle.putSerializable("asset", (Serializable) assetAdapter.getData().get(position));
                 intent.putExtras(bundle);
                 startActivityForResult(intent, 0);
 

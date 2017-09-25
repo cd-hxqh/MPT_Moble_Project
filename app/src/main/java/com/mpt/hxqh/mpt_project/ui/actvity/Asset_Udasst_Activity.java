@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ImageSpan;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -43,7 +44,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *资产维修
+ * 资产维修
  **/
 public class Asset_Udasst_Activity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener, SwipeRefreshLayout.OnLoadListener {
 
@@ -98,7 +99,7 @@ public class Asset_Udasst_Activity extends BaseActivity implements SwipeRefreshL
     ArrayList<UDASST> items = new ArrayList<UDASST>();
 
 
-    private String[] optionList = new String[]{"Back","Add"};
+    private String[] optionList = new String[]{"Back", "Add"};
     private BaseAnimatorSet mBasIn;
     private BaseAnimatorSet mBasOut;
 
@@ -167,7 +168,7 @@ public class Asset_Udasst_Activity extends BaseActivity implements SwipeRefreshL
     private View.OnClickListener addOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            Intent intent = new Intent(Asset_Udasst_Activity.this,Udasst_AddNew_Activity.class);
+            Intent intent = new Intent(Asset_Udasst_Activity.this, Udasst_AddNew_Activity.class);
             startActivity(intent);
         }
     };
@@ -209,13 +210,13 @@ public class Asset_Udasst_Activity extends BaseActivity implements SwipeRefreshL
                 @Override
                 public void onOperItemClick(AdapterView<?> parent, View view, int position, long id) {
 //                    linetypeTextView.setText(linetypeList[position]);
-                    switch (position){
+                    switch (position) {
                         case 0://Back
                             finish();
                             normalListDialog.superDismiss();
                             break;
                         case 1://Add
-                            Intent intent = new Intent(Asset_Udasst_Activity.this,Udasst_AddNew_Activity.class);
+                            Intent intent = new Intent(Asset_Udasst_Activity.this, Udasst_AddNew_Activity.class);
                             startActivity(intent);
                             normalListDialog.superDismiss();
                             break;
@@ -232,11 +233,19 @@ public class Asset_Udasst_Activity extends BaseActivity implements SwipeRefreshL
         msp.setSpan(new ImageSpan(drawable), 0, 2, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
         search.setHint(msp);
+        search.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                return false;
+            }
+        });
         search.setOnEditorActionListener(new TextView.OnEditorActionListener() {
 
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+
+                Log.e(TAG, "actionId=" + actionId);
+                if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == event.KEYCODE_UNKNOWN) {
                     // 先隐藏键盘
                     ((InputMethodManager) search.getContext().getSystemService(Context.INPUT_METHOD_SERVICE))
                             .hideSoftInputFromWindow(
@@ -268,7 +277,7 @@ public class Asset_Udasst_Activity extends BaseActivity implements SwipeRefreshL
 
             @Override
             public void onSuccess(Results results, int totalPages, int currentPage) {
-                ArrayList<UDASST> item = JsonUtils.parsingUDASST( results.getResultlist());
+                ArrayList<UDASST> item = JsonUtils.parsingUDASST(results.getResultlist());
                 refresh_layout.setRefreshing(false);
                 refresh_layout.setLoading(false);
                 if (item == null || item.isEmpty()) {

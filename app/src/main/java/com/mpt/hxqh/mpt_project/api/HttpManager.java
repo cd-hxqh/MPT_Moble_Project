@@ -198,6 +198,7 @@ public class HttpManager {
         if (!item.equals("")) {
             item = "=" + item;
         }
+
         return "{'appid':'" + Constants.UDMPTASSET_APPID + "','objectname':'" + Constants.ASSET_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','orderby':'ASSETNUM ASC','condition':{'LOCATION':'" + location + "','SERIALNUM':'" + sn + "','ITEMNUM':'" + item + "'}}";
     }
 
@@ -402,6 +403,26 @@ public class HttpManager {
             return "{'appid':'" + Constants.WHIN_APPID + "','objectname':'" + Constants.PO_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','sinorsearch':{'PONUM':'" + vlaue + "','DESCRIPTION':'" + vlaue + "'}}";
         }
     }
+
+
+
+    /**
+     * 设置采购接收行扫描*
+     */
+    public static String getUDBOQLISTURL(String ponum, int curpage, int showcount) {
+        return "{'appid':'" + Constants.ITEMREV_APPID + "','objectname':'" + Constants.UDBOQLIST_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','condition':{'PONUM':'=" + ponum + "'}}";
+
+    }
+
+
+    /**
+     * 查询SN码是否存在
+     */
+    public static String getSERIALNUMURL(String sn, int curpage, int showcount) {
+        return "{'appid':'" + Constants.ITEMREV_APPID + "','objectname':'" + Constants.UDBOQLIST_NAME + "','curpage':" + curpage + ",'showcount':" + showcount + ",'option':'read','condition':{'SERIALNUM':'=" + sn + "'}}";
+
+    }
+
 
     /**
      * 设置采购接收行*

@@ -39,6 +39,7 @@ import com.mpt.hxqh.mpt_project.manager.AppManager;
 import com.mpt.hxqh.mpt_project.model.PO;
 import com.mpt.hxqh.mpt_project.ui.widget.SwipeRefreshLayout;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -99,7 +100,7 @@ public class Material_PO_Activity extends BaseActivity implements SwipeRefreshLa
     private BaseAnimatorSet mBasIn;
     private BaseAnimatorSet mBasOut;
 //    private String[] optionList = new String[]{"Back","Add","Receive scanning"};
-    private String[] optionList = new String[]{"Back","Receive scanning"};
+    private String[] optionList = new String[]{"Back"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -214,17 +215,11 @@ public class Material_PO_Activity extends BaseActivity implements SwipeRefreshLa
                             normalListDialog.superDismiss();
                             finish();
                             break;
-//                        case 1://Add
+//                        case 1:
 //                            normalListDialog.superDismiss();
-//                            Intent intent = new Intent(Material_PO_Activity.this,PO_AddNew_Activity.class);
-//                            startActivity(intent);
-//
+//                            Intent intent2 = new Intent(Material_PO_Activity.this,PO_AddNew_Activity.class);
+//                            startActivity(intent2);
 //                            break;
-                        case 2:
-                            normalListDialog.superDismiss();
-                            Intent intent2 = new Intent(Material_PO_Activity.this,PO_AddNew_Activity.class);
-                            startActivity(intent2);
-                            break;
                     }
 //                    normalListDialog.dismiss();
                 }
@@ -242,7 +237,7 @@ public class Material_PO_Activity extends BaseActivity implements SwipeRefreshLa
 
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == event.KEYCODE_UNKNOWN) {
                     // 先隐藏键盘
                     ((InputMethodManager) search.getContext().getSystemService(Context.INPUT_METHOD_SERVICE))
                             .hideSoftInputFromWindow(
@@ -318,7 +313,7 @@ public class Material_PO_Activity extends BaseActivity implements SwipeRefreshLa
             public void onItemClick(View view, int position) {
                 Intent intent = new Intent(Material_PO_Activity.this, Po_Details_Activity.class);
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("po", items.get(position));
+                bundle.putSerializable("po", (Serializable) poAdapter.getData().get(position));
                 intent.putExtras(bundle);
                 startActivityForResult(intent, 0);
             }

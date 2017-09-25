@@ -21,8 +21,8 @@
             android:background="@drawable/editbox_background_normal"
             android:gravity="center"
             android:imeOptions="actionSearch"
-            android:maxLines="1"
-            android:singleLine="true" />
+            android:inputType="text"
+            android:lines="1" />
     </RelativeLayout>
 
     <include layout="@layout/list"></include>

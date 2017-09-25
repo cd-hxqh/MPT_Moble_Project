@@ -209,7 +209,6 @@ public class Material_Mainvuse_Activity extends BaseActivity implements SwipeRef
             normalListDialog.setOnOperItemClickL(new OnOperItemClickL() {
                 @Override
                 public void onOperItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                    linetypeTextView.setText(linetypeList[position]);
                     switch (position){
                         case 0://Back
                             normalListDialog.superDismiss();
@@ -222,7 +221,6 @@ public class Material_Mainvuse_Activity extends BaseActivity implements SwipeRef
 
                             break;
                     }
-//                    normalListDialog.dismiss();
                 }
             });
         }
@@ -239,7 +237,7 @@ public class Material_Mainvuse_Activity extends BaseActivity implements SwipeRef
 
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == event.KEYCODE_UNKNOWN) {
                     // 先隐藏键盘
                     ((InputMethodManager) search.getContext().getSystemService(Context.INPUT_METHOD_SERVICE))
                             .hideSoftInputFromWindow(

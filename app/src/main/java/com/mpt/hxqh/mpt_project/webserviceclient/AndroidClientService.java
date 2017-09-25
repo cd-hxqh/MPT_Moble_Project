@@ -326,9 +326,9 @@ public class AndroidClientService {
      * @return
      */
     public static WebResult AddMatRfLin(Context context, String invusenum, String itemnum, String rotassetnum, String enterby
-            , String quantity,String linetype,String url) {
-        Log.e(TAG,"url="+AccountUtils.getIpAddress(context) + url);
-        Log.e(TAG,"invusenum="+invusenum+",itemnum="+itemnum+",rotassetnum="+rotassetnum+",enterby="+enterby+",quantity="+quantity+",linetype="+linetype);
+            , String quantity, String linetype, String url) {
+        Log.e(TAG, "url=" + AccountUtils.getIpAddress(context) + url);
+        Log.e(TAG, "invusenum=" + invusenum + ",itemnum=" + itemnum + ",rotassetnum=" + rotassetnum + ",enterby=" + enterby + ",quantity=" + quantity + ",linetype=" + linetype);
         SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         soapEnvelope.implicitTypes = true;
         soapEnvelope.dotNet = true;
@@ -366,7 +366,7 @@ public class AndroidClientService {
      * @return
      */
     public static WebResult AddMatRfLin(Context context, String invusenum, String itemnum, String rotassetnum, String enterby
-            , String quantity, String usetype,String linetype, String newphyscnt, String remark, String url) {
+            , String quantity, String usetype, String linetype, String newphyscnt, String remark, String url) {
 
         SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         soapEnvelope.implicitTypes = true;
@@ -660,7 +660,7 @@ public class AndroidClientService {
      *
      * @return
      */
-    public static WebResult AddRetireLine(Context context, String repairnum, String assetnum, String retiredate,String retireloc, String url) {
+    public static WebResult AddRetireLine(Context context, String repairnum, String assetnum, String retiredate, String retireloc, String url) {
 
         SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         soapEnvelope.implicitTypes = true;
@@ -806,8 +806,6 @@ public class AndroidClientService {
                                            String description, String location, String issueto, String linetype,
                                            String restype, String quantity, String storelocsite, String unitcost,
                                            String orderunit, String createby, String url) {
-        Log.i(TAG, "wonum=" + wonum + ",itemnum=" + itemnum + ",description=" + description + ",location=" + location + ",issueto=" + issueto + ",linetype=" + linetype + ",restype=" + restype + ",quantity="
-                + quantity + ",storelocsite=" + storelocsite + ",unitcost=" + unitcost + ",orderunit=" + orderunit + ",createby=" + createby);
         SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         soapEnvelope.implicitTypes = true;
         soapEnvelope.dotNet = true;
@@ -817,9 +815,9 @@ public class AndroidClientService {
         soapReq.addProperty("DESCRIPTION", description);//描述
         soapReq.addProperty("LOCATION", location);//位置
         soapReq.addProperty("ISSUETO", issueto);//到哪个位置
-        soapReq.addProperty("LINETYPE", linetype);//行类型
+        soapReq.addProperty("LINETYPE", linetype);//行类型W
         soapReq.addProperty("RESTYPE", restype);//预定类型
-        soapReq.addProperty("Quantity", quantity);//数量
+        soapReq.addProperty("QUANTITY", quantity);//数量
         soapReq.addProperty("STORELOCSITE", storelocsite);//库房位置
         soapReq.addProperty("UNITCOST", unitcost);//单位成本
         soapReq.addProperty("ORDERUNIT", orderunit);//单位
@@ -851,9 +849,8 @@ public class AndroidClientService {
      * @return
      */
     public static WebResult AddOutActuralLine(Context context, String wonum, String itemnum,
-                                              String description, String linetype,String storeloc,String siteid, String quantity,
-                                              String unitcost, String location, String trantype, String createby, String rotassetnum,String url) {
-
+                                              String description, String linetype, String storeloc, String siteid, String quantity,
+                                              String unitcost, String location, String trantype, String createby, String rotassetnum, String url) {
         SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         soapEnvelope.implicitTypes = true;
         soapEnvelope.dotNet = true;
@@ -864,10 +861,10 @@ public class AndroidClientService {
         soapReq.addProperty("LINETYPE", linetype);//行类型
         soapReq.addProperty("STORELOC", storeloc);//地点
         soapReq.addProperty("SITEID", siteid);//地点
-        soapReq.addProperty("Quantity", quantity);//数量
+        soapReq.addProperty("POSITIVEQUANTITY", quantity);//数量
         soapReq.addProperty("UnitCost", unitcost);//单位成本
         soapReq.addProperty("Location", location);//位置
-        soapReq.addProperty("TranType", trantype);//交易类型
+        soapReq.addProperty("ISSUETYPE", trantype);//交易类型
         soapReq.addProperty("CREATEBY", createby);//创建人
         soapReq.addProperty("ROTASSETNUM", rotassetnum);//rotassetnum
         soapEnvelope.setOutputSoapObject(soapReq);
@@ -911,10 +908,10 @@ public class AndroidClientService {
             return null;
         }
         String obj = null;
-        String results=null;
+        String results = null;
         try {
             obj = soapEnvelope.getResponse().toString();
-            results=JsonUtils.parsingString(obj);
+            results = JsonUtils.parsingString(obj);
         } catch (SoapFault soapFault) {
             soapFault.printStackTrace();
         }
@@ -994,5 +991,42 @@ public class AndroidClientService {
         }
         return obj;
     }
+
+
+    /**
+     * 采购接收物资盘点
+     *
+     * @return
+     */
+    public static WebResult UdBOQList(Context context, String ponum, String jsonAarry,String url) {
+
+        Log.e(TAG,"ponum="+ponum+",jsonAarry="+jsonAarry+",url="+AccountUtils.getIpAddress(context) + url);
+        SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+        soapEnvelope.implicitTypes = true;
+        soapEnvelope.dotNet = true;
+        SoapObject soapReq = new SoapObject(NAMESPACE, "mptmobileserviceupBOQList");
+        soapReq.addProperty("PONum", ponum);//物料出站主表单号
+        soapReq.addProperty("jsonAarry", jsonAarry);//项目编号
+        soapEnvelope.setOutputSoapObject(soapReq);
+        HttpTransportSE httpTransport = new HttpTransportSE(AccountUtils.getIpAddress(context) + url, timeOut);
+        try {
+            httpTransport.call("urn:action", soapEnvelope);
+        } catch (IOException | XmlPullParserException e) {
+            Log.e(TAG,"异常:"+e.getMessage());
+            return null;
+        }
+        String obj = null;
+        WebResult webResult = null;
+        try {
+            obj = soapEnvelope.getResponse().toString();
+
+            Log.i(TAG, "obj=" + obj);
+            webResult = JsonUtils.parsingWebResult1(obj);
+        } catch (SoapFault soapFault) {
+            soapFault.printStackTrace();
+        }
+        return webResult;
+    }
+
 
 }

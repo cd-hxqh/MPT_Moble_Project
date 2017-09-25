@@ -1,8 +1,10 @@
 package com.mpt.hxqh.mpt_project.ui.actvity;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ImageSpan;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -20,6 +23,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.flyco.animation.BaseAnimatorSet;
 import com.flyco.animation.BounceEnter.BounceTopEnter;
@@ -29,26 +33,30 @@ import com.flyco.dialog.listener.OnOperItemClickL;
 import com.flyco.dialog.widget.NormalDialog;
 import com.flyco.dialog.widget.NormalListDialog;
 import com.mpt.hxqh.mpt_project.R;
-import com.mpt.hxqh.mpt_project.adpter.BaseQuickAdapter;
-import com.mpt.hxqh.mpt_project.adpter.UdassettransfAdapter;
+import com.mpt.hxqh.mpt_project.adpter.RefundlineAdapter;
 import com.mpt.hxqh.mpt_project.api.HttpManager;
 import com.mpt.hxqh.mpt_project.api.HttpRequestHandler;
 import com.mpt.hxqh.mpt_project.api.JsonUtils;
 import com.mpt.hxqh.mpt_project.bean.Results;
+import com.mpt.hxqh.mpt_project.config.Constants;
 import com.mpt.hxqh.mpt_project.manager.AppManager;
-import com.mpt.hxqh.mpt_project.model.UDASSETTRANSF;
+import com.mpt.hxqh.mpt_project.model.GETREFUNDLINE;
+import com.mpt.hxqh.mpt_project.model.INVUSE;
+import com.mpt.hxqh.mpt_project.model.WebResult;
 import com.mpt.hxqh.mpt_project.ui.widget.SwipeRefreshLayout;
+import com.mpt.hxqh.mpt_project.unit.AccountUtils;
+import com.mpt.hxqh.mpt_project.unit.MessageUtils;
+import com.mpt.hxqh.mpt_project.webserviceclient.AndroidClientService;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 资产移动
+ * 退回的Activity
  **/
-public class Asset_Udassettransf_Activity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener, SwipeRefreshLayout.OnLoadListener {
+public class Return_Item_Activity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener, SwipeRefreshLayout.OnLoadListener {
 
-    private static String TAG = "Asset_Udassettransf_Activity";
+    private static String TAG = "Return_Item_Activity";
 
     /**
      * 返回按钮
@@ -81,7 +89,7 @@ public class Asset_Udassettransf_Activity extends BaseActivity implements SwipeR
     /**
      * 适配器*
      */
-    private UdassettransfAdapter udassettransfAdapter;
+    private RefundlineAdapter refundlineAdapter;
     /**
      * 编辑框*
      */
@@ -97,22 +105,41 @@ public class Asset_Udassettransf_Activity extends BaseActivity implements SwipeR
     private Button option;
 
 
-    ArrayList<UDASSETTRANSF> items = new ArrayList<UDASSETTRANSF>();
+    ArrayList<INVUSE> items = new ArrayList<INVUSE>();
 
+
+    private String[] optionList = new String[]{"Back", "Confirm"};
     private BaseAnimatorSet mBasIn;
     private BaseAnimatorSet mBasOut;
 
-    private String[] optionList = new String[]{"Back", "Add"};
+
+    private String invusenum; //主表编号
+
+    private ProgressDialog mProgressDialog;
+
+    /**
+     * 选中的数据
+     **/
+    private List<GETREFUNDLINE> chooseLine = new ArrayList<GETREFUNDLINE>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_list);
+        initData();
         findViewById();
         initView();
 
         mBasIn = new BounceTopEnter();
         mBasOut = new SlideBottomExit();
+    }
+
+    /**
+     * 获取上个界面传递过来的数据
+     **/
+    private void initData() {
+        invusenum = getIntent().getExtras().getString("invusenum");
+
     }
 
 
@@ -140,10 +167,10 @@ public class Asset_Udassettransf_Activity extends BaseActivity implements SwipeR
             }
         });
         backImageView.setVisibility(View.GONE);
-        titleTextView.setText(R.string.asset_management_text);
+        titleTextView.setText(R.string.return_item_text);
 //        addBtn.setVisibility(View.VISIBLE);
         buttonLayout.setVisibility(View.VISIBLE);
-        layoutManager = new LinearLayoutManager(Asset_Udassettransf_Activity.this);
+        layoutManager = new LinearLayoutManager(Return_Item_Activity.this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         layoutManager.scrollToPosition(0);
         recyclerView.setLayoutManager(layoutManager);
@@ -158,7 +185,7 @@ public class Asset_Udassettransf_Activity extends BaseActivity implements SwipeR
         refresh_layout.setOnLoadListener(this);
 
         refresh_layout.setRefreshing(true);
-        initAdapter(new ArrayList<UDASSETTRANSF>());
+        initAdapter(new ArrayList<GETREFUNDLINE>());
         getData(searchText);
 
         addBtn.setOnClickListener(addOnClickListener);
@@ -169,7 +196,7 @@ public class Asset_Udassettransf_Activity extends BaseActivity implements SwipeR
     private View.OnClickListener addOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            Intent intent = new Intent(Asset_Udassettransf_Activity.this, Udassettransf_AddNew_Activity.class);
+            Intent intent = new Intent(Return_Item_Activity.this, Transfer_AddNew_Activity.class);
             startActivity(intent);
         }
     };
@@ -177,7 +204,7 @@ public class Asset_Udassettransf_Activity extends BaseActivity implements SwipeR
     private View.OnClickListener quitOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            final NormalDialog dialog = new NormalDialog(Asset_Udassettransf_Activity.this);
+            final NormalDialog dialog = new NormalDialog(Return_Item_Activity.this);
             dialog.content("Sure to exit?")//
                     .showAnim(mBasIn)//
                     .dismissAnim(mBasOut)//
@@ -192,7 +219,7 @@ public class Asset_Udassettransf_Activity extends BaseActivity implements SwipeR
                     new OnBtnClickL() {
                         @Override
                         public void onBtnClick() {
-                            AppManager.AppExit(Asset_Udassettransf_Activity.this);
+                            AppManager.AppExit(Return_Item_Activity.this);
                         }
                     });
 
@@ -202,7 +229,7 @@ public class Asset_Udassettransf_Activity extends BaseActivity implements SwipeR
     private View.OnClickListener optionOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            final NormalListDialog normalListDialog = new NormalListDialog(Asset_Udassettransf_Activity.this, optionList);
+            final NormalListDialog normalListDialog = new NormalListDialog(Return_Item_Activity.this, optionList);
             normalListDialog.title("Option")
                     .showAnim(mBasIn)//
                     .dismissAnim(mBasOut)//
@@ -210,23 +237,28 @@ public class Asset_Udassettransf_Activity extends BaseActivity implements SwipeR
             normalListDialog.setOnOperItemClickL(new OnOperItemClickL() {
                 @Override
                 public void onOperItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                    linetypeTextView.setText(linetypeList[position]);
                     switch (position) {
                         case 0://Back
                             normalListDialog.superDismiss();
                             finish();
                             break;
-                        case 1://Add
+                        case 1://Confirm
                             normalListDialog.superDismiss();
-                            Intent intent = new Intent(Asset_Udassettransf_Activity.this, Udassettransf_AddNew_Activity.class);
-                            startActivity(intent);
+                            if (null == chooseLine || chooseLine.size() == 0) {
+                                MessageUtils.showMiddleToast(Return_Item_Activity.this, "Select the data you need to submit...");
+                            } else {
+                                //提交数据
+                                submitChooseData();
+                            }
                             break;
                     }
-//                    normalListDialog.dismiss();
                 }
+
+
             });
         }
     };
+
 
     private void setSearchEdit() {
         SpannableString msp = new SpannableString(getString(R.string.search_text));
@@ -242,12 +274,11 @@ public class Asset_Udassettransf_Activity extends BaseActivity implements SwipeR
                     // 先隐藏键盘
                     ((InputMethodManager) search.getContext().getSystemService(Context.INPUT_METHOD_SERVICE))
                             .hideSoftInputFromWindow(
-                                    Asset_Udassettransf_Activity.this.getCurrentFocus()
+                                    Return_Item_Activity.this.getCurrentFocus()
                                             .getWindowToken(),
                                     InputMethodManager.HIDE_NOT_ALWAYS);
                     searchText = search.getText().toString();
-                    udassettransfAdapter.removeAll(items);
-                    items = new ArrayList<UDASSETTRANSF>();
+                    refundlineAdapter.removeAll(refundlineAdapter.getData());
                     nodatalayout.setVisibility(View.GONE);
                     refresh_layout.setRefreshing(true);
                     page = 1;
@@ -263,14 +294,14 @@ public class Asset_Udassettransf_Activity extends BaseActivity implements SwipeR
      * 获取数据*
      */
     private void getData(String search) {
-        HttpManager.getDataPagingInfo(Asset_Udassettransf_Activity.this, HttpManager.getUDASSETTRANSFURL(search, page, 20), new HttpRequestHandler<Results>() {
+        HttpManager.getDataPagingInfo(Return_Item_Activity.this, HttpManager.getMAINVUSE(search, invusenum, page, 20), new HttpRequestHandler<Results>() {
             @Override
             public void onSuccess(Results results) {
             }
 
             @Override
             public void onSuccess(Results results, int totalPages, int currentPage) {
-                ArrayList<UDASSETTRANSF> item = JsonUtils.parsingUDASSETTRANSF(results.getResultlist());
+                ArrayList<GETREFUNDLINE> item = JsonUtils.parsingGETREFUNDLINE(results.getResultlist());
                 refresh_layout.setRefreshing(false);
                 refresh_layout.setLoading(false);
                 if (item == null || item.isEmpty()) {
@@ -279,17 +310,15 @@ public class Asset_Udassettransf_Activity extends BaseActivity implements SwipeR
 
                     if (item != null || item.size() != 0) {
                         if (page == 1) {
-                            items = new ArrayList<UDASSETTRANSF>();
-                            initAdapter(items);
+                            initAdapter(new ArrayList<GETREFUNDLINE>());
                         }
-                        for (int i = 0; i < item.size(); i++) {
-                            items.add(item.get(i));
+                        if (page == currentPage) {
+                            MessageUtils.showMiddleToast(Return_Item_Activity.this, "full data has been loaded...");
+                        } else {
+                            addData(item);
                         }
-                        addData(item);
                     }
-                    nodatalayout.setVisibility(View.GONE);
 
-                    initAdapter(items);
                 }
             }
 
@@ -305,18 +334,17 @@ public class Asset_Udassettransf_Activity extends BaseActivity implements SwipeR
     /**
      * 获取数据*
      */
-    private void initAdapter(final List<UDASSETTRANSF> list) {
+    private void initAdapter(final List<GETREFUNDLINE> list) {
         nodatalayout.setVisibility(View.GONE);
-        udassettransfAdapter = new UdassettransfAdapter(Asset_Udassettransf_Activity.this, R.layout.list_asset_transfer, list);
-        recyclerView.setAdapter(udassettransfAdapter);
-        udassettransfAdapter.setOnRecyclerViewItemClickListener(new BaseQuickAdapter.OnRecyclerViewItemClickListener() {
+        refundlineAdapter = new RefundlineAdapter(Return_Item_Activity.this, R.layout.list_item_refundline, list);
+        recyclerView.setAdapter(refundlineAdapter);
+        refundlineAdapter.setOnCheckedChangeListener(new RefundlineAdapter.OnCheckedChangeListener() {
             @Override
-            public void onItemClick(View view, int position) {
-                Intent intent = new Intent(Asset_Udassettransf_Activity.this, Udassettransf_Details_Activity.class);
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("udassettransf", (Serializable) udassettransfAdapter.getData().get(position));
-                intent.putExtras(bundle);
-                startActivityForResult(intent, 0);
+            public void cOnCheckedChangeListener(boolean b, int postion) {
+                Log.e(TAG, "b=" + b + ",postion=" + postion);
+                if (b) {
+                    chooseLine.add((GETREFUNDLINE) refundlineAdapter.getData().get(postion));
+                }
             }
         });
     }
@@ -324,8 +352,8 @@ public class Asset_Udassettransf_Activity extends BaseActivity implements SwipeR
     /**
      * 添加数据*
      */
-    private void addData(final List<UDASSETTRANSF> list) {
-        udassettransfAdapter.addData(list);
+    private void addData(final List<GETREFUNDLINE> list) {
+        refundlineAdapter.addData(list);
     }
 
 
@@ -346,5 +374,41 @@ public class Asset_Udassettransf_Activity extends BaseActivity implements SwipeR
         super.onActivityResult(requestCode, resultCode, data);
 
     }
+
+
+    //提交选中的数据
+    private void submitChooseData() {
+
+        new AsyncTask<String, String, WebResult>() {
+            @Override
+            protected WebResult doInBackground(String... strings) {
+                WebResult reviseresult = null;
+                for (int i = 0; i < chooseLine.size(); i++) {
+
+                    GETREFUNDLINE line = chooseLine.get(i);
+                    reviseresult = AndroidClientService.AddMatRfLin(Return_Item_Activity.this, invusenum, line.getITEMNUM(),
+                            line.getROTASSETNUM(), AccountUtils.getpersonId(Return_Item_Activity.this), "-1", line.getITEMTYPE()
+                            , Constants.TRANSFER_URL);
+                }
+
+                return reviseresult;
+            }
+
+            @Override
+            protected void onPostExecute(WebResult workResult) {
+                super.onPostExecute(workResult);
+                if (workResult == null) {
+                    Toast.makeText(Return_Item_Activity.this, "fail", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(Return_Item_Activity.this, workResult.returnStr, Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+                closeProgressDialog();
+            }
+        }.execute();
+
+
+    }
+
 
 }

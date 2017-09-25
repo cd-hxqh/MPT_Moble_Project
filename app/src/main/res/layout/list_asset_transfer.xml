@@ -3,10 +3,10 @@
     android:id="@+id/card_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_margin="@dimen/dimen_10"
     android:layout_marginBottom="2dp"
     android:layout_marginTop="2dp"
     android:background="@drawable/shape_corner_bottom"
-    android:layout_margin="@dimen/dimen_10"
     android:foreground="?android:selectableItemBackground"
     android:orientation="horizontal"
     card_view:cardCornerRadius="2dp">

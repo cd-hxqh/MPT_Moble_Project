@@ -218,7 +218,6 @@ public class Mainvuse_Details_Activity extends BaseActivity {
             normalListDialog.setOnOperItemClickL(new OnOperItemClickL() {
                 @Override
                 public void onOperItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                    linetypeTextView.setText(linetypeList[position]);
                     switch (position) {
                         case 0://Back
                             normalListDialog.superDismiss();
